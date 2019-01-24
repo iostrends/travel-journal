@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>546326274310-vvnfoekoq3sdqim8ojd5rkfek4k1e6bo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.546326274310-vvnfoekoq3sdqim8ojd5rkfek4k1e6bo</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD7D2A8YtngkZXD7QajBWcgrqyoi34PHjM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>546326274310</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>se.niclasnordling.TravelJournal2</string>
+	<key>PROJECT_ID</key>
+	<string>traveljournal-5717f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>traveljournal-5717f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:546326274310:ios:6866a90bb85b01ba</string>
+	<key>DATABASE_URL</key>
+	<string>https://traveljournal-5717f.firebaseio.com</string>
+</dict>
+</plist>
