@@ -108,6 +108,7 @@ PODS:
   - nanopb/encode (0.3.901)
   - Protobuf (3.6.1)
   - SVProgressHUD (2.2.5)
+  - UPCarouselFlowLayout (1.1.2)
 
 DEPENDENCIES:
   - Firebase/Auth
@@ -115,6 +116,7 @@ DEPENDENCIES:
   - Firebase/Firestore
   - Firebase/Storage
   - SVProgressHUD
+  - UPCarouselFlowLayout
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -136,6 +138,7 @@ SPEC REPOS:
     - nanopb
     - Protobuf
     - SVProgressHUD
+    - UPCarouselFlowLayout
 
 SPEC CHECKSUMS:
   BoringSSL: e10f92a27043805c01071fe815a5cd98ae8212e7
@@ -156,7 +159,8 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  UPCarouselFlowLayout: 4c7d2c43a10ebb1597bde502a53699d378341dad
 
-PODFILE CHECKSUM: c0fbeeb7ed47d41043917933512ddc691aef9dd4
+PODFILE CHECKSUM: 67d3efd694405dbc09748fa0f778bea203d654ce
 
 COCOAPODS: 1.5.3

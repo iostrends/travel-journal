@@ -26,14 +26,18 @@ class Welcome: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Travel Journal 2"
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         //setupUI()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        setupUI()
+    }
+    
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        self.title = "Travel Journal 2"
         setupBackground()
         setupButtons()
         setupMainLabel()
@@ -45,8 +49,8 @@ class Welcome: UIViewController {
         imageView.clipsToBounds = true
         let image = UIImage(named: "background2")
         imageView.image = image
-        view.addSubview(imageView)
         imageView.addSubview(blurEffect())
+        view.addSubview(imageView)
     }
     
     func blurEffect() -> UIVisualEffectView {
@@ -89,7 +93,7 @@ class Welcome: UIViewController {
     
     @objc func loginPressed() {
         print("Logging in....")
-        let loginViewController = NewTrip()
+        let loginViewController = MyTrips()
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     

@@ -10,20 +10,71 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
+import UPCarouselFlowLayout
 
-class MyTrips: UIViewController {
+class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataDelegate {
+    
+    let myTripsData = TripData()
+    var collectionView : UICollectionView!
+    fileprivate var currentPage: Int = 0 {
+        didSet {
+            print("Currentpage:\(currentPage)")
+        }
+    }
+    
+    fileprivate var pageSize: CGSize {
+        let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
+        var pageSize = layout.itemSize
+        if layout.scrollDirection == .horizontal {
+            pageSize.width += layout.minimumLineSpacing
+        } else {
+            pageSize.height += layout.minimumLineSpacing
+        }
+        return pageSize
+    }
+    
+    fileprivate var orientation: UIDeviceOrientation {
+        return UIDevice.current.orientation
+    }
+    
+    @objc fileprivate func rotationDidChange() {
+        guard !orientation.isFlat else { return }
+        let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
+        let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
+        layout.scrollDirection = direction
+        layout.itemSize = direction == .horizontal ? CGSize(width: 350, height: 500) : CGSize(width: 320, height: 320)
+        collectionView.frame = UIScreen.main.bounds
+        backgroundImage()
+        if currentPage > 0 {
+            let indexPath = IndexPath(item: currentPage, section: 0)
+            let scrollPosition: UICollectionView.ScrollPosition = orientation.isPortrait ? .centeredHorizontally : .centeredVertically
+            self.collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: false)
+        }
+        collectionView.flashScrollIndicators()
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
     
-    var sendDataButton : UIButton {
-        let button = UIButton()
-        button.setTitle("Send Data", for: .normal)
-        button.titleLabel?.textColor = UIColor.white
-        button.addTarget(self, action: #selector(sendDataPressed), for: .touchUpInside)
-        button.backgroundColor = UIColor.black
-        return button
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
+        let pageSide = (layout.scrollDirection == .horizontal) ? self.pageSize.width : self.pageSize.height
+        let offset = (layout.scrollDirection == .horizontal) ? scrollView.contentOffset.x : scrollView.contentOffset.y
+        currentPage = Int(floor((offset - pageSide / 2) / pageSide) + 1)
+    }
+    
+    func backgroundImage() {
+        let backgroundImage = UIImage(named: "planeCloud2")
+        let imageView = UIImageView(image: backgroundImage)
+        
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        imageView.addSubview(blurEffectView)
+        
+        self.collectionView.backgroundView = imageView
+        
     }
     
     var addNewTripButton : UIBarButtonItem {
@@ -34,33 +85,71 @@ class MyTrips: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        view.backgroundColor = UIColor.red
+        view.backgroundColor = UIColor.clear
         self.title = "My Trips"
         navigationItem.rightBarButtonItem = addNewTripButton
-        let button = sendDataButton
-        button.frame = CGRect(x: view.bounds.width / 2 - 75, y: view.bounds.height / 2, width: 150, height: 50)
-        view.addSubview(button)
+        myTripsData.dataDel = self
+        setupCarousel()
+        NotificationCenter.default.addObserver(self, selector: #selector(MyTrips.rotationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
+        backgroundImage()
     }
     
-    @objc func sendDataPressed() {
-        let db = Firestore.firestore()
-        let dataDict = [
-            "tripTitle": "Sam test",
-            "date": "12/4 - 19"
-        ]
+    func setupCarousel() {
+        let layout = UPCarouselFlowLayout()
+        let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
+        layout.scrollDirection = direction
+        layout.itemSize = direction == .horizontal ? CGSize(width: 350, height: 500) : CGSize(width: 320, height: 320)
+        layout.sideItemScale = 0.8
+        layout.sideItemAlpha = 1
+        layout.spacingMode = .fixed(spacing: 20)
+        collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: layout)
+        collectionView.flashScrollIndicators()
+        collectionView.register(UINib(nibName: "TripCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MyTripCell")
         
-        db.collection("Trips").document().setData(dataDict) { err in
-            if let err = err {
-                print("Error: \(err)")
-            } else {
-                print("Dokument sparat")
-            }
-        }
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.addSubview(collectionView)
+        self.currentPage = 0
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        laddaDB()
+        laddaTabell()
     }
     
     @objc func addNewTripPressed() {
         let newTripViewController = NewTrip()
         self.navigationController?.pushViewController(newTripViewController, animated: true)
+    }
+    
+    func laddaTabell() {
+        collectionView.reloadData()
+    }
+    
+    func laddaDB() {
+        myTripsData.trips.removeAll()
+        myTripsData.loadTrips()
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Trip:\(myTripsData.trips[indexPath.row].tripTitle)")
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return myTripsData.trips.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyTripCell", for: indexPath) as! TripCollectionViewCell
+        cell.tripImage.image = self.myTripsData.trips[indexPath.row].tripImg
+        cell.tripTitle.text = self.myTripsData.trips[indexPath.row].tripTitle
+        cell.tripDate.text = self.myTripsData.trips[indexPath.row].tripDate
+        
+        return cell
     }
     
     

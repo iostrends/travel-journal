@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" reuseIdentifier="MyTripCell" id="gTV-IL-0wX" customClass="TripCollectionViewCell" customModule="TravelJournal2" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="500"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="350" height="500"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mxd-kh-IJc">
+                        <rect key="frame" x="0.0" y="0.0" width="350" height="420"/>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CnD-zl-AFK">
+                        <rect key="frame" x="10" y="460" width="330" height="30"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5hb-Vb-4k7">
+                        <rect key="frame" x="10" y="430" width="330" height="20"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="CnD-zl-AFK" secondAttribute="bottom" constant="10" id="L1B-XK-eDN"/>
+                <constraint firstItem="CnD-zl-AFK" firstAttribute="top" secondItem="5hb-Vb-4k7" secondAttribute="bottom" constant="10" id="S6X-z1-9Pi"/>
+                <constraint firstAttribute="trailing" secondItem="Mxd-kh-IJc" secondAttribute="trailing" id="SBN-P9-vxI"/>
+                <constraint firstAttribute="trailing" secondItem="CnD-zl-AFK" secondAttribute="trailing" constant="10" id="UBw-QB-Yfc"/>
+                <constraint firstItem="5hb-Vb-4k7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Xib-aU-eYg"/>
+                <constraint firstItem="Mxd-kh-IJc" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="Zej-ZA-5oA"/>
+                <constraint firstItem="Mxd-kh-IJc" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="cNy-gt-5zQ"/>
+                <constraint firstAttribute="bottom" secondItem="5hb-Vb-4k7" secondAttribute="bottom" constant="50" id="oOm-sj-eMg"/>
+                <constraint firstAttribute="trailing" secondItem="5hb-Vb-4k7" secondAttribute="trailing" constant="10" id="rnY-f9-6kf"/>
+                <constraint firstItem="CnD-zl-AFK" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="vCI-mL-XSK"/>
+                <constraint firstAttribute="bottom" secondItem="Mxd-kh-IJc" secondAttribute="bottom" constant="80" id="yV9-Ya-J45"/>
+                <constraint firstItem="5hb-Vb-4k7" firstAttribute="top" secondItem="Mxd-kh-IJc" secondAttribute="bottom" constant="10" id="ygz-xR-JJt"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <connections>
+                <outlet property="tripDate" destination="CnD-zl-AFK" id="4uv-tL-1e1"/>
+                <outlet property="tripImage" destination="Mxd-kh-IJc" id="IP4-aC-IXq"/>
+                <outlet property="tripTitle" destination="5hb-Vb-4k7" id="kUD-aV-kgf"/>
+            </connections>
+            <point key="canvasLocation" x="137.59999999999999" y="139.43028485757122"/>
+        </collectionViewCell>
+    </objects>
+</document>

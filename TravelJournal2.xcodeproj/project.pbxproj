@@ -18,6 +18,8 @@
 		13727BBE21F9C60D0053CA88 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BBD21F9C60D0053CA88 /* Login.swift */; };
 		13727BC021F9C6130053CA88 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BBF21F9C6130053CA88 /* Register.swift */; };
 		13727BC221F9C6560053CA88 /* MyTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BC121F9C6560053CA88 /* MyTrips.swift */; };
+		7E9BB10F21F9ED1700CABAE2 /* TripCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */; };
+		7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */; };
 		D638CD89D2A8BFEB8DE46701 /* Pods_TravelJournal2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67780BA536D3A382E096593 /* Pods_TravelJournal2.framework */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +38,8 @@
 		13727BBD21F9C60D0053CA88 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		13727BBF21F9C6130053CA88 /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		13727BC121F9C6560053CA88 /* MyTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrips.swift; sourceTree = "<group>"; };
+		7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCollectionViewCell.swift; sourceTree = "<group>"; };
+		7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripCollectionViewCell.xib; sourceTree = "<group>"; };
 		B9FC714A9A7237F1EB6D4CF5 /* Pods-TravelJournal2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelJournal2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TravelJournal2/Pods-TravelJournal2.debug.xcconfig"; sourceTree = "<group>"; };
 		D67780BA536D3A382E096593 /* Pods_TravelJournal2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TravelJournal2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -79,6 +83,8 @@
 				13727BBB21F9C5CF0053CA88 /* NewTrip.swift */,
 				13727BBD21F9C60D0053CA88 /* Login.swift */,
 				13727BC121F9C6560053CA88 /* MyTrips.swift */,
+				7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */,
+				7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */,
 				13727BBF21F9C6130053CA88 /* Register.swift */,
 				1308835921F9BF720052050C /* Assets.xcassets */,
 				1308835B21F9BF720052050C /* LaunchScreen.storyboard */,
@@ -168,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1308835D21F9BF720052050C /* LaunchScreen.storyboard in Resources */,
+				7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */,
 				1308835A21F9BF720052050C /* Assets.xcassets in Resources */,
 				13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */,
 			);
@@ -234,6 +241,7 @@
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/UPCarouselFlowLayout/UPCarouselFlowLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-C++/grpcpp.framework",
 				"${BUILT_PRODUCTS_DIR}/gRPC-Core/grpc.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -248,6 +256,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UPCarouselFlowLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpcpp.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/grpc.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -273,6 +282,7 @@
 				13727BC021F9C6130053CA88 /* Register.swift in Sources */,
 				13727BB821F9C43D0053CA88 /* TripData.swift in Sources */,
 				1308835021F9BF710052050C /* AppDelegate.swift in Sources */,
+				7E9BB10F21F9ED1700CABAE2 /* TripCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,13 +422,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DT55U63BYS;
+				DEVELOPMENT_TEAM = JHNA7HLFF2;
 				INFOPLIST_FILE = TravelJournal2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = se.niclasnordling.TravelJournal2;
+				PRODUCT_BUNDLE_IDENTIFIER = se.samuellavasani.TravelJournal2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -431,13 +441,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = DT55U63BYS;
+				DEVELOPMENT_TEAM = JHNA7HLFF2;
 				INFOPLIST_FILE = TravelJournal2/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = se.niclasnordling.TravelJournal2;
+				PRODUCT_BUNDLE_IDENTIFIER = se.samuellavasani.TravelJournal2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";

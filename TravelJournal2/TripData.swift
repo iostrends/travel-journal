@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseStorage
+import SVProgressHUD
 
 protocol TripDelegate {
     func SetTripData(description:[String: Any])
@@ -89,6 +90,7 @@ class TripData {
     }
     
     func loadTrips() {
+        SVProgressHUD.show()
         let db = Firestore.firestore()
         var trip = Trip()
         
@@ -100,14 +102,14 @@ class TripData {
                 for document in qSnapshot.documents {
                     trip.tripId = document.documentID
                     trip.tripTitle = document.data()["tripTitle"]as? String ?? ""
-                    trip.tripDate = document.data()["date"]as? String ?? ""
-                    trip.tripImgURL = document.data()["imgURL"]as? String ?? ""
+                    trip.tripDate = document.data()["tripDate"]as? String ?? ""
+                    trip.tripImgURL = document.data()["tripImg"]as? String ?? ""
                     
                     self.trips.append(trip)
+                    print("TripDB \(trip)")
                 }
                 self.loadImage()
             }
-            
         }
     }
     
@@ -126,6 +128,7 @@ class TripData {
                         i+=1
                     }
                 }
+                SVProgressHUD.dismiss()
                 if (i == self.trips.count) {
                     self.dataDel?.laddaTabell()
                 }
