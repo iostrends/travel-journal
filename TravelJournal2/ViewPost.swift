@@ -31,7 +31,7 @@ class ViewPost: UIViewController, PostDelegate {
     var postArray : [String] = []
     
     var currentPost = 0
-    var postId = "TEhar58OpwmeSqMFn1oY"
+    var postId = "btbNMLaXB2wQu86kkKfn"
 
     override func viewDidLoad() {
         super.viewDidLoad()

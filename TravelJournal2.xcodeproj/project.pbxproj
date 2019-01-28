@@ -21,6 +21,11 @@
 		13CE55F121FB082A00F85906 /* ViewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CE55F021FB082A00F85906 /* ViewPost.swift */; };
 		7E9BB10F21F9ED1700CABAE2 /* TripCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */; };
 		7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */; };
+		7EC316C621FF3DC300C5A406 /* UIImage + Decompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */; };
+		7EC316C821FF3DFF00C5A406 /* UltraVisualLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC316C721FF3DFF00C5A406 /* UltraVisualLayout.swift */; };
+		7EC316CA21FF3E5400C5A406 /* PostsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC316C921FF3E5400C5A406 /* PostsCollectionViewController.swift */; };
+		7EC316CD21FF3EEB00C5A406 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC316CB21FF3EEB00C5A406 /* PostCollectionViewCell.swift */; };
+		7EC316CE21FF3EEB00C5A406 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7EC316CC21FF3EEB00C5A406 /* PostCollectionViewCell.xib */; };
 		D638CD89D2A8BFEB8DE46701 /* Pods_TravelJournal2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67780BA536D3A382E096593 /* Pods_TravelJournal2.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +47,11 @@
 		13CE55F021FB082A00F85906 /* ViewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPost.swift; sourceTree = "<group>"; };
 		7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCollectionViewCell.swift; sourceTree = "<group>"; };
 		7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripCollectionViewCell.xib; sourceTree = "<group>"; };
+		7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Decompression.swift"; sourceTree = "<group>"; };
+		7EC316C721FF3DFF00C5A406 /* UltraVisualLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraVisualLayout.swift; sourceTree = "<group>"; };
+		7EC316C921FF3E5400C5A406 /* PostsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCollectionViewController.swift; sourceTree = "<group>"; };
+		7EC316CB21FF3EEB00C5A406 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
+		7EC316CC21FF3EEB00C5A406 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
 		B9FC714A9A7237F1EB6D4CF5 /* Pods-TravelJournal2.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelJournal2.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TravelJournal2/Pods-TravelJournal2.debug.xcconfig"; sourceTree = "<group>"; };
 		D67780BA536D3A382E096593 /* Pods_TravelJournal2.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TravelJournal2.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -85,6 +95,11 @@
 				13727BBB21F9C5CF0053CA88 /* NewTrip.swift */,
 				13727BBD21F9C60D0053CA88 /* Login.swift */,
 				13727BC121F9C6560053CA88 /* MyTrips.swift */,
+				7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */,
+				7EC316C721FF3DFF00C5A406 /* UltraVisualLayout.swift */,
+				7EC316C921FF3E5400C5A406 /* PostsCollectionViewController.swift */,
+				7EC316CB21FF3EEB00C5A406 /* PostCollectionViewCell.swift */,
+				7EC316CC21FF3EEB00C5A406 /* PostCollectionViewCell.xib */,
 				13CE55F021FB082A00F85906 /* ViewPost.swift */,
 				7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */,
 				7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */,
@@ -180,6 +195,7 @@
 				7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */,
 				1308835A21F9BF720052050C /* Assets.xcassets in Resources */,
 				13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */,
+				7EC316CE21FF3EEB00C5A406 /* PostCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,9 +300,13 @@
 				13727BBE21F9C60D0053CA88 /* Login.swift in Sources */,
 				13727BC021F9C6130053CA88 /* Register.swift in Sources */,
 				13CE55F121FB082A00F85906 /* ViewPost.swift in Sources */,
+				7EC316C621FF3DC300C5A406 /* UIImage + Decompression.swift in Sources */,
+				7EC316C821FF3DFF00C5A406 /* UltraVisualLayout.swift in Sources */,
 				13727BB821F9C43D0053CA88 /* TripData.swift in Sources */,
 				1308835021F9BF710052050C /* AppDelegate.swift in Sources */,
 				7E9BB10F21F9ED1700CABAE2 /* TripCollectionViewCell.swift in Sources */,
+				7EC316CD21FF3EEB00C5A406 /* PostCollectionViewCell.swift in Sources */,
+				7EC316CA21FF3E5400C5A406 /* PostsCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

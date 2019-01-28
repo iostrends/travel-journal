@@ -9,6 +9,7 @@
 import UIKit
 
 class Welcome: UIViewController {
+    
     var logButton : UIButton {
         let button = UIButton()
         button.titleLabel?.textColor = UIColor.black
@@ -20,6 +21,14 @@ class Welcome: UIViewController {
         return button
     }
     
+    var loginButton = UIButton()
+    var registerButton = UIButton()
+    var mainLabel = UILabel()
+    var backgroundImageView = UIImageView()
+    var backgroundImage = UIImage()
+    var blurEffectStyle = UIBlurEffect()
+    var blurEffectView = UIVisualEffectView()
+    
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
@@ -28,11 +37,15 @@ class Welcome: UIViewController {
         super.viewDidLoad()
         self.title = "Travel Journal 2"
         view.backgroundColor = UIColor.clear
+        loginButton = logButton
+        registerButton = logButton
+        backgroundImage = UIImage(named: "background2")!
+        blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
-        //setupUI()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         setupUI()
     }
     
@@ -44,22 +57,14 @@ class Welcome: UIViewController {
     }
     
     func setupBackground() {
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        let image = UIImage(named: "background2")
-        imageView.image = image
-        imageView.addSubview(blurEffect())
-        view.addSubview(imageView)
-    }
-    
-    func blurEffect() -> UIVisualEffectView {
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        //backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
+        backgroundImageView.frame = UIScreen.main.bounds
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.image = backgroundImage
         blurEffectView.frame = view.bounds
-        
-        return blurEffectView
-        
+        backgroundImageView.addSubview(blurEffectView)
+        view.addSubview(backgroundImageView)
     }
     
     func setupButtons() {
@@ -69,31 +74,30 @@ class Welcome: UIViewController {
             x *= 4
             width *= 4
         }
-        let loginButton = logButton
         loginButton.setTitle("Login", for: .normal)
         loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 140, width: UIScreen.main.bounds.width - width, height: 50)
-        view.addSubview(loginButton)
         
-        let registerButton = logButton
         registerButton.setTitle("Register", for: .normal)
         registerButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
         registerButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 80, width: UIScreen.main.bounds.width - width, height: 50)
+        view.addSubview(loginButton)
         view.addSubview(registerButton)
     }
     
     func setupMainLabel() {
-        let label = UILabel(frame: CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33))
-        label.text = "Add nice slogan here"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Zapfino", size: 25.0)
-        label.textColor = UIColor.white
-        view.addSubview(label)
+        mainLabel.frame = CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33)
+        mainLabel.text = "Add nice slogan here"
+        mainLabel.textAlignment = .center
+        mainLabel.font = UIFont(name: "Zapfino", size: 25.0)
+        mainLabel.textColor = UIColor.white
+        view.addSubview(mainLabel)
+        
     }
     
     @objc func loginPressed() {
         print("Logging in....")
-        let loginViewController = MyTrips()
+        let loginViewController = PostsCollectionViewController()
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     

@@ -161,6 +161,7 @@ class TripData {
     
     func loadPostImage(imgUrl: String) {
         let storageRef = Storage.storage().reference()
+        
         let imgRef = storageRef.child(imgUrl)
         imgRef.getData(maxSize: 1024*1024) { (data, error) in
             if let error = error {
@@ -202,8 +203,54 @@ class TripData {
         }
     }
     
+    func loadPostImages() {
+        let storageRef = Storage.storage().reference()
+        var i = 0
+        for (index, post) in posts.enumerated() {
+            let imgRef = storageRef.child(post.postImgURL)
+            imgRef.getData(maxSize: 1024*1024) { (data, error) in
+                if let error = error {
+                    print(error)
+                } else {
+                    if let imgData = data {
+                        let postImg = UIImage(data: imgData)
+                        self.posts[index].postImg = postImg
+                        i+=1
+                    }
+                }
+                SVProgressHUD.dismiss()
+                if (i == self.posts.count) {
+                    self.dataDel?.laddaTabell()
+                }
+            }
+        }
+    }
+    
     func loadPostsByTrip(tripTitle: String){
+        SVProgressHUD.show()
+        let db = Firestore.firestore()
+        var post = Post()
         
+        db.collection("Posts").getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting document: \(err)")
+            } else {
+                guard let qSnapshot = querySnapshot else {return}
+                for document in qSnapshot.documents {
+                    post.postId = document.documentID
+                    post.tripTitle = document.data()["tripTitle"]as? String ?? ""
+                    post.postTitle = document.data()["postTitle"]as? String ?? ""
+                    post.postDate = document.data()["postDate"]as? String ?? ""
+                    post.postText = document.data()["postText"]as? String ?? ""
+                    post.postImgURL = document.data()["postImg"]as? String ?? ""
+                    
+                    self.posts.append(post)
+                    print("PostDB \(post)")
+                }
+                self.loadPostImages()
+            }
+        }
+
     }
     
     func uploadPost() {

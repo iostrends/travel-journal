@@ -26,22 +26,26 @@ class LoginViewController: UIViewController, UITextViewDelegate {
     
     var emailTextField = UITextField()
     var passwordTextField = UITextField()
+    var loginButton = UIButton()
+    var backgroundImageView = UIImageView()
+    var backgroundImage = UIImage()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         // Do any additional setup after loading the view.
+        loginButton = logButton
+        backgroundImage =  UIImage(named: "loginbackground")!
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         setupUI()
     }
     
     func setupBackground() {
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        let image = UIImage(named: "loginbackground")
-        imageView.image = image
-        view.addSubview(imageView)
+        backgroundImageView.frame = UIScreen.main.bounds
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.image = backgroundImage
+        view.addSubview(backgroundImageView)
         
     }
     
@@ -52,7 +56,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
             x *= 4
             width *= 4
         }
-        let loginButton = logButton
+        
         loginButton.setTitle("Login", for: .normal)
         loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 50)
@@ -66,14 +70,14 @@ class LoginViewController: UIViewController, UITextViewDelegate {
             x *= 4
             width *= 4
         }
-        emailTextField = UITextField(frame: CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40))
+        emailTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
         emailTextField.backgroundColor = UIColor.white
         emailTextField.placeholder = "Email"
         emailTextField.textAlignment = .center
         emailTextField.layer.cornerRadius = 10
         view.addSubview(emailTextField)
         
-        passwordTextField = UITextField(frame: CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40))
+        passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
         passwordTextField.backgroundColor = UIColor.white
         passwordTextField.placeholder = "Password"
         passwordTextField.textAlignment = .center

@@ -41,7 +41,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         guard !orientation.isFlat else { return }
         let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
         let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
-        layout.scrollDirection = direction
+        layout.scrollDirection = .horizontal
         layout.itemSize = direction == .horizontal ? CGSize(width: 350, height: 500) : CGSize(width: 320, height: 320)
         collectionView.frame = UIScreen.main.bounds
         backgroundImage()
