@@ -40,33 +40,17 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func setupBackground() {
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        let image = UIImage(named: "background2")
-        imageView.image = image
-        view.addSubview(imageView)
-        imageView.addSubview(blurEffect())
-    }
-    
-    func blurEffect() -> UIVisualEffectView {
+        let backgroundImage = UIImage(named: "background2")
+        let imageView = UIImageView(image: backgroundImage)
+        
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
+        view.addSubview(imageView)
+        imageView.addSubview(blurEffectView)
         
-        return blurEffectView
         
     }
-    
-    //    func backgroundImage() {
-    //        let backgroundImage = UIImage(named: "planeCloud2")
-    //        let imageView = UIImageView(image: backgroundImage)
-    //
-    //        imageView.addSubview(blurEffect())
-    //
-    //        self.tableView.backgroundView = imageView
-    //
-    //    }
     
     func addNewTripUI() {
         
@@ -87,13 +71,8 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         showcaseImage.clipsToBounds = true
         
         tripContentView.addSubview(showcaseImage)
-        
-        //        var x : CGFloat = 10
-        //        var width : CGFloat = 20
-        //
+
         if orientation != .portrait {
-            //            x *= 4
-            //            width *= 4
             tripContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
             showcaseImage.frame = (CGRect(x: 0, y: 0, width: tripContentView.frame.width, height: (tripContentView.frame.height*0.75)))
         }

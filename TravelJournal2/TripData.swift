@@ -17,24 +17,47 @@ protocol TripDelegate {
     func setTripImg(img:UIImage)
 }
 
+protocol PostDelegate {
+    func SetPostData(description:[String: Any])
+    func setPostImg(img:UIImage)
+}
+
 protocol DataDelegate {
     func laddaTabell()
 }
 
+struct Trip {
+    var tripId = ""
+    var tripTitle = ""
+    var tripDate = ""
+    var tripImgURL = ""
+    var tripImg: UIImage?
+}
+
+struct Post {
+    var postId = ""
+    var tripTitle = ""
+    var postTitle = ""
+    var postImg : UIImage?
+    var postImgURL = ""
+    var postText = ""
+    var postDate = ""
+    var lat = ""
+    var long = ""
+}
+
 class TripData {
     var tripDel: TripDelegate?
+    var postDel: PostDelegate?
     var dataDel: DataDelegate?
     
-    struct Trip {
-        var tripId = ""
-        var tripTitle = ""
-        var tripDate = ""
-        var tripImgURL = ""
-        var tripImg: UIImage?
-    }
-    
     var trips:[Trip] = []
+    var posts:[Post] = []
+    
     var oneTrip = Trip()
+    var onePost = Post()
+    
+    var filteredPosts : [Post] = []
     
     func uploadData() {
         var imgName = oneTrip.tripTitle.replacingOccurrences(of: " ", with: "_")
@@ -134,6 +157,61 @@ class TripData {
                 }
             }
         }
+    }
+    
+    func loadPostImage(imgUrl: String) {
+        let storageRef = Storage.storage().reference()
+        let imgRef = storageRef.child(imgUrl)
+        imgRef.getData(maxSize: 1024*1024) { (data, error) in
+            if let error = error {
+                print(error)
+            } else {
+                if let imgData = data {
+                    if let postImg = UIImage(data: imgData) {
+                        self.postDel?.setPostImg(img:postImg)
+                        print("restImg: \(postImg)")
+                    }
+                }
+            }
+            SVProgressHUD.dismiss()
+            
+        }
+    }
+    
+    func loadOnePost(postId : String){
+        SVProgressHUD.show()
+        let db = Firestore.firestore()
+        let docRef = db.collection("Posts").document(postId)
+        print("postId", postId)
+        docRef.getDocument { (document,error) in
+            if let document = document, document.exists {
+                if let dataDescription = document.data() {
+                    self.postDel?.SetPostData(description: dataDescription)
+                    print("loadOnePost")
+                    print("dataDescription", dataDescription)
+                    if let imgUrl = dataDescription["postImgURL"] as? String {
+                        self.loadPostImage(imgUrl: imgUrl)
+                        print("imgUrl: \(imgUrl)")
+                    } else {
+                        SVProgressHUD.dismiss()
+                    }
+                }
+            } else {
+                print("No document")
+            }
+        }
+    }
+    
+    func loadPostsByTrip(tripTitle: String){
+        
+    }
+    
+    func uploadPost() {
+        
+    }
+
+    func updatePost(id: String){
+        
     }
 }
 
