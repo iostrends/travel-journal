@@ -58,7 +58,7 @@ class ViewPost: UIViewController, PostDelegate {
         imageView.addSubview(blurEffectView)
     }
 
-    func addNewPostUI() {
+    func addViewPostUI() {
 
         postContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
         postContentView.backgroundColor = UIColor.clear
@@ -123,7 +123,7 @@ class ViewPost: UIViewController, PostDelegate {
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
         setupBackground()
-        addNewPostUI()
+        addViewPostUI()
     }
 
     @objc func sharePost() {
@@ -149,5 +149,4 @@ class ViewPost: UIViewController, PostDelegate {
         postImage.image = img
         print("SetPostImg")
     }
-
 }
