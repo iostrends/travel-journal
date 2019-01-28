@@ -109,6 +109,9 @@ extension PostsCollectionViewController {
             )
         } else {
             print("In Focus!")
+            let viewPost = ViewPost()
+            viewPost.postId = myTripsData.posts[indexPath.row].postId
+            self.navigationController?.pushViewController(viewPost, animated: true)
         }
     }
 }
