@@ -170,7 +170,6 @@ class TripData {
                 if let imgData = data {
                     if let postImg = UIImage(data: imgData) {
                         self.postDel?.setPostImg(img:postImg)
-                        print("restImg: \(postImg)")
                     }
                 }
             }
@@ -183,16 +182,14 @@ class TripData {
         SVProgressHUD.show()
         let db = Firestore.firestore()
         let docRef = db.collection("Posts").document(postId)
-        print("postId", postId)
         docRef.getDocument { (document,error) in
             if let document = document, document.exists {
                 if let dataDescription = document.data() {
                     self.postDel?.SetPostData(description: dataDescription)
-                    print("loadOnePost")
-                    print("dataDescription", dataDescription)
-                    if let imgUrl = dataDescription["postImgURL"] as? String {
+                    print("datadesc", dataDescription)
+                    if let imgUrl = dataDescription["postImg"] as? String {
+                        print("imgUrl")
                         self.loadPostImage(imgUrl: imgUrl)
-                        print("imgUrl: \(imgUrl)")
                     } else {
                         SVProgressHUD.dismiss()
                     }
@@ -254,7 +251,58 @@ class TripData {
     }
     
     func uploadPost() {
+        var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
+        imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.lowercased()
         
+        let db = Firestore.firestore()
+        var dataDict = [
+            "tripTitle": onePost.tripTitle,
+            "postTitle": onePost.postTitle,
+            "postText": onePost.postText,
+            "postDate": onePost.postDate
+            ]
+        
+        if onePost.postImg != nil {
+            dataDict["postImg"] = imgName + ".jpg"
+        }
+        
+        db.collection("Posts").document().setData(dataDict) { err in
+            if let err = err {
+                print("Error: \(err)")
+            } else {
+                print("Dokument sparat")
+                if self.onePost.postImg != nil { self.uploadPostImage(imgName: imgName) }
+            }
+        }
+    }
+    
+    func uploadPostImage(imgName:String) {
+        if let image = onePost.postImg {
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: 375, height: 180), false, 0.0)
+            let ratio = image.size.width/image.size.height
+            let scaleWidth = ratio*375
+            let offsetX = (scaleWidth-375)/2
+            image.draw(in: CGRect(x: -offsetX, y: 0, width: scaleWidth, height: 180))
+            let postImg = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            if let jpegData = postImg?.jpegData(compressionQuality: 0.7) {
+                let storageRef = Storage.storage().reference()
+                let imgRef = storageRef.child(imgName+".jpg")
+                let metaData = StorageMetadata()
+                metaData.contentType = "image/jpeg"
+                
+                imgRef.putData(jpegData, metadata: metaData) { (metaData, error) in
+                    guard metaData != nil else{
+                        print(error!)
+                        return
+                    }
+                    print("image uploaded")
+                    self.uploadImage(imgName: imgName)
+                }
+            }
+        }
     }
 
     func updatePost(id: String){

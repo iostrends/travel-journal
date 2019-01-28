@@ -21,7 +21,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Permission to use access the media library needed</string>
+	<string>Permission to access the media library needed</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Permission to use the camera needed</string>
 	<key>UILaunchStoryboardName</key>
