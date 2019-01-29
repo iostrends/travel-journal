@@ -92,10 +92,33 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         self.title = "My Trips"
         currentUser = Auth.auth().currentUser?.email ?? "User not found"
         navigationItem.rightBarButtonItem = addNewTripButton
+        let backItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logOutUser))
+        navigationItem.leftBarButtonItem = backItem
+
         myTripsData.dataDel = self
         setupCarousel()
         NotificationCenter.default.addObserver(self, selector: #selector(MyTrips.rotationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
-        backgroundImage()
+    }
+    
+    @objc func logOutUser() {
+        do{
+            
+            try Auth.auth().signOut()
+            uploadSuccessMessage()
+            
+        } catch {
+            print("Error")
+        }
+    }
+    
+    func uploadSuccessMessage(){
+        let alert = UIAlertController(title: "Logga ut", message: "Du är nu utloggad", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            
+            // Returns to root viewcontroller
+            self.navigationController?.popToRootViewController(animated: true)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func setupCarousel() {
@@ -119,6 +142,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     override func viewWillAppear(_ animated: Bool) {
         laddaDB()
         laddaTabell()
+        backgroundImage()
     }
     
     @objc func addNewTripPressed() {
