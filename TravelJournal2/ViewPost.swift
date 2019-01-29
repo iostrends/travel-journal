@@ -32,6 +32,8 @@ class ViewPost: UIViewController, PostDelegate {
     
     var currentPost = 0
     var postId = "PJ2XH5UHOZNO4hiUME6N"
+    var longitude = ""
+    var latitude = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,7 +133,13 @@ class ViewPost: UIViewController, PostDelegate {
     }
 
     @objc func postLocation() {
-        
+        let showMap = ShowMap()
+//        viewPost.postId = myTripsData.posts[indexPath.row].postId
+        print("longitude", longitude)
+        print("latitude", latitude)
+        showMap.lat = latitude
+        showMap.long = longitude
+        self.navigationController?.pushViewController(showMap, animated: true)
     }
     
     @objc func editPost() {
@@ -142,6 +150,8 @@ class ViewPost: UIViewController, PostDelegate {
         postTitle.text = description["postTitle"] as? String
         postDate.text = description["postDate"] as? String
         postText.text = description["postText"] as? String
+        longitude = description["postLong"] as? String ?? ""
+        latitude = description["postLat"] as? String ?? ""
         print("SetPostData")
     }
     

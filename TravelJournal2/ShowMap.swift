@@ -21,7 +21,7 @@ class ShowMap: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
-        //showPin()
+        showPin()
         mapView.delegate = self
     }
     
