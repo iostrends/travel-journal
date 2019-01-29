@@ -97,7 +97,7 @@ class Welcome: UIViewController {
     
     @objc func loginPressed() {
         print("Logging in....")
-        let loginViewController = PostsCollectionViewController()
+        let loginViewController = LoginViewController()
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     

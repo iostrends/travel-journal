@@ -15,7 +15,14 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         return UIStatusBarStyle.lightContent
     }
     
+    var addNewTripButton : UIBarButtonItem {
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPostPressed))
+        return button
+    }
+    
     let myTripsData = TripData()
+    var tripTitle = ""
+    var currentUser = ""
     var collectionView : UICollectionView!
     var backgroundImageView = UIImageView()
     var backgroundImage = UIImage()
@@ -26,6 +33,7 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         super.viewDidLoad()
         view.backgroundColor = .clear
         myTripsData.dataDel = self
+        navigationItem.rightBarButtonItem = addNewTripButton
         backgroundImage = UIImage(named: "background2")!
         blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
         blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
@@ -46,7 +54,13 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     override func viewWillAppear(_ animated: Bool) {
         laddaDB()
         laddaTabell()
-        print("MyPosts:\(myTripsData.posts)")
+    }
+
+    @objc func addNewPostPressed() {
+        let newPostViewController = NewPost()
+        newPostViewController.currentUser = currentUser
+        newPostViewController.tripTitle = tripTitle
+        self.navigationController?.pushViewController(newPostViewController, animated: true)
     }
     
     func setupBackground() {
@@ -73,7 +87,7 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     
     func laddaDB() {
         myTripsData.posts.removeAll()
-        myTripsData.loadPostsByTrip(tripTitle: "Trip Title")
+        myTripsData.loadPostsByTrip(user: currentUser,tripTitle: tripTitle)
     }
     
     

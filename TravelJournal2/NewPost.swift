@@ -19,6 +19,8 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     var postContentView = UIView()
+    var currentUser = ""
+    var tripTitle = ""
     var postImage = UIImageView()
     var postTitle = UITextField()
     var postText = UITextView()
@@ -123,13 +125,13 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM dd, YYYY"
             let date = formatter.string(from: Date())
-            
+            data.onePost.userEmail = currentUser
             data.onePost.postTitle = postTitle.text ?? ""
             data.onePost.postText = postText.text ?? ""
             data.onePost.postDate = date
             data.onePost.lat = latitude
             data.onePost.long = longitude
-            data.onePost.tripTitle = "London"
+            data.onePost.tripTitle = tripTitle
             
             if postImage.image != nil {
                 data.onePost.postImg = postImage.image

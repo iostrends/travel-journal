@@ -11,6 +11,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseStorage
 import UPCarouselFlowLayout
+import FirebaseAuth
 
 class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataDelegate {
     
@@ -36,6 +37,8 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
+    
+    var currentUser = ""
     
     @objc fileprivate func rotationDidChange() {
         guard !orientation.isFlat else { return }
@@ -87,6 +90,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.clear
         self.title = "My Trips"
+        currentUser = Auth.auth().currentUser?.email ?? "User not found"
         navigationItem.rightBarButtonItem = addNewTripButton
         myTripsData.dataDel = self
         setupCarousel()
@@ -128,7 +132,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
     func laddaDB() {
         myTripsData.trips.removeAll()
-        myTripsData.loadTrips()
+        myTripsData.loadTrips(user: currentUser)
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -136,7 +140,11 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Trip:\(myTripsData.trips[indexPath.row].tripTitle)")
+        //print("Trip:\(myTripsData.trips[indexPath.row].tripTitle)")
+        let postsVC = PostsCollectionViewController()
+        postsVC.tripTitle = myTripsData.trips[indexPath.row].tripTitle
+        postsVC.currentUser = currentUser
+        self.navigationController?.pushViewController(postsVC, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

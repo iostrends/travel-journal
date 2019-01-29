@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
@@ -28,12 +29,14 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     let tripData = TripData()
     var tripsArray : [String] = []
     var dateChoosenString = ""
+    var currentUser = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
+        currentUser = Auth.auth().currentUser?.email ?? "User not found"
         setupUI()
         tripTitle.delegate = self
         tripsArray = tripData.trips.map { $0.tripTitle.lowercased() }
@@ -130,8 +133,8 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         //Checks if the fields are empty and if the Trip Name already exists
         if(tripName != "" && !tripsArray.contains(tripName.lowercased())){
             
+            tripData.oneTrip.userEmail = currentUser
             tripData.oneTrip.tripTitle = tripTitle.text ?? ""
-            
             tripData.oneTrip.tripDate = getChoosenDate()
             
             if showcaseImage.image != nil {
