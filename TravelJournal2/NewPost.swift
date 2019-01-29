@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class CreatePost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
     
     let screenHeight = UIScreen.main.bounds.size.height
     let screenWidth = UIScreen.main.bounds.size.width
@@ -26,13 +27,17 @@ class CreatePost: UIViewController, UIImagePickerControllerDelegate, UINavigatio
     var libraryBtn = UIButton()
     
     let data = TripData()
-    var postArray : [String] = []
+    let locationManager = CLLocationManager()
+    
+    var latitude = ""
+    var longitude = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
+        findMyLocation()
         setupUI()
         postText.delegate = self
     }
@@ -122,6 +127,8 @@ class CreatePost: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             data.onePost.postTitle = postTitle.text ?? ""
             data.onePost.postText = postText.text ?? ""
             data.onePost.postDate = date
+            data.onePost.lat = latitude
+            data.onePost.long = longitude
             data.onePost.tripTitle = "London"
             
             if postImage.image != nil {
@@ -210,6 +217,31 @@ class CreatePost: UIViewController, UIImagePickerControllerDelegate, UINavigatio
             _ = self.navigationController?.popViewController(animated: true)
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    // LOCATION
+    
+    func findMyLocation() {
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations[locations.count - 1]
+        
+        // stop updating when you get a valid result. If horizontalAcc is below 0 it is an invalid result
+        if location.horizontalAccuracy > 0 {
+            
+            locationManager.stopUpdatingLocation()
+            locationManager.delegate = nil
+            
+            
+            latitude = String(location.coordinate.latitude)
+            longitude = String(location.coordinate.longitude)
+            print("Long: \(longitude) and Lat: \(latitude)")
+        }
     }
     
     // MISC

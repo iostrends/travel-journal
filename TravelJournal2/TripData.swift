@@ -240,6 +240,8 @@ class TripData {
                     post.postDate = document.data()["postDate"]as? String ?? ""
                     post.postText = document.data()["postText"]as? String ?? ""
                     post.postImgURL = document.data()["postImg"]as? String ?? ""
+                    post.lat = document.data()["postLat"]as? String ?? ""
+                    post.long = document.data()["postLong"]as? String ?? ""
                     
                     self.posts.append(post)
                     print("PostDB \(post)")
@@ -260,7 +262,9 @@ class TripData {
             "tripTitle": onePost.tripTitle,
             "postTitle": onePost.postTitle,
             "postText": onePost.postText,
-            "postDate": onePost.postDate
+            "postDate": onePost.postDate,
+            "postLat": onePost.lat,
+            "postLong": onePost.long
             ]
         
         if onePost.postImg != nil {
