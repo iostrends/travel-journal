@@ -11,14 +11,10 @@ import CoreLocation
 
 class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
     
-    let screenHeight = UIScreen.main.bounds.size.height
-    let screenWidth = UIScreen.main.bounds.size.width
-    
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
-    var postContentView = UIView()
     var currentUser = ""
     var tripTitle = ""
     var postImage = UIImageView()
@@ -60,13 +56,12 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func addNewPostUI() {
         
-        postContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
-        postContentView.backgroundColor = UIColor.clear
-        postContentView.clipsToBounds = true
-        view.addSubview(postContentView)
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
         
-        let postViewWidth = postContentView.frame.width
-        let postViewHeight = postContentView.frame.height
+        let width = view.frame.width - 20
+        let height = view.frame.height
+        var y = navbarHeight + statusbarHeight + 10
         
         createPostBtn.style = .plain
         createPostBtn.title = "Save"
@@ -74,43 +69,45 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         self.navigationItem.rightBarButtonItem = createPostBtn
         
-        postImage.frame = (CGRect(x: 10, y: 0, width: postViewWidth - 20, height: postViewHeight*0.40))
+        postImage.frame = (CGRect(x: 10, y: y, width: width, height: height*0.40))
         postImage.contentMode = .scaleAspectFill
         postImage.layer.cornerRadius = 10.0
         postImage.clipsToBounds = true
         postImage.backgroundColor = UIColor.white
         
-        postContentView.addSubview(postImage)
-
-        if orientation != .portrait {
-            postContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
-            postImage.frame = (CGRect(x: 0, y: 0, width: postViewWidth, height: (postViewHeight*0.75)))
-        }
-        
-        postTitle.frame = (CGRect(x: 10, y: postViewHeight*0.41, width: postViewWidth - 20, height: postViewHeight*0.09))
-        postTitle.backgroundColor = UIColor.white
-        postTitle.textColor = UIColor.black
-        postTitle.placeholder = " Title" // Intentional space
-        postTitle.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
-        postTitle.layer.cornerRadius = 10.0
-        postContentView.addSubview(postTitle)
-        
-        postText.frame = (CGRect(x: 10, y: postViewHeight*0.51, width: postViewWidth - 20, height: postViewHeight*0.45))
-        postText.text = "Journal entry here"
-        postText.textColor = UIColor.lightGray
-        postText.backgroundColor = UIColor.white
-        postText.layer.cornerRadius = 10.0
-        postContentView.addSubview(postText)
+        view.addSubview(postImage)
         
         cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
         cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
-        cameraBtn.frame = CGRect(x: 20, y: 10, width: 32, height: 32)
-        postContentView.addSubview(cameraBtn)
+        cameraBtn.frame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
+        view.addSubview(cameraBtn)
         
         libraryBtn.setImage(UIImage(named: "library"), for: .normal)
         libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
-        libraryBtn.frame = CGRect(x: postViewWidth - 52, y: 10, width: 32, height: 32)
-        postContentView.addSubview(libraryBtn)
+        libraryBtn.frame = CGRect(x: width - 32, y: y + 10, width: 32, height: 32)
+        view.addSubview(libraryBtn)
+        y += postImage.bounds.size.height
+        
+        postTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
+        postTitle.backgroundColor = UIColor.white
+        postTitle.textColor = UIColor.black
+        postTitle.layer.borderColor = UIColor.white.cgColor
+        postTitle.layer.borderWidth = 1
+        postTitle.placeholder = " Title" // Intentional space
+        postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
+        postTitle.layer.cornerRadius = 10.0
+        view.addSubview(postTitle)
+        y += postTitle.bounds.size.height
+        
+        postText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
+        postText.text = "Journal entry here"
+        postText.textColor = UIColor.lightGray
+        postText.backgroundColor = UIColor.white
+        postText.layer.borderColor = UIColor.black.cgColor
+        postText.layer.borderWidth = 1
+        postText.layer.cornerRadius = 10.0
+        view.addSubview(postText)
+        y += postText.bounds.size.height
     }
     
     @objc func setupUI() {
@@ -256,6 +253,13 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         if textView.textColor == UIColor.lightGray {
             textView.text = nil
             textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            postText.text = "Journal entry here"
+            postText.textColor = UIColor.lightGray
         }
     }
 }

@@ -18,20 +18,29 @@ class ShowMap: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     var lat = ""
     var long = ""
     
+    fileprivate var orientation: UIDeviceOrientation {
+        return UIDevice.current.orientation
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(setupMapView), name: UIDevice.orientationDidChangeNotification, object: nil)
         setupMapView()
         showPin()
         mapView.delegate = self
+        
+        segControl.insertSegment(withTitle: "Standard", at: 0, animated: true)
+        segControl.insertSegment(withTitle: "Satellite", at: 1, animated: true)
+        segControl.selectedSegmentIndex = 0
+        
+        self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
     }
     
-    func setupMapView() {
+    @objc func setupMapView() {
         mapView.frame =  CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
         view.addSubview(mapView)
         
         segControl.frame = CGRect(x: UIScreen.main.bounds.width - 160, y: UIScreen.main.bounds.height - 50, width: 140, height: 30)
-        segControl.insertSegment(withTitle: "Standard", at: 0, animated: true)
-        segControl.insertSegment(withTitle: "Satellite", at: 1, animated: true)
         segControl.addTarget(self, action: #selector(changeMapStyle), for: .valueChanged)
         view.addSubview(segControl)
     }
