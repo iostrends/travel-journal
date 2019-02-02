@@ -16,6 +16,11 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     var currentUser = ""
+    
+    var backgroundImage = UIImageView()
+    var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    var blurEffectView = UIVisualEffectView()
+    
     var tripTitle = ""
     var postImage = UIImageView()
     var postTitle = UITextField()
@@ -36,22 +41,21 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         findMyLocation()
+        blurEffectView.effect = blurEffect
         setupUI()
         postText.delegate = self
     }
     
     func setupBackground() {
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "background2")
+        backgroundImage.frame = UIScreen.main.bounds
+        backgroundImage.contentMode = .scaleAspectFill
+        backgroundImage.clipsToBounds = true
+        backgroundImage.image = UIImage(named: "background2")
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         
-        view.addSubview(imageView)
-        imageView.addSubview(blurEffectView)
+        view.addSubview(backgroundImage)
+        backgroundImage.addSubview(blurEffectView)
     }
     
     func addNewPostUI() {
@@ -207,7 +211,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Tillagd", message: "Inlägget är tillagd", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Tillagd", message: "Inlägget är tillagt", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
             
             self.emptyFields()
