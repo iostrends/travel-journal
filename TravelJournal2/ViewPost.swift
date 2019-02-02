@@ -23,7 +23,7 @@ class ViewPost: UIViewController, PostDelegate {
     var postText = UITextView()
     var shareBtn = UIButton()
     var locationBtn = UIButton()
-    var savePostBtn = UIBarButtonItem()
+    var editPostBtn = UIBarButtonItem()
     
     let data = TripData()
     
@@ -69,9 +69,13 @@ class ViewPost: UIViewController, PostDelegate {
             landscapeTitle = 10
         }
         
-        // Save Post button
-
-        self.navigationItem.rightBarButtonItem = savePostBtn
+        // Edit Post button
+        editPostBtn.style = .plain
+        editPostBtn.title = "Edit"
+        editPostBtn.target = self
+        editPostBtn.action = #selector(editPost)
+        
+        self.navigationItem.rightBarButtonItem = editPostBtn
         
         // Post Image
         postImage.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.40))
@@ -138,7 +142,13 @@ class ViewPost: UIViewController, PostDelegate {
     }
     
     @objc func editPost() {
-        
+        let editPost = EditPost()
+        editPost.postId = postId
+        editPost.editImage.image = postImage.image
+        editPost.editTitle.text = postTitle.text
+        editPost.editText.text = postText.text
+
+        self.navigationController?.pushViewController(editPost, animated: true)
     }
     
     func SetPostData(description:[String:Any]) {

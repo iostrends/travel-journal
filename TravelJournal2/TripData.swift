@@ -216,7 +216,6 @@ class TripData {
                     self.postDel?.SetPostData(description: dataDescription)
                     print("datadesc", dataDescription)
                     if let imgUrl = dataDescription["postImg"] as? String {
-                        print("imgUrl")
                         self.loadPostImage(imgUrl: imgUrl)
                     } else {
                         SVProgressHUD.dismiss()
@@ -282,29 +281,6 @@ class TripData {
                     self.loadPostImages()
                 }
         }
-        
-//        db.collection("Posts").getDocuments() { (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting document: \(err)")
-//            } else {
-//                guard let qSnapshot = querySnapshot else {return}
-//                for document in qSnapshot.documents {
-//                    post.userEmail = document.data()["userEmail"]as? String ?? ""
-//                    post.postId = document.documentID
-//                    post.tripTitle = document.data()["tripTitle"]as? String ?? ""
-//                    post.postTitle = document.data()["postTitle"]as? String ?? ""
-//                    post.postDate = document.data()["postDate"]as? String ?? ""
-//                    post.postText = document.data()["postText"]as? String ?? ""
-//                    post.postImgURL = document.data()["postImg"]as? String ?? ""
-//                    post.lat = document.data()["postLat"]as? String ?? ""
-//                    post.long = document.data()["postLong"]as? String ?? ""
-//
-//                    self.posts.append(post)
-//                    print("PostDB \(post)")
-//                }
-//                self.loadPostImages()
-//            }
-//        }
 
     }
     
@@ -366,8 +342,30 @@ class TripData {
         }
     }
 
-    func updatePost(id: String){
+    func updatePost(postId: String){
+        var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
+        imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.lowercased()
+
+        let db = Firestore.firestore()
         
+        var dataDict = [
+            "postTitle": onePost.postTitle,
+            "postText": onePost.postText,
+        ]
+
+        if onePost.postImg != nil {
+            dataDict["postImg"] = imgName + ".jpg"
+        }
+        
+        db.collection("Posts").document(postId).updateData(dataDict) { err in
+            if let err = err {
+                print("Error: \(err)")
+            } else {
+                print("Dokument sparat")
+                if self.onePost.postImg != nil { self.uploadPostImage(imgName: imgName) }
+            }
+        }
     }
 }
 
