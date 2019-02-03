@@ -16,6 +16,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     var currentUser = ""
     var postId = ""
+    var newImage = false
     
     var backgroundImage = UIImageView()
     var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -123,7 +124,8 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 invalidFormMessage(errMessage: 3)
             }
 
-            data.updatePost(postId: postId)
+            data.updatePost(postId: postId, newImage: newImage)
+            newImage = false
 
             print("Post updated")
             uploadSuccessMessage()
@@ -161,7 +163,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         dismiss(animated: true, completion: nil)
         editImage.isHidden = false
         editImage.alpha = 1
-        
+        newImage = true
     }
     
     // Helper function inserted by Swift 4.2 migrator.

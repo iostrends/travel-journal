@@ -58,6 +58,7 @@ class TripData {
     
     var oneTrip = Trip()
     var onePost = Post()
+    var oldPostTitle = ""
     
     var filteredPosts : [Post] = []
     
@@ -214,6 +215,8 @@ class TripData {
             if let document = document, document.exists {
                 if let dataDescription = document.data() {
                     self.postDel?.SetPostData(description: dataDescription)
+                    self.oldPostTitle = dataDescription["postTitle"] as? String ?? ""
+                    print("oldPostTitle", self.oldPostTitle)
                     print("datadesc", dataDescription)
                     if let imgUrl = dataDescription["postImg"] as? String {
                         self.loadPostImage(imgUrl: imgUrl)
@@ -336,13 +339,13 @@ class TripData {
                         return
                     }
                     print("image uploaded")
-                    self.uploadImage(imgName: imgName)
+//                    self.uploadImage(imgName: imgName)
                 }
             }
         }
     }
 
-    func updatePost(postId: String){
+    func updatePost(postId: String, newImage: Bool){
         var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
         imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
         imgName = imgName.lowercased()
@@ -356,6 +359,7 @@ class TripData {
 
         if onePost.postImg != nil {
             dataDict["postImg"] = imgName + ".jpg"
+            print("newImage true", newImage)
         }
         
         db.collection("Posts").document(postId).updateData(dataDict) { err in
@@ -363,8 +367,48 @@ class TripData {
                 print("Error: \(err)")
             } else {
                 print("Dokument sparat")
-                if self.onePost.postImg != nil { self.uploadPostImage(imgName: imgName) }
+                if self.onePost.postImg != nil {
+                    newImage ? self.uploadPostImage(imgName: imgName) : self.updateImage(imgName: imgName) }
+                if self.onePost.postTitle != self.oldPostTitle { self.deleteOldImage(oldPostTitle: self.oldPostTitle) }
             }
+        }
+    }
+    
+    func updateImage(imgName: String) {
+        if let image = onePost.postImg {
+            if let jpegData = image.jpegData(compressionQuality: 0.7) {
+                let storageRef = Storage.storage().reference()
+                let imgRef = storageRef.child(imgName+".jpg")
+                let metaData = StorageMetadata()
+                metaData.contentType = "image/jpeg"
+                
+                imgRef.putData(jpegData, metadata: metaData) { (metaData, error) in
+                    guard metaData != nil else{
+                        print(error!)
+                        return
+                    }
+                    print("image updated")
+//                    self.uploadImage(imgName: imgName)
+                }
+            }
+        }
+    }
+    
+    func deleteOldImage(oldPostTitle: String) {
+        var oldImgName = self.oldPostTitle.replacingOccurrences(of: " ", with: "_")
+        oldImgName = self.oldPostTitle.replacingOccurrences(of: "&", with: "")
+        oldImgName = oldImgName.lowercased()
+        oldImgName = oldImgName + ".jpg"
+        
+        let storageRef = Storage.storage().reference()
+        let deleteImg = storageRef.child(oldImgName)
+        
+        deleteImg.delete { error in if let error = error {
+            print(error)
+        } else {
+            print("old image deleted")
+            }
+            
         }
     }
 }
