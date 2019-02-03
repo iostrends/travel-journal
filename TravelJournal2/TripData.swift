@@ -63,8 +63,10 @@ class TripData {
     var filteredPosts : [Post] = []
     
     func uploadData() {
-        var imgName = oneTrip.tripTitle.replacingOccurrences(of: " ", with: "_")
-        imgName = oneTrip.tripTitle.replacingOccurrences(of: "&", with: "")
+        var imgName = "\(oneTrip.tripTitle)_\(oneTrip.tripDate)_\(oneTrip.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
         imgName = imgName.lowercased()
         
         let db = Firestore.firestore()
@@ -110,7 +112,7 @@ class TripData {
                         return
                     }
                     print("image uploaded")
-                    self.uploadImage(imgName: imgName)
+//                    self.uploadImage(imgName: imgName)
                 }
             }
         }
@@ -216,8 +218,7 @@ class TripData {
                 if let dataDescription = document.data() {
                     self.postDel?.SetPostData(description: dataDescription)
                     self.oldPostTitle = dataDescription["postTitle"] as? String ?? ""
-                    print("oldPostTitle", self.oldPostTitle)
-                    print("datadesc", dataDescription)
+
                     if let imgUrl = dataDescription["postImg"] as? String {
                         self.loadPostImage(imgUrl: imgUrl)
                     } else {
@@ -288,8 +289,10 @@ class TripData {
     }
     
     func uploadPost() {
-        var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
-        imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
+        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
         imgName = imgName.lowercased()
         
         let db = Firestore.firestore()
@@ -346,8 +349,10 @@ class TripData {
     }
 
     func updatePost(postId: String, newImage: Bool){
-        var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
-        imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
+        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
         imgName = imgName.lowercased()
 
         let db = Firestore.firestore()
@@ -359,7 +364,6 @@ class TripData {
 
         if onePost.postImg != nil {
             dataDict["postImg"] = imgName + ".jpg"
-            print("newImage true", newImage)
         }
         
         db.collection("Posts").document(postId).updateData(dataDict) { err in
@@ -395,18 +399,19 @@ class TripData {
     }
     
     func deleteOldImage(oldPostTitle: String) {
-        var oldImgName = self.oldPostTitle.replacingOccurrences(of: " ", with: "_")
-        oldImgName = self.oldPostTitle.replacingOccurrences(of: "&", with: "")
-        oldImgName = oldImgName.lowercased()
-        oldImgName = oldImgName + ".jpg"
+        var imgName = "\(self.oldPostTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
+        imgName = imgName.lowercased()
         
         let storageRef = Storage.storage().reference()
-        let deleteImg = storageRef.child(oldImgName)
+        let deleteImg = storageRef.child("\(imgName).jpg")
         
         deleteImg.delete { error in if let error = error {
             print(error)
         } else {
-            print("old image deleted")
+            print("old image deleted", deleteImg)
             }
             
         }

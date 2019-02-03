@@ -31,6 +31,7 @@ class ViewPost: UIViewController, PostDelegate {
     var postId = ""
     var longitude = ""
     var latitude = ""
+    var userEmail = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,9 +145,6 @@ class ViewPost: UIViewController, PostDelegate {
     @objc func editPost() {
         let editPost = EditPost()
         editPost.postId = postId
-        editPost.editImage.image = postImage.image
-        editPost.editTitle.text = postTitle.text
-        editPost.editText.text = postText.text
 
         self.navigationController?.pushViewController(editPost, animated: true)
     }
@@ -157,6 +155,7 @@ class ViewPost: UIViewController, PostDelegate {
         postText.text = description["postText"] as? String
         longitude = description["postLong"] as? String ?? ""
         latitude = description["postLat"] as? String ?? ""
+        userEmail = description["userEmail"] as? String ?? ""
     }
     
     func setPostImg(img:UIImage) {

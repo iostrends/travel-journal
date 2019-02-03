@@ -8,14 +8,15 @@
 
 import UIKit
 
-class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, PostDelegate {
     
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
-    var currentUser = ""
+    var userEmail = ""
     var postId = ""
+    var postDate = ""
     var newImage = false
     
     var backgroundImage = UIImageView()
@@ -40,6 +41,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         data.loadOnePost(postId: postId)
         blurEffectView.effect = blurEffect
         setupUI()
+        data.postDel = self
         editText.delegate = self
     }
     
@@ -117,6 +119,10 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
 
             data.onePost.postTitle = editTitle.text ?? ""
             data.onePost.postText = editText.text ?? ""
+            data.onePost.postDate = postDate
+            data.onePost.userEmail = userEmail
+                    print("user email", userEmail)
+            print("post date", postDate)
 
             if editImage.image != nil {
                 data.onePost.postImg = editImage.image
@@ -223,5 +229,16 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             editText.text = "Journal entry here"
             editText.textColor = UIColor.lightGray
         }
+    }
+    
+    func SetPostData(description:[String:Any]) {
+        editTitle.text = description["postTitle"] as? String
+        postDate = description["postDate"] as? String ?? ""
+        editText.text = description["postText"] as? String
+        userEmail = description["userEmail"] as? String ?? ""
+    }
+    
+    func setPostImg(img:UIImage) {
+        editImage.image = img
     }
 }
