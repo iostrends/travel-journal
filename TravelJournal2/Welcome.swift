@@ -10,7 +10,7 @@ import UIKit
 
 class Welcome: UIViewController {
     
-    var logButton : UIButton {
+    private var logButton : UIButton {
         let button = UIButton()
         button.titleLabel?.textColor = UIColor.black
         button.backgroundColor = UIColor.clear
@@ -21,13 +21,13 @@ class Welcome: UIViewController {
         return button
     }
     
-    var loginButton = UIButton()
-    var registerButton = UIButton()
-    var mainLabel = UILabel()
-    var backgroundImageView = UIImageView()
-    var backgroundImage = UIImage()
-    var blurEffectStyle = UIBlurEffect()
-    var blurEffectView = UIVisualEffectView()
+    private var loginButton = UIButton()
+    private var registerButton = UIButton()
+    private var mainLabel = UILabel()
+    private var backgroundImageView = UIImageView()
+    private var backgroundImage = UIImage()
+    private var blurEffectStyle = UIBlurEffect()
+    private var blurEffectView = UIVisualEffectView()
     
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
@@ -49,14 +49,14 @@ class Welcome: UIViewController {
         setupUI()
     }
     
-    @objc func setupUI() {
+    @objc private func setupUI() {
         guard !orientation.isFlat else { return }
         setupBackground()
         setupButtons()
         setupMainLabel()
     }
     
-    func setupBackground() {
+    private func setupBackground() {
         //backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
         backgroundImageView.frame = UIScreen.main.bounds
         backgroundImageView.contentMode = .scaleAspectFill
@@ -67,7 +67,7 @@ class Welcome: UIViewController {
         view.addSubview(backgroundImageView)
     }
     
-    func setupButtons() {
+    private func setupButtons() {
         var x : CGFloat = 10
         var width : CGFloat = 20
         if orientation != .portrait {
@@ -75,17 +75,17 @@ class Welcome: UIViewController {
             width *= 4
         }
         loginButton.setTitle("Login", for: .normal)
-        loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
+        loginButton.addTarget(self, action: #selector(goToLoginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 140, width: UIScreen.main.bounds.width - width, height: 50)
         
         registerButton.setTitle("Register", for: .normal)
-        registerButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(goToRegisterPressed), for: .touchUpInside)
         registerButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 80, width: UIScreen.main.bounds.width - width, height: 50)
         view.addSubview(loginButton)
         view.addSubview(registerButton)
     }
     
-    func setupMainLabel() {
+    private func setupMainLabel() {
         mainLabel.frame = CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33)
         mainLabel.text = "Add nice slogan here"
         mainLabel.textAlignment = .center
@@ -95,14 +95,12 @@ class Welcome: UIViewController {
         
     }
     
-    @objc func loginPressed() {
-        print("Logging in....")
+    @objc private func goToLoginPressed() {
         let loginViewController = LoginViewController()
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     
-    @objc func registerPressed() {
-        print("Register....")
+    @objc private func goToRegisterPressed() {
         let regViewController = Register()
         self.navigationController?.pushViewController(regViewController, animated: true)
     }

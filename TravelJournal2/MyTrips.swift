@@ -90,13 +90,14 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.clear
         self.title = "My Trips"
-        currentUser = Auth.auth().currentUser?.email ?? "User not found"
         navigationItem.rightBarButtonItem = addNewTripButton
         let backItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logOutUser))
         navigationItem.leftBarButtonItem = backItem
-
+        
+        currentUser = Auth.auth().currentUser?.email ?? "User not found"
         myTripsData.dataDel = self
         setupCarousel()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(MyTrips.rotationDidChange), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
@@ -125,7 +126,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         let layout = UPCarouselFlowLayout()
         let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
         layout.scrollDirection = direction
-        layout.itemSize = direction == .horizontal ? CGSize(width: 350, height: 500) : CGSize(width: 320, height: 320)
+        layout.itemSize = direction == .horizontal ? CGSize(width: 320, height: 480) : CGSize(width: 320, height: 320)
         layout.sideItemScale = 0.8
         layout.sideItemAlpha = 1
         layout.spacingMode = .fixed(spacing: 20)
@@ -164,10 +165,12 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        //print("Trip:\(myTripsData.trips[indexPath.row].tripTitle)")
+        
         let postsVC = PostsCollectionViewController()
+        
         postsVC.tripTitle = myTripsData.trips[indexPath.row].tripTitle
         postsVC.currentUser = currentUser
+        
         self.navigationController?.pushViewController(postsVC, animated: true)
     }
     
@@ -177,6 +180,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyTripCell", for: indexPath) as! TripCollectionViewCell
+        
         cell.tripImage.image = self.myTripsData.trips[indexPath.row].tripImg
         cell.tripTitle.text = self.myTripsData.trips[indexPath.row].tripTitle
         cell.tripDate.text = self.myTripsData.trips[indexPath.row].tripDate

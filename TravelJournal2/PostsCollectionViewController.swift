@@ -10,13 +10,12 @@ import UIKit
 
 class PostsCollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, DataDelegate {
     
-    var images : [UIImage] = []
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
     
     var addNewTripButton : UIBarButtonItem {
-        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPostPressed))
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(goToAddNewPostPressed))
         return button
     }
     
@@ -32,22 +31,13 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
-        myTripsData.dataDel = self
         navigationItem.rightBarButtonItem = addNewTripButton
+        myTripsData.dataDel = self
         backgroundImage = UIImage(named: "background2")!
         blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
         blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         setupBackground()
-        collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: UltravisualLayout())
-        collectionView.backgroundColor = .clear
-        collectionView.register(UINib(nibName: "PostCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PostCell")
-        
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        images.append(UIImage(named: "loginbackground")!)
-        images.append(UIImage(named: "registerbackground")!)
-        images.append(UIImage(named: "travelbackground")!)
-        view.addSubview(collectionView)
+        setupCollectionView()
         NotificationCenter.default.addObserver(self, selector: #selector(rotationHappened), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
@@ -56,11 +46,21 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         laddaTabell()
     }
 
-    @objc func addNewPostPressed() {
+    @objc private func goToAddNewPostPressed() {
         let newPostViewController = NewPost()
         newPostViewController.currentUser = currentUser
         newPostViewController.tripTitle = tripTitle
         self.navigationController?.pushViewController(newPostViewController, animated: true)
+    }
+    
+    func setupCollectionView() {
+        collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: UltravisualLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.register(UINib(nibName: "PostCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PostCell")
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        view.addSubview(collectionView)
     }
     
     func setupBackground() {
@@ -117,12 +117,12 @@ extension PostsCollectionViewController {
                 return
         }
         let offset = layout.dragOffset * CGFloat(indexPath.item)
+        
         if collectionView.contentOffset.y != offset {
             collectionView.setContentOffset(
                 CGPoint(x: 0, y: offset), animated: true
             )
         } else {
-            print("In Focus!")
             let viewPost = ViewPost()
             viewPost.postId = myTripsData.posts[indexPath.row].postId
             self.navigationController?.pushViewController(viewPost, animated: true)

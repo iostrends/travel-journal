@@ -20,7 +20,15 @@ class Register: UIViewController, UITextViewDelegate {
         return button
     }
     
-    var usernameTextField = UITextField()
+    var textField : UITextField {
+        let text = UITextField()
+        text.backgroundColor = UIColor.white
+        text.textAlignment = .center
+        text.layer.cornerRadius = 10
+        return text
+    }
+    
+    //var usernameTextField = UITextField()
     var emailTextField = UITextField()
     var passwordTextField = UITextField()
     var loginButton = UIButton()
@@ -34,8 +42,10 @@ class Register: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
-        // Do any additional setup after loading the view.
+        self.title = "Register"
         loginButton = logButton
+        emailTextField = textField
+        passwordTextField = textField
         backgroundImage =  UIImage(named: "registerbackground")!
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         setupUI()
@@ -57,25 +67,19 @@ class Register: UIViewController, UITextViewDelegate {
             x *= 4
             width *= 4
         }
-        usernameTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
-        usernameTextField.backgroundColor = UIColor.white
-        usernameTextField.placeholder = "Username"
-        usernameTextField.textAlignment = .center
-        usernameTextField.layer.cornerRadius = 10
-        view.addSubview(usernameTextField)
+//        usernameTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
+//        usernameTextField.backgroundColor = UIColor.white
+//        usernameTextField.placeholder = "Username"
+//        usernameTextField.textAlignment = .center
+//        usernameTextField.layer.cornerRadius = 10
+//        view.addSubview(usernameTextField)
         
-        emailTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
-        emailTextField.backgroundColor = UIColor.white
+        emailTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4), width: UIScreen.main.bounds.width - width, height: 40)
         emailTextField.placeholder = "Email"
-        emailTextField.textAlignment = .center
-        emailTextField.layer.cornerRadius = 10
         view.addSubview(emailTextField)
         
-        passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 40)
-        passwordTextField.backgroundColor = UIColor.white
+        passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
         passwordTextField.placeholder = "Password"
-        passwordTextField.textAlignment = .center
-        passwordTextField.layer.cornerRadius = 10
         passwordTextField.isSecureTextEntry = true
         view.addSubview(passwordTextField)
     }
@@ -89,19 +93,19 @@ class Register: UIViewController, UITextViewDelegate {
         }
         loginButton.setTitle("Register", for: .normal)
         loginButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
-        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 150, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 50)
         view.addSubview(loginButton)
     }
     
-    @objc func registerPressed() {
+    @objc private func registerPressed() {
         Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
-            if(error != nil){
-                let alert = UIAlertController(title: "Register failed", message: "\(error!.localizedDescription)", preferredStyle: .alert)
+            if let error = error {
+                let alert = UIAlertController(title: "Register failed", message: "\(error.localizedDescription)", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
                     NSLog("The \"OK\" alert occured.")
                 }))
                 self.present(alert, animated: true, completion: nil)
-                print(error!)
+                print(error)
                 
             } else {
                 
@@ -114,7 +118,6 @@ class Register: UIViewController, UITextViewDelegate {
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        self.title = "Register"
         setupBackground()
         setupTextFields()
         setupButtons()
