@@ -416,5 +416,17 @@ class TripData {
             
         }
     }
+    
+    func removeFromDB(collection: String, id: String) {
+        let db = Firestore.firestore()
+        
+        db.collection(collection).document(id).delete() { err in
+            if let err = err {
+                print("Error removing document: \(err)")
+            } else {
+                print("Document successfully removed!")
+            }
+        }
+    }
 }
 
