@@ -148,6 +148,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
     @objc func addNewTripPressed() {
         let newTripViewController = NewTrip()
+        newTripViewController.tripsArray = myTripsData.trips.map { $0.tripTitle.lowercased() }
         self.navigationController?.pushViewController(newTripViewController, animated: true)
     }
     
