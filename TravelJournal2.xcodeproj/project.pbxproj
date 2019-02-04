@@ -19,6 +19,8 @@
 		13727BBE21F9C60D0053CA88 /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BBD21F9C60D0053CA88 /* Login.swift */; };
 		13727BC021F9C6130053CA88 /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BBF21F9C6130053CA88 /* Register.swift */; };
 		13727BC221F9C6560053CA88 /* MyTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BC121F9C6560053CA88 /* MyTrips.swift */; };
+		13ADBDD32207CD7C002B765E /* Medinah.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13ADBDD02207CD15002B765E /* Medinah.ttf */; };
+		13ADBDDC2207DB46002B765E /* Hamilyn.otf in Resources */ = {isa = PBXBuildFile; fileRef = 13ADBDDB2207DB46002B765E /* Hamilyn.otf */; };
 		13B6DE512200804A00238695 /* ShowMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B6DE502200804A00238695 /* ShowMap.swift */; };
 		13C4BB1021FF2C83008D6BC5 /* NewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C4BB0F21FF2C83008D6BC5 /* NewPost.swift */; };
 		13CE55F121FB082A00F85906 /* ViewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CE55F021FB082A00F85906 /* ViewPost.swift */; };
@@ -48,6 +50,8 @@
 		13727BBD21F9C60D0053CA88 /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		13727BBF21F9C6130053CA88 /* Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		13727BC121F9C6560053CA88 /* MyTrips.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTrips.swift; sourceTree = "<group>"; };
+		13ADBDD02207CD15002B765E /* Medinah.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Medinah.ttf; sourceTree = "<group>"; };
+		13ADBDDB2207DB46002B765E /* Hamilyn.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Hamilyn.otf; sourceTree = "<group>"; };
 		13B6DE502200804A00238695 /* ShowMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMap.swift; sourceTree = "<group>"; };
 		13C4BB0F21FF2C83008D6BC5 /* NewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPost.swift; sourceTree = "<group>"; };
 		13CE55F021FB082A00F85906 /* ViewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPost.swift; sourceTree = "<group>"; };
@@ -118,6 +122,8 @@
 				1308835E21F9BF720052050C /* Info.plist */,
 				1308835621F9BF710052050C /* TravelJournal2.xcdatamodeld */,
 				13727BB921F9C5880053CA88 /* GoogleService-Info.plist */,
+				13ADBDDB2207DB46002B765E /* Hamilyn.otf */,
+				13ADBDD02207CD15002B765E /* Medinah.ttf */,
 			);
 			path = TravelJournal2;
 			sourceTree = "<group>";
@@ -203,6 +209,8 @@
 				1308835D21F9BF720052050C /* LaunchScreen.storyboard in Resources */,
 				7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */,
 				1308835A21F9BF720052050C /* Assets.xcassets in Resources */,
+				13ADBDD32207CD7C002B765E /* Medinah.ttf in Resources */,
+				13ADBDDC2207DB46002B765E /* Hamilyn.otf in Resources */,
 				13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */,
 				7EC316CE21FF3EEB00C5A406 /* PostCollectionViewCell.xib in Resources */,
 			);

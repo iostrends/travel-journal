@@ -22,11 +22,14 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     let myTripsData = TripData()
     var tripTitle = ""
     var currentUser = ""
+    var postId = ""
     var collectionView : UICollectionView!
     var backgroundImageView = UIImageView()
     var backgroundImage = UIImage()
     var blurEffectStyle = UIBlurEffect()
     var blurEffectView = UIVisualEffectView()
+    
+    var touch = UILongPressGestureRecognizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,8 +92,6 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         myTripsData.posts.removeAll()
         myTripsData.loadPostsByTrip(user: currentUser,tripTitle: tripTitle)
     }
-    
-    
 }
 
 extension PostsCollectionViewController {
@@ -107,6 +108,12 @@ extension PostsCollectionViewController {
         cell.imageView.image = myTripsData.posts[indexPath.row].postImg
         cell.titleLabel.text = myTripsData.posts[indexPath.row].postTitle
         cell.dateLabel.text = myTripsData.posts[indexPath.row].postDate
+        postId = myTripsData.posts[indexPath.row].postId
+        
+        touch.addTarget(self, action: #selector(deleteMessage))
+        touch.minimumPressDuration = 2
+        cell.addGestureRecognizer(touch)
+        
         return cell
     }
     
@@ -127,5 +134,24 @@ extension PostsCollectionViewController {
             viewPost.postId = myTripsData.posts[indexPath.row].postId
             self.navigationController?.pushViewController(viewPost, animated: true)
         }
+    }
+    
+    @objc func deletePost() {
+        let cell = touch.view as! UICollectionViewCell
+        let itemIndex = self.collectionView.indexPath(for: cell)!.item
+        myTripsData.removeFromDB(collection: "Posts", id: postId)
+        myTripsData.posts.remove(at: itemIndex)
+        self.collectionView.reloadData()
+    }
+    
+    @objc func deleteMessage(){
+        let alert = UIAlertController(title: "Ta bort Inlägg", message: "Säker på att du vill ta bort inlägget?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Tillbaka", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Ta Bort", comment: "Delete action"), style: .destructive, handler: { _ in
+            self.deletePost()
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
 }

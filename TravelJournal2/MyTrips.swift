@@ -39,6 +39,8 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     var currentUser = ""
+    var tripId = ""
+    var touch = UILongPressGestureRecognizer()
     
     @objc fileprivate func rotationDidChange() {
         guard !orientation.isFlat else { return }
@@ -185,10 +187,33 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         cell.tripImage.image = self.myTripsData.trips[indexPath.row].tripImg
         cell.tripTitle.text = self.myTripsData.trips[indexPath.row].tripTitle
         cell.tripDate.text = self.myTripsData.trips[indexPath.row].tripDate
+        tripId = self.myTripsData.trips[indexPath.row].tripId
+        
+        touch.addTarget(self, action: #selector(deleteMessage))
+        touch.minimumPressDuration = 2
+        cell.addGestureRecognizer(touch)
         
         return cell
     }
     
+    @objc func deleteTrip() {
+        let cell = touch.view as! UICollectionViewCell
+        let itemIndex = self.collectionView.indexPath(for: cell)!.item
+        myTripsData.removeFromDB(collection: "Trips", id: tripId)
+        myTripsData.trips.remove(at: itemIndex)
+        self.collectionView.reloadData()
+    }
+    
+    @objc func deleteMessage(){
+        let alert = UIAlertController(title: "Ta bort Resa", message: "Säker på att du vill ta bort resan?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Tillbaka", comment: "Cancel action"), style: .cancel, handler: { _ in
+            
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Ta Bort", comment: "Delete action"), style: .destructive, handler: { _ in
+            self.deleteTrip()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     
 }
 

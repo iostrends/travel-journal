@@ -12,12 +12,12 @@ class Welcome: UIViewController {
     
     private var logButton : UIButton {
         let button = UIButton()
-        button.titleLabel?.textColor = UIColor.black
-        button.backgroundColor = UIColor.clear
-        button.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
+        button.setTitleColor(UIColor(red: 144/255, green: 12/255, blue: 63/255, alpha: 1.0), for: .normal)
+        button.backgroundColor = UIColor.white
+        button.titleLabel?.font = UIFont(name: "Hamilyn", size: 30)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
-        button.layer.cornerRadius = 10
+//        button.layer.cornerRadius = 80
         return button
     }
     
@@ -35,7 +35,6 @@ class Welcome: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Travel Journal 2"
         view.backgroundColor = UIColor.clear
         loginButton = logButton
         registerButton = logButton
@@ -54,6 +53,9 @@ class Welcome: UIViewController {
         setupBackground()
         setupButtons()
         setupMainLabel()
+        UIView.animate(withDuration: 2.0) {
+            self.mainLabel.alpha = 1
+        }
     }
     
     private func setupBackground() {
@@ -67,9 +69,9 @@ class Welcome: UIViewController {
         view.addSubview(backgroundImageView)
     }
     
-    private func setupButtons() {
-        var x : CGFloat = 10
-        var width : CGFloat = 20
+    func setupButtons() {
+        var x : CGFloat = 50
+        var width : CGFloat = 100
         if orientation != .portrait {
             x *= 4
             width *= 4
@@ -77,20 +79,23 @@ class Welcome: UIViewController {
         loginButton.setTitle("Login", for: .normal)
         loginButton.addTarget(self, action: #selector(goToLoginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 140, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
         
         registerButton.setTitle("Register", for: .normal)
         registerButton.addTarget(self, action: #selector(goToRegisterPressed), for: .touchUpInside)
         registerButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 80, width: UIScreen.main.bounds.width - width, height: 50)
+        registerButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
         view.addSubview(loginButton)
         view.addSubview(registerButton)
     }
     
     private func setupMainLabel() {
         mainLabel.frame = CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33)
-        mainLabel.text = "Add nice slogan here"
+        mainLabel.text = "Triping"
         mainLabel.textAlignment = .center
-        mainLabel.font = UIFont(name: "Zapfino", size: 25.0)
+        mainLabel.font = UIFont(name: "Medinah", size: 85.0)
         mainLabel.textColor = UIColor.white
+        mainLabel.alpha = 0
         view.addSubview(mainLabel)
         
     }
@@ -104,4 +109,16 @@ class Welcome: UIViewController {
         let regViewController = Register()
         self.navigationController?.pushViewController(regViewController, animated: true)
     }
+    
+}
+
+extension UIButton {
+    
+    func roundCorners(_ corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        self.layer.mask = mask
+    }
+    
 }
