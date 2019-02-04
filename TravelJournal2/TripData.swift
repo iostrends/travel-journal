@@ -58,12 +58,15 @@ class TripData {
     
     var oneTrip = Trip()
     var onePost = Post()
+    var oldPostTitle = ""
     
     var filteredPosts : [Post] = []
     
     func uploadData() {
-        var imgName = oneTrip.tripTitle.replacingOccurrences(of: " ", with: "_")
-        imgName = oneTrip.tripTitle.replacingOccurrences(of: "&", with: "")
+        var imgName = "\(oneTrip.tripTitle)_\(oneTrip.tripDate)_\(oneTrip.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
         imgName = imgName.lowercased()
         
         let db = Firestore.firestore()
@@ -109,7 +112,7 @@ class TripData {
                         return
                     }
                     print("image uploaded")
-                    self.uploadImage(imgName: imgName)
+//                    self.uploadImage(imgName: imgName)
                 }
             }
         }
@@ -214,9 +217,9 @@ class TripData {
             if let document = document, document.exists {
                 if let dataDescription = document.data() {
                     self.postDel?.SetPostData(description: dataDescription)
-                    print("datadesc", dataDescription)
+                    self.oldPostTitle = dataDescription["postTitle"] as? String ?? ""
+
                     if let imgUrl = dataDescription["postImg"] as? String {
-                        print("imgUrl")
                         self.loadPostImage(imgUrl: imgUrl)
                     } else {
                         SVProgressHUD.dismiss()
@@ -282,35 +285,14 @@ class TripData {
                     self.loadPostImages()
                 }
         }
-        
-//        db.collection("Posts").getDocuments() { (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting document: \(err)")
-//            } else {
-//                guard let qSnapshot = querySnapshot else {return}
-//                for document in qSnapshot.documents {
-//                    post.userEmail = document.data()["userEmail"]as? String ?? ""
-//                    post.postId = document.documentID
-//                    post.tripTitle = document.data()["tripTitle"]as? String ?? ""
-//                    post.postTitle = document.data()["postTitle"]as? String ?? ""
-//                    post.postDate = document.data()["postDate"]as? String ?? ""
-//                    post.postText = document.data()["postText"]as? String ?? ""
-//                    post.postImgURL = document.data()["postImg"]as? String ?? ""
-//                    post.lat = document.data()["postLat"]as? String ?? ""
-//                    post.long = document.data()["postLong"]as? String ?? ""
-//
-//                    self.posts.append(post)
-//                    print("PostDB \(post)")
-//                }
-//                self.loadPostImages()
-//            }
-//        }
 
     }
     
     func uploadPost() {
-        var imgName = onePost.postTitle.replacingOccurrences(of: " ", with: "_")
-        imgName = onePost.postTitle.replacingOccurrences(of: "&", with: "")
+        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
         imgName = imgName.lowercased()
         
         let db = Firestore.firestore()
@@ -360,14 +342,79 @@ class TripData {
                         return
                     }
                     print("image uploaded")
-                    self.uploadImage(imgName: imgName)
+//                    self.uploadImage(imgName: imgName)
                 }
             }
         }
     }
 
-    func updatePost(id: String){
+    func updatePost(postId: String, newImage: Bool){
+        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
+        imgName = imgName.lowercased()
+
+        let db = Firestore.firestore()
         
+        var dataDict = [
+            "postTitle": onePost.postTitle,
+            "postText": onePost.postText,
+        ]
+
+        if onePost.postImg != nil {
+            dataDict["postImg"] = imgName + ".jpg"
+        }
+        
+        db.collection("Posts").document(postId).updateData(dataDict) { err in
+            if let err = err {
+                print("Error: \(err)")
+            } else {
+                print("Dokument sparat")
+                if self.onePost.postImg != nil {
+                    newImage ? self.uploadPostImage(imgName: imgName) : self.updateImage(imgName: imgName) }
+                if self.onePost.postTitle != self.oldPostTitle { self.deleteOldImage(oldPostTitle: self.oldPostTitle) }
+            }
+        }
+    }
+    
+    func updateImage(imgName: String) {
+        if let image = onePost.postImg {
+            if let jpegData = image.jpegData(compressionQuality: 0.7) {
+                let storageRef = Storage.storage().reference()
+                let imgRef = storageRef.child(imgName+".jpg")
+                let metaData = StorageMetadata()
+                metaData.contentType = "image/jpeg"
+                
+                imgRef.putData(jpegData, metadata: metaData) { (metaData, error) in
+                    guard metaData != nil else{
+                        print(error!)
+                        return
+                    }
+                    print("image updated")
+//                    self.uploadImage(imgName: imgName)
+                }
+            }
+        }
+    }
+    
+    func deleteOldImage(oldPostTitle: String) {
+        var imgName = "\(self.oldPostTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        imgName = imgName.replacingOccurrences(of: " ", with: "")
+        imgName = imgName.replacingOccurrences(of: "&", with: "")
+        imgName = imgName.replacingOccurrences(of: ",", with: "")
+        imgName = imgName.lowercased()
+        
+        let storageRef = Storage.storage().reference()
+        let deleteImg = storageRef.child("\(imgName).jpg")
+        
+        deleteImg.delete { error in if let error = error {
+            print(error)
+        } else {
+            print("old image deleted", deleteImg)
+            }
+            
+        }
     }
 }
 

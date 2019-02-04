@@ -1,49 +1,48 @@
 //
-//  CreatePost.swift
+//  EditPost.swift
 //  TravelJournal2
 //
-//  Created by Niclas Nordling on 2019-01-28.
+//  Created by Niclas Nordling on 2019-02-02.
 //  Copyright © 2019 Niclas Nordling. All rights reserved.
 //
 
 import UIKit
-import CoreLocation
 
-class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
+class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, PostDelegate {
     
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
-    var currentUser = ""
+    var userEmail = ""
+    var postId = ""
+    var postDate = ""
+    var newImage = false
     
     var backgroundImage = UIImageView()
     var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
     var blurEffectView = UIVisualEffectView()
     
     var tripTitle = ""
-    var postImage = UIImageView()
-    var postTitle = UITextField()
-    var postText = UITextView()
-    var createPostBtn = UIBarButtonItem()
+    var editImage = UIImageView()
+    var editTitle = UITextField()
+    var editText = UITextView()
+    var savePostBtn = UIBarButtonItem()
     var cameraBtn = UIButton()
     var libraryBtn = UIButton()
     
     let data = TripData()
-    let locationManager = CLLocationManager()
-    
-    var latitude = ""
-    var longitude = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
-        findMyLocation()
+        data.loadOnePost(postId: postId)
         blurEffectView.effect = blurEffect
         setupUI()
-        postText.delegate = self
+        data.postDel = self
+        editText.delegate = self
     }
     
     func setupBackground() {
@@ -58,7 +57,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         backgroundImage.addSubview(blurEffectView)
     }
     
-    func addNewPostUI() {
+    func addEditPostUI() {
         
         guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
         let statusbarHeight = UIApplication.shared.statusBarFrame.height
@@ -67,19 +66,20 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         let height = view.frame.height
         var y = navbarHeight + statusbarHeight + 10
         
-        createPostBtn.style = .plain
-        createPostBtn.title = "Save"
-        createPostBtn.action = #selector(uploadPost)
+        savePostBtn.style = .plain
+        savePostBtn.title = "Save"
+        savePostBtn.target = self
+        savePostBtn.action = #selector(updatePost)
         
-        self.navigationItem.rightBarButtonItem = createPostBtn
+        navigationItem.rightBarButtonItem = savePostBtn
         
-        postImage.frame = (CGRect(x: 10, y: y, width: width, height: height*0.40))
-        postImage.contentMode = .scaleAspectFill
-        postImage.layer.cornerRadius = 10.0
-        postImage.clipsToBounds = true
-        postImage.backgroundColor = UIColor.white
+        editImage.frame = (CGRect(x: 10, y: y, width: width, height: height*0.40))
+        editImage.contentMode = .scaleAspectFill
+        editImage.layer.cornerRadius = 10.0
+        editImage.clipsToBounds = true
+        editImage.backgroundColor = UIColor.white
         
-        view.addSubview(postImage)
+        view.addSubview(editImage)
         
         cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
         cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
@@ -90,62 +90,53 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
         libraryBtn.frame = CGRect(x: width - 32, y: y + 10, width: 32, height: 32)
         view.addSubview(libraryBtn)
-        y += postImage.bounds.size.height
+        y += editImage.bounds.size.height
         
-        postTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
-        postTitle.backgroundColor = UIColor.white
-        postTitle.textColor = UIColor.black
-        postTitle.layer.borderColor = UIColor.white.cgColor
-        postTitle.layer.borderWidth = 1
-        postTitle.placeholder = " Title" // Intentional space
-        postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
-        postTitle.layer.cornerRadius = 10.0
-        view.addSubview(postTitle)
-        y += postTitle.bounds.size.height
+        editTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
+        editTitle.backgroundColor = UIColor.white
+        editTitle.textColor = UIColor.black
+        editTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
+        editTitle.layer.cornerRadius = 10.0
+        view.addSubview(editTitle)
+        y += editTitle.bounds.size.height
         
-        postText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
-        postText.text = "Journal entry here"
-        postText.textColor = UIColor.lightGray
-        postText.backgroundColor = UIColor.white
-        postText.layer.borderColor = UIColor.black.cgColor
-        postText.layer.borderWidth = 1
-        postText.layer.cornerRadius = 10.0
-        view.addSubview(postText)
-        y += postText.bounds.size.height
+        editText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
+        editText.textColor = UIColor.black
+        editText.backgroundColor = UIColor.white
+        editText.layer.cornerRadius = 10.0
+        view.addSubview(editText)
+        y += editText.bounds.size.height
     }
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
         setupBackground()
-        addNewPostUI()
+        addEditPostUI()
     }
     
-    @objc func uploadPost() {
-        if(postTitle.text != ""){
-            
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMM dd, YYYY"
-            let date = formatter.string(from: Date())
-            data.onePost.userEmail = currentUser
-            data.onePost.postTitle = postTitle.text ?? ""
-            data.onePost.postText = postText.text ?? ""
-            data.onePost.postDate = date
-            data.onePost.lat = latitude
-            data.onePost.long = longitude
-            data.onePost.tripTitle = tripTitle
-            
-            if postImage.image != nil {
-                data.onePost.postImg = postImage.image
+    @objc func updatePost() {
+        if(editTitle.text != ""){
+
+            data.onePost.postTitle = editTitle.text ?? ""
+            data.onePost.postText = editText.text ?? ""
+            data.onePost.postDate = postDate
+            data.onePost.userEmail = userEmail
+                    print("user email", userEmail)
+            print("post date", postDate)
+
+            if editImage.image != nil {
+                data.onePost.postImg = editImage.image
             } else {
                 invalidFormMessage(errMessage: 3)
             }
-            
-            data.uploadPost()
-            
-            print("Post saved")
+
+            data.updatePost(postId: postId, newImage: newImage)
+            newImage = false
+
+            print("Post updated")
             uploadSuccessMessage()
-            
-        } else if(postTitle.text == "") {
+
+        } else if(editTitle.text == "") {
             print("No title")
             invalidFormMessage(errMessage: 1)
         }
@@ -174,11 +165,11 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
         
-        postImage.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
+        editImage.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
         dismiss(animated: true, completion: nil)
-        postImage.isHidden = false
-        postImage.alpha = 1
-        
+        editImage.isHidden = false
+        editImage.alpha = 1
+        newImage = true
     }
     
     // Helper function inserted by Swift 4.2 migrator.
@@ -198,8 +189,6 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         if(errMessage == 1){
             alert = UIAlertController(title: "Titel saknas", message: "Fyll i titelfältet", preferredStyle: .alert)
-        } else if(errMessage == 2){
-            alert = UIAlertController(title: "Resan finns redan", message: "Titeln finns redan", preferredStyle: .alert)
         } else if(errMessage == 3){
             alert = UIAlertController(title: "Bild saknas", message: "Välj en bild från galleri eller ta en ny", preferredStyle: .alert)
         }
@@ -211,7 +200,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Tillagd", message: "Inlägget är tillagt", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Uppdaterat", message: "Inlägget har blivit uppdaterat", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
             
             self.emptyFields()
@@ -222,35 +211,10 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.present(alert, animated: true, completion: nil)
     }
     
-    // LOCATION
-    
-    func findMyLocation() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = locations[locations.count - 1]
-        
-        // stop updating when you get a valid result. If horizontalAcc is below 0 it is an invalid result
-        if location.horizontalAccuracy > 0 {
-            
-            locationManager.stopUpdatingLocation()
-            locationManager.delegate = nil
-            
-            
-            latitude = String(location.coordinate.latitude)
-            longitude = String(location.coordinate.longitude)
-            print("Long: \(longitude) and Lat: \(latitude)")
-        }
-    }
-    
     // MISC
     
     func emptyFields(){
-        postTitle.text = ""
+        editTitle.text = ""
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -259,11 +223,22 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             textView.textColor = UIColor.black
         }
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            postText.text = "Journal entry here"
-            postText.textColor = UIColor.lightGray
+            editText.text = "Journal entry here"
+            editText.textColor = UIColor.lightGray
         }
+    }
+    
+    func SetPostData(description:[String:Any]) {
+        editTitle.text = description["postTitle"] as? String
+        postDate = description["postDate"] as? String ?? ""
+        editText.text = description["postText"] as? String
+        userEmail = description["userEmail"] as? String ?? ""
+    }
+    
+    func setPostImg(img:UIImage) {
+        editImage.image = img
     }
 }

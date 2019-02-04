@@ -10,116 +10,118 @@ import UIKit
 
 class ViewPost: UIViewController, PostDelegate {
 
-    let screenHeight = UIScreen.main.bounds.size.height
-    let screenWidth = UIScreen.main.bounds.size.width
-
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
-
-    var postContentView = UIView()
+    
+    var backgroundImage = UIImageView()
+    var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    var blurEffectView = UIVisualEffectView()
     var postImage = UIImageView()
     var postTitle = UILabel()
     var postDate = UILabel()
     var postText = UITextView()
     var shareBtn = UIButton()
     var locationBtn = UIButton()
-    var savePostBtn = UIBarButtonItem()
-    var buttonView = UIView()
-
+    var editPostBtn = UIBarButtonItem()
+    
     let data = TripData()
-    var postArray : [String] = []
     
     var currentPost = 0
-    var postId = "PJ2XH5UHOZNO4hiUME6N"
+    var postId = ""
     var longitude = ""
     var latitude = ""
+    var userEmail = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         data.loadOnePost(postId: postId)
+        blurEffectView.effect = blurEffect
         setupUI()
         data.postDel = self
-        postArray = data.posts.map { $0.tripTitle.lowercased() }
     }
 
     func setupBackground() {
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "background2")
+        backgroundImage.frame = UIScreen.main.bounds
+        backgroundImage.contentMode = .scaleAspectFill
+        backgroundImage.clipsToBounds = true
+        backgroundImage.image = UIImage(named: "background2")
         
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         
-        view.addSubview(imageView)
-        imageView.addSubview(blurEffectView)
+        view.addSubview(backgroundImage)
+        backgroundImage.addSubview(blurEffectView)
     }
 
-    func addViewPostUI() {
-
-        postContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
-        postContentView.backgroundColor = UIColor.clear
-        postContentView.clipsToBounds = true
-        view.addSubview(postContentView)
-
-        savePostBtn.style = .plain
-        savePostBtn.title = "Edit"
-        savePostBtn.action = #selector(editPost)
-
-        self.navigationItem.rightBarButtonItem = savePostBtn
-
-        postImage.frame = (CGRect(x: 10, y: 0, width: postContentView.frame.width - 20, height: postContentView.frame.height*0.40))
+    @objc func addViewPostUI() {
+        let screenHeight = UIScreen.main.bounds.size.height
+        let screenWidth = UIScreen.main.bounds.size.width
+        
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let width = view.frame.width - 20
+        var y = navbarHeight + statusbarHeight + 10
+        var landscapeTitle: CGFloat = 0 // Hack to make title 10px below image in landscape
+        
+        if orientation != .portrait {
+            landscapeTitle = 10
+        }
+        
+        // Edit Post button
+        editPostBtn.style = .plain
+        editPostBtn.title = "Edit"
+        editPostBtn.target = self
+        editPostBtn.action = #selector(editPost)
+        
+        self.navigationItem.rightBarButtonItem = editPostBtn
+        
+        // Post Image
+        postImage.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.40))
         postImage.contentMode = .scaleAspectFill
         postImage.layer.cornerRadius = 10.0
         postImage.clipsToBounds = true
 
-        postContentView.addSubview(postImage)
-
-        //        var x : CGFloat = 10
-        //        var width : CGFloat = 20
-        //
-        if orientation != .portrait {
-            //            x *= 4
-            //            width *= 4
-            postContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
-            postImage.frame = (CGRect(x: 0, y: 0, width: postContentView.frame.width, height: (postContentView.frame.height*0.75)))
-        }
-
-        postTitle.frame = (CGRect(x: 10, y: postContentView.frame.height*0.41, width: postContentView.frame.width - 20, height: postContentView.frame.height*0.06))
+        view.addSubview(postImage)
+        y += postImage.bounds.size.height
+        y += landscapeTitle
+        
+        // Post title
+        postTitle.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.06))
         postTitle.textColor = UIColor.white
         postTitle.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
-        postContentView.addSubview(postTitle)
+        view.addSubview(postTitle)
+        y += postTitle.bounds.size.height
         
-        postDate.frame = (CGRect(x: 10, y: postContentView.frame.height*0.46, width: postContentView.frame.width - 20, height: postContentView.frame.height*0.03))
+        // Post date
+        postDate.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.03))
         postDate.textColor = UIColor.white
         postDate.font = UIFont(name: "AvenirNext-MediumItalic", size: 12.0)
-        postContentView.addSubview(postDate)
+        view.addSubview(postDate)
+        y += postDate.bounds.size.height
         
-        postText.frame = (CGRect(x: 10, y: postContentView.frame.height*0.50, width: postContentView.frame.width - 20, height: postContentView.frame.height*0.40))
+        // Post text
+        postText.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.40))
         postText.isEditable = false
         postText.isSelectable = true
         postText.textColor = UIColor.white
         postText.backgroundColor = UIColor.clear
-        postContentView.addSubview(postText)
+        view.addSubview(postText)
+        y += postText.bounds.size.height
         
-        buttonView.frame = CGRect(x: 10, y: postContentView.frame.height*0.90, width: postContentView.frame.width - 20, height: postContentView.frame.height*0.10)
-        buttonView.clipsToBounds = true
-        postContentView.addSubview(buttonView)
-        
+        // Share icon
         shareBtn.setImage(UIImage(named: "share"), for: .normal)
         shareBtn.addTarget(self, action: #selector(sharePost), for: .touchUpInside)
-        shareBtn.frame = CGRect(x: 0, y: 15, width: 32, height: 32)
-        buttonView.addSubview(shareBtn)
-
+        shareBtn.frame = CGRect(x: 20, y: screenHeight - 52, width: 32, height: 32)
+        view.addSubview(shareBtn)
+        
+        // Location icon
         locationBtn.setImage(UIImage(named: "location"), for: .normal)
         locationBtn.addTarget(self, action: #selector(postLocation), for: .touchUpInside)
-        locationBtn.frame = CGRect(x: buttonView.frame.width - 32, y: 15, width: 32, height: 32)
-        buttonView.addSubview(locationBtn)
+        locationBtn.frame = CGRect(x: screenWidth - 52, y: screenHeight - 52, width: 32, height: 32)
+        view.addSubview(locationBtn)
     }
 
     @objc func setupUI() {
@@ -134,16 +136,17 @@ class ViewPost: UIViewController, PostDelegate {
 
     @objc func postLocation() {
         let showMap = ShowMap()
-//        viewPost.postId = myTripsData.posts[indexPath.row].postId
-        print("longitude", longitude)
-        print("latitude", latitude)
         showMap.lat = latitude
         showMap.long = longitude
+        
         self.navigationController?.pushViewController(showMap, animated: true)
     }
     
     @objc func editPost() {
-        
+        let editPost = EditPost()
+        editPost.postId = postId
+
+        self.navigationController?.pushViewController(editPost, animated: true)
     }
     
     func SetPostData(description:[String:Any]) {
@@ -152,11 +155,10 @@ class ViewPost: UIViewController, PostDelegate {
         postText.text = description["postText"] as? String
         longitude = description["postLong"] as? String ?? ""
         latitude = description["postLat"] as? String ?? ""
-        print("SetPostData")
+        userEmail = description["userEmail"] as? String ?? ""
     }
     
     func setPostImg(img:UIImage) {
         postImage.image = img
-        print("SetPostImg")
     }
 }
