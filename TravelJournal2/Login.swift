@@ -44,6 +44,8 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         view.backgroundColor = UIColor.clear
         // Do any additional setup after loading the view.
         loginButton = logButton
+        emailTextField = textField
+        passwordTextField = textField
         backgroundImage = UIImage(named: "background2")!
         blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
         blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
