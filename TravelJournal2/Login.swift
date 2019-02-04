@@ -11,12 +11,20 @@ import FirebaseAuth
 
 class LoginViewController: UIViewController, UITextViewDelegate {
     
-    var logButton : UIButton {
+    private var logButton : UIButton {
         let button = UIButton()
         button.setTitleColor(UIColor(red: 144/255, green: 12/255, blue: 63/255, alpha: 1.0), for: .normal)
         button.backgroundColor = UIColor.white
         button.titleLabel?.font = UIFont(name: "Hamilyn", size: 30)
         return button
+    }
+    
+    private var textField : UITextField {
+        let text = UITextField()
+        text.backgroundColor = UIColor.white
+        text.textAlignment = .center
+        text.layer.cornerRadius = 10
+        return text
     }
     
     fileprivate var orientation: UIDeviceOrientation {
@@ -43,7 +51,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         setupUI()
     }
     
-    func setupBackground() {
+    private func setupBackground() {
         backgroundImageView.frame = UIScreen.main.bounds
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
@@ -68,7 +76,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         view.addSubview(loginButton)
     }
     
-    func setupTextFields() {
+    private func setupTextFields() {
         var x : CGFloat = 10
         var width : CGFloat = 20
         if orientation != .portrait {
@@ -76,26 +84,20 @@ class LoginViewController: UIViewController, UITextViewDelegate {
             width *= 4
         }
         emailTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
-        emailTextField.backgroundColor = UIColor.white
         emailTextField.placeholder = "Email"
-        emailTextField.textAlignment = .center
-        emailTextField.layer.cornerRadius = 10
         view.addSubview(emailTextField)
         
         passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
-        passwordTextField.backgroundColor = UIColor.white
         passwordTextField.placeholder = "Password"
-        passwordTextField.textAlignment = .center
-        passwordTextField.layer.cornerRadius = 10
         passwordTextField.isSecureTextEntry = true
         view.addSubview(passwordTextField)
     }
     
-    @objc func loginPressed() {
+    @objc private func loginPressed() {
         Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
             
             if let error = error {
-                let alert = UIAlertController(title: "Log in failed", message: "Email or password is not correct", preferredStyle: .alert)
+                let alert = UIAlertController(title: "Log in failed", message: "\(error.localizedDescription)", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
                     NSLog("The \"OK\" alert occured.")
                 }))
@@ -109,7 +111,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    @objc func setupUI() {
+    @objc private func setupUI() {
         guard !orientation.isFlat else { return }
         self.title = "Login"
         setupBackground()

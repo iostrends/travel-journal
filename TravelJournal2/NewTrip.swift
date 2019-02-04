@@ -39,7 +39,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         currentUser = Auth.auth().currentUser?.email ?? "User not found"
         setupUI()
         tripTitle.delegate = self
-        tripsArray = tripData.trips.map { $0.tripTitle.lowercased() }
+        //tripsArray = tripData.trips.map { $0.tripTitle.lowercased() }
     }
     
     func setupBackground() {
@@ -65,6 +65,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         saveTripBtn.style = .plain
         saveTripBtn.title = "Save"
+        saveTripBtn.target = self
         saveTripBtn.action = #selector(saveNewTrip)
         
         self.navigationItem.rightBarButtonItem = saveTripBtn
@@ -130,6 +131,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @objc func saveNewTrip(_ sender: UIBarButtonItem) {
         let tripName = tripTitle.text!
         
+        print("tripname=\(tripName), triparray \(tripsArray)")
         //Checks if the fields are empty and if the Trip Name already exists
         if(tripName != "" && !tripsArray.contains(tripName.lowercased())){
             
