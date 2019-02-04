@@ -13,10 +13,9 @@ class LoginViewController: UIViewController, UITextViewDelegate {
     
     var logButton : UIButton {
         let button = UIButton()
-        button.titleLabel?.textColor = UIColor.white
-        button.backgroundColor = UIColor.brown
-        button.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        button.layer.cornerRadius = 10
+        button.setTitleColor(UIColor(red: 144/255, green: 12/255, blue: 63/255, alpha: 1.0), for: .normal)
+        button.backgroundColor = UIColor.white
+        button.titleLabel?.font = UIFont(name: "Hamilyn", size: 30)
         return button
     }
     
@@ -29,13 +28,17 @@ class LoginViewController: UIViewController, UITextViewDelegate {
     var loginButton = UIButton()
     var backgroundImageView = UIImageView()
     var backgroundImage = UIImage()
+    var blurEffectStyle = UIBlurEffect()
+    var blurEffectView = UIVisualEffectView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         // Do any additional setup after loading the view.
         loginButton = logButton
-        backgroundImage =  UIImage(named: "loginbackground")!
+        backgroundImage = UIImage(named: "background2")!
+        blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         setupUI()
     }
@@ -45,13 +48,14 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         backgroundImageView.image = backgroundImage
+        blurEffectView.frame = view.bounds
+        backgroundImageView.addSubview(blurEffectView)
         view.addSubview(backgroundImageView)
-        
     }
     
     func setupButtons() {
-        var x : CGFloat = 10
-        var width : CGFloat = 20
+        var x : CGFloat = 20
+        var width : CGFloat = 40
         if orientation != .portrait {
             x *= 4
             width *= 4
@@ -59,7 +63,8 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         
         loginButton.setTitle("Login", for: .normal)
         loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
-        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 125, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
         view.addSubview(loginButton)
     }
     
