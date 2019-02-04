@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FacebookShare
 
 class ViewPost: UIViewController, PostDelegate {
 
@@ -131,7 +132,17 @@ class ViewPost: UIViewController, PostDelegate {
     }
 
     @objc func sharePost() {
-        
+        if let img = postImage.image {
+            let photo = Photo(image: img, userGenerated: false)
+            let content = PhotoShareContent(photos: [photo])
+            let shareDialog = ShareDialog(content: content)
+            
+            do {
+                try shareDialog.show()
+            } catch {
+                print("Facebook share error \(error)")
+            }
+        }
     }
 
     @objc func postLocation() {
