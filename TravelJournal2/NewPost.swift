@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreLocation
+import CoreML
+import Vision
 
 class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
     
@@ -167,6 +169,33 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         self.present(imagePicker, animated: true, completion: nil)
     }
     
+    func detectCML(image: CIImage) {
+        // Load the ML model through its generated class
+        guard let model = try? VNCoreMLModel(for: GoogLeNetPlaces().model) else {
+            fatalError("can't load ML model")
+        }
+        
+        let request = VNCoreMLRequest(model: model) { request, error in
+            guard let results = request.results as? [VNClassificationObservation],
+                let topResult = results.first
+                else {
+                    fatalError("unexpected result type from VNCoreMLRequest")
+            }
+            
+            guard let observe = request.results as? [VNClassificationObservation] else {return}
+            for classification in observe {
+                if classification.confidence > 0.01 { print(classification.identifier, classification.confidence) }
+            }
+            print(topResult.identifier)
+            self.postTitle.text = topResult.identifier
+        }
+        
+        let handler = VNImageRequestHandler(ciImage: image)
+        
+        do { try handler.perform([request]) }
+        catch { print(error) }
+    }
+    
     // IMAGE PICKER FUNCTIONS
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -174,10 +203,19 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
         
-        postImage.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
-        dismiss(animated: true, completion: nil)
-        postImage.isHidden = false
-        postImage.alpha = 1
+        if let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage {
+            
+            postImage.image = image
+            dismiss(animated: true, completion: nil)
+            postImage.isHidden = false
+            postImage.alpha = 1
+            
+            guard let ciImage = CIImage(image: image) else {
+                fatalError("couldn't convert uiimage to CIImage")
+            }
+            
+            detectCML(image: ciImage)
+        }
         
     }
     

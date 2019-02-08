@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreML
+import Vision
 
 class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, PostDelegate {
     
@@ -97,6 +99,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editTitle.textColor = UIColor.black
         editTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
         editTitle.layer.cornerRadius = 10.0
+        editTitle.setInsetLeft(10.0)
         view.addSubview(editTitle)
         y += editTitle.bounds.size.height
         
@@ -158,6 +161,33 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         self.present(imagePicker, animated: true, completion: nil)
     }
     
+    func detectCML(image: CIImage) {
+        // Load the ML model through its generated class
+        guard let model = try? VNCoreMLModel(for: GoogLeNetPlaces().model) else {
+            fatalError("can't load ML model")
+        }
+        
+        let request = VNCoreMLRequest(model: model) { request, error in
+            guard let results = request.results as? [VNClassificationObservation],
+                let topResult = results.first
+                else {
+                    fatalError("unexpected result type from VNCoreMLRequest")
+            }
+            
+            guard let observe = request.results as? [VNClassificationObservation] else {return}
+            for classification in observe {
+                if classification.confidence > 0.01 { print(classification.identifier, classification.confidence) }
+            }
+            print(topResult.identifier)
+            self.editTitle.text = topResult.identifier
+        }
+        
+        let handler = VNImageRequestHandler(ciImage: image)
+        
+        do { try handler.perform([request]) }
+        catch { print(error) }
+    }
+    
     // IMAGE PICKER FUNCTIONS
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -165,11 +195,20 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         
         let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
         
-        editImage.image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
-        dismiss(animated: true, completion: nil)
-        editImage.isHidden = false
-        editImage.alpha = 1
-        newImage = true
+        if let image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage {
+            
+            editImage.image = image
+            dismiss(animated: true, completion: nil)
+            editImage.isHidden = false
+            editImage.alpha = 1
+            newImage = true
+            
+            guard let ciImage = CIImage(image: image) else {
+                fatalError("couldn't convert uiimage to CIImage")
+            }
+            
+            detectCML(image: ciImage)
+        }
     }
     
     // Helper function inserted by Swift 4.2 migrator.
