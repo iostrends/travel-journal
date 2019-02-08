@@ -70,6 +70,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var y = navbarHeight + statusbarHeight + 10
         
         createPostBtn.style = .plain
+        createPostBtn.target = self
         createPostBtn.title = "Save"
         createPostBtn.action = #selector(uploadPost)
         
