@@ -24,6 +24,7 @@
 		13B6DE512200804A00238695 /* ShowMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B6DE502200804A00238695 /* ShowMap.swift */; };
 		13C4BB1021FF2C83008D6BC5 /* NewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13C4BB0F21FF2C83008D6BC5 /* NewPost.swift */; };
 		13CE55F121FB082A00F85906 /* ViewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13CE55F021FB082A00F85906 /* ViewPost.swift */; };
+		7E23826B220DA5A80054B674 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7E238269220DA5A80054B674 /* Localizable.strings */; };
 		7E9BB10F21F9ED1700CABAE2 /* TripCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */; };
 		7E9BB11021F9ED1700CABAE2 /* TripCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */; };
 		7EC316C621FF3DC300C5A406 /* UIImage + Decompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */; };
@@ -55,6 +56,10 @@
 		13B6DE502200804A00238695 /* ShowMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMap.swift; sourceTree = "<group>"; };
 		13C4BB0F21FF2C83008D6BC5 /* NewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPost.swift; sourceTree = "<group>"; };
 		13CE55F021FB082A00F85906 /* ViewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewPost.swift; sourceTree = "<group>"; };
+		7E238268220DA56D0054B674 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		7E23826A220DA5A80054B674 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = TravelJournal2/Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7E23826C220DA5AD0054B674 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = TravelJournal2/en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7E23826D220DA5B20054B674 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = TravelJournal2/sv.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7E9BB10D21F9ED1700CABAE2 /* TripCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripCollectionViewCell.swift; sourceTree = "<group>"; };
 		7E9BB10E21F9ED1700CABAE2 /* TripCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TripCollectionViewCell.xib; sourceTree = "<group>"; };
 		7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage + Decompression.swift"; sourceTree = "<group>"; };
@@ -124,6 +129,7 @@
 				13727BB921F9C5880053CA88 /* GoogleService-Info.plist */,
 				13ADBDDB2207DB46002B765E /* Hamilyn.otf */,
 				13ADBDD02207CD15002B765E /* Medinah.ttf */,
+				7E238269220DA5A80054B674 /* Localizable.strings */,
 			);
 			path = TravelJournal2;
 			sourceTree = "<group>";
@@ -190,6 +196,7 @@
 			knownRegions = (
 				en,
 				Base,
+				sv,
 			);
 			mainGroup = 1308834321F9BF710052050C;
 			productRefGroup = 1308834D21F9BF710052050C /* Products */;
@@ -211,6 +218,7 @@
 				1308835A21F9BF720052050C /* Assets.xcassets in Resources */,
 				13ADBDD32207CD7C002B765E /* Medinah.ttf in Resources */,
 				13ADBDDC2207DB46002B765E /* Hamilyn.otf in Resources */,
+				7E23826B220DA5A80054B674 /* Localizable.strings in Resources */,
 				13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */,
 				7EC316CE21FF3EEB00C5A406 /* PostCollectionViewCell.xib in Resources */,
 			);
@@ -351,8 +359,19 @@
 			isa = PBXVariantGroup;
 			children = (
 				1308835C21F9BF720052050C /* Base */,
+				7E238268220DA56D0054B674 /* sv */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		7E238269220DA5A80054B674 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7E23826A220DA5A80054B674 /* Base */,
+				7E23826C220DA5AD0054B674 /* en */,
+				7E23826D220DA5B20054B674 /* sv */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -362,6 +381,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -423,6 +443,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

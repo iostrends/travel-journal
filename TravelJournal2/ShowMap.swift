@@ -29,8 +29,8 @@ class ShowMap: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
         showPin()
         mapView.delegate = self
         
-        segControl.insertSegment(withTitle: "Standard", at: 0, animated: true)
-        segControl.insertSegment(withTitle: "Satellite", at: 1, animated: true)
+        segControl.insertSegment(withTitle: NSLocalizedString("Standard", comment: ""), at: 0, animated: true)
+        segControl.insertSegment(withTitle: NSLocalizedString("Satellite", comment: ""), at: 1, animated: true)
         segControl.selectedSegmentIndex = 0
         
         self.navigationItem.leftBarButtonItem?.tintColor = UIColor.red
@@ -66,7 +66,7 @@ class ShowMap: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate {
     @objc func changeMapStyle() {
         switch segControl.selectedSegmentIndex {
         case 1:
-            print("case 1")
+            //print("case 1")
             mapView.mapType = .satellite
             segControl.tintColor = UIColor.white
         default:

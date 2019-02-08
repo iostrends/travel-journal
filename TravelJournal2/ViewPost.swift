@@ -73,7 +73,7 @@ class ViewPost: UIViewController, PostDelegate {
         
         // Edit Post button
         editPostBtn.style = .plain
-        editPostBtn.title = "Edit"
+        editPostBtn.title = NSLocalizedString("Edit", comment: "")
         editPostBtn.target = self
         editPostBtn.action = #selector(editPost)
         

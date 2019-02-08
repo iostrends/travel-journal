@@ -37,8 +37,8 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
-        currentUser = Auth.auth().currentUser?.email ?? "User not found"
-        self.title = "Add Trip"
+        currentUser = Auth.auth().currentUser?.email ?? NSLocalizedString("User not found", comment: "")
+        self.title = NSLocalizedString("Add Trip", comment: "")
         blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         setupSaveTripButton()
         setupUI()
@@ -57,7 +57,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     fileprivate func setupSaveTripButton() {
         saveTripBtn.style = .plain
-        saveTripBtn.title = "Save"
+        saveTripBtn.title = NSLocalizedString("Save", comment: "")
         saveTripBtn.target = self
         saveTripBtn.action = #selector(saveNewTrip)
         self.navigationItem.rightBarButtonItem = saveTripBtn
@@ -85,7 +85,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         view.addSubview(showcaseImage)
         
         tripTitle.frame = (CGRect(x: 10, y: showcaseImage.frame.height + 10 + y, width: view.frame.width - 20, height: 50))
-        tripTitle.placeholder = "Trip Title"
+        tripTitle.placeholder = NSLocalizedString("Trip title", comment: "")
         tripTitle.layer.cornerRadius = 10
         tripTitle.backgroundColor = .white
         tripTitle.minimumFontSize = 20.0
@@ -163,32 +163,30 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @objc func saveNewTrip(_ sender: UIBarButtonItem) {
         let tripName = tripTitle.text!
         
-        print("tripname=\(tripName), triparray \(tripsArray)")
+        //print("tripname=\(tripName), triparray \(tripsArray)")
         //Checks if the fields are empty and if the Trip Name already exists
-        if(tripName != "" && !tripsArray.contains(tripName.lowercased())){
+        if(tripName != "" && !tripsArray.contains(tripName.lowercased()) && showcaseImage.image != nil){
             
             tripData.oneTrip.userEmail = currentUser
             tripData.oneTrip.tripTitle = tripTitle.text ?? ""
             tripData.oneTrip.tripDate = getChoosenDate()
             
-            if showcaseImage.image != nil {
-                tripData.oneTrip.tripImg = showcaseImage.image
-            } else {
-                invalidFormMessage(errMessage: 3)
-            }
+            tripData.oneTrip.tripImg = showcaseImage.image
             
             tripData.uploadData()
             
-            print("Trip saved")
+            //print("Trip saved")
             uploadSuccessMessage()
             
         } else if(tripName == "") {
-            print("No title")
+            //print("No title")
             invalidFormMessage(errMessage: 1)
             
         } else if(tripsArray.contains(tripName.lowercased())) {
-            print("Trip already exists")
+            //print("Trip already exists")
             invalidFormMessage(errMessage: 2)
+        } else {
+            invalidFormMessage(errMessage: 3)
         }
         
     }
@@ -224,22 +222,22 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         var alert = UIAlertController()
         
         if(errMessage == 1){
-            alert = UIAlertController(title: "Titel saknas", message: "Fyll i titelfältet", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Missing title", comment: ""), message: NSLocalizedString("Fill in title field", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 2){
-            alert = UIAlertController(title: "Resan finns redan", message: "Titeln finns redan", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Trip already exists", comment: ""), message: NSLocalizedString("Change your trip title", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 3){
-            alert = UIAlertController(title: "Bild saknas", message: "Välj en bild från galleri eller ta en ny", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Picture missing", comment: ""), message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .alert)
         }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Tillagd", message: "Resan är tillagd", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Trip added", comment: ""), message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
             self.emptyFields()
             
@@ -260,7 +258,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         formatter.dateFormat = "MMM dd, YYYY"
         let date = formatter.string(from: datePicker.date)
-        print("date datePickerDate", formatter.string(from: datePicker.date))
+        //print("date datePickerDate", formatter.string(from: datePicker.date))
         
         return date
     }

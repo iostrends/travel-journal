@@ -76,14 +76,14 @@ class Welcome: UIViewController {
             x *= 4
             width *= 4
         }
-        loginButton.setTitle("Login", for: .normal)
-        loginButton.addTarget(self, action: #selector(goToLoginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 140, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.setTitle(NSLocalizedString("Login", comment: ""), for: .normal)
+        loginButton.addTarget(self, action: #selector(goToLoginPressed), for: .touchUpInside)
         loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
         
-        registerButton.setTitle("Register", for: .normal)
-        registerButton.addTarget(self, action: #selector(goToRegisterPressed), for: .touchUpInside)
         registerButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 80, width: UIScreen.main.bounds.width - width, height: 50)
+        registerButton.setTitle(NSLocalizedString("Register", comment: ""), for: .normal)
+        registerButton.addTarget(self, action: #selector(goToRegisterPressed), for: .touchUpInside)
         registerButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
         view.addSubview(loginButton)
         view.addSubview(registerButton)
@@ -91,7 +91,7 @@ class Welcome: UIViewController {
     
     private func setupMainLabel() {
         mainLabel.frame = CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33)
-        mainLabel.text = "Triping"
+        mainLabel.text = NSLocalizedString("Triping", comment: "")
         mainLabel.textAlignment = .center
         mainLabel.font = UIFont(name: "Medinah", size: 85.0)
         mainLabel.textColor = UIColor.white

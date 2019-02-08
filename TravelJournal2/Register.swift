@@ -42,7 +42,7 @@ class Register: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
-        self.title = "Register"
+        self.title = NSLocalizedString("Register", comment: "")
         loginButton = logButton
         emailTextField = textField
         passwordTextField = textField
@@ -67,19 +67,13 @@ class Register: UIViewController, UITextViewDelegate {
             x *= 4
             width *= 4
         }
-//        usernameTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
-//        usernameTextField.backgroundColor = UIColor.white
-//        usernameTextField.placeholder = "Username"
-//        usernameTextField.textAlignment = .center
-//        usernameTextField.layer.cornerRadius = 10
-//        view.addSubview(usernameTextField)
         
         emailTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4), width: UIScreen.main.bounds.width - width, height: 40)
-        emailTextField.placeholder = "Email"
+        emailTextField.placeholder = NSLocalizedString("Email", comment: "")
         view.addSubview(emailTextField)
         
         passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
-        passwordTextField.placeholder = "Password"
+        passwordTextField.placeholder = NSLocalizedString("Password", comment: "")
         passwordTextField.isSecureTextEntry = true
         view.addSubview(passwordTextField)
     }
@@ -91,18 +85,19 @@ class Register: UIViewController, UITextViewDelegate {
             x *= 4
             width *= 4
         }
-        loginButton.setTitle("Register", for: .normal)
-        loginButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
+        
         loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.setTitle(NSLocalizedString("Register", comment: ""), for: .normal)
+        loginButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
         view.addSubview(loginButton)
     }
     
     @objc private func registerPressed() {
         Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
             if let error = error {
-                let alert = UIAlertController(title: "Register failed", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                    NSLog("The \"OK\" alert occured.")
+                let alert = UIAlertController(title: NSLocalizedString("Register failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    //NSLog("The \"OK\" alert occured.")
                 }))
                 self.present(alert, animated: true, completion: nil)
                 print(error)

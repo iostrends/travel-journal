@@ -1,0 +1,71 @@
+/* 
+  Localizable.strings
+  TravelJournal2
+
+  Created by Samuel Lavasani on 2019-02-08.
+  Copyright © 2019 Niclas Nordling. All rights reserved.
+*/
+
+"Add Trip" = "Lägg till resa";
+
+"Are you sure you want to remove this post?" = "Är du säker på att du vill ta bort det här inlägget?";
+
+"Are you sure you want to remove this trip?" = "Är du säker på att du vill ta bort den här resan?";
+
+"Back" = "Tillbaka";
+
+"Change your trip title" = "Ändra resans titel";
+
+"Edit" = "Ändra";
+
+"Email" = "Email";
+
+"Fill in title field" = "Fyll i titel fältet";
+
+"Login" = "Logga in";
+
+"Login failed" = "Inloggning misslyckades";
+
+"Log out" = "Logga ut";
+
+"Missing title" = "Saknar Titel";
+
+"My Trips" = "Mina Resor";
+
+"OK" = "OK";
+
+"Password" = "Lösenord";
+
+"Pick a picture from gallery or take a new picture" = "Välj en bild från galleriet eller ta en ny bild";
+
+"Picture missing" = "Bild saknas";
+
+"Register" = "Registrera";
+
+"Register failed" = "Registrering misslyckades";
+
+"Remove" = "Ta bort";
+
+"Remove post" = "Ta bort inlägg";
+
+"Remove trip" = "Ta bort Resa";
+
+"Satellite" = "Satellit";
+
+"Save" = "Spara";
+
+"Sign Up" = "Bli medlem";
+
+"Standard" = "Standard";
+
+"Trip added" = "Resan tillagd";
+
+"Trip already exists" = "Resan finns redan";
+
+"Triping" = "Triping";
+
+"Trip title" = "Resans Titel";
+
+"User not found" = "Användaren hittades inte";
+
+"You are now logged out" = "Du är nu utloggad";

@@ -91,12 +91,12 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.clear
-        self.title = "My Trips"
+        self.title = NSLocalizedString("My Trips", comment: "")
         navigationItem.rightBarButtonItem = addNewTripButton
-        let backItem = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logOutUser))
+        let backItem = UIBarButtonItem(title: NSLocalizedString("Log out", comment: ""), style: .plain, target: self, action: #selector(logOutUser))
         navigationItem.leftBarButtonItem = backItem
         
-        currentUser = Auth.auth().currentUser?.email ?? "User not found"
+        currentUser = Auth.auth().currentUser?.email ?? NSLocalizedString("User not found", comment: "")
         myTripsData.dataDel = self
         setupCarousel()
         
@@ -115,8 +115,8 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Logga ut", message: "Du är nu utloggad", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Log out", comment: ""), message: NSLocalizedString("You are now logged out", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
             // Returns to root viewcontroller
             self.navigationController?.popToRootViewController(animated: true)
@@ -205,11 +205,11 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     @objc func deleteMessage(){
-        let alert = UIAlertController(title: "Ta bort Resa", message: "Säker på att du vill ta bort resan?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Tillbaka", comment: "Cancel action"), style: .cancel, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Remove trip", comment: ""), message: NSLocalizedString("Are you sure you want to remove this trip?", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: ""), style: .cancel, handler: { _ in
             
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Ta Bort", comment: "Delete action"), style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Remove", comment: ""), style: .destructive, handler: { _ in
             self.deleteTrip()
         }))
         self.present(alert, animated: true, completion: nil)

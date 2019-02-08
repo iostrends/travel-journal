@@ -145,11 +145,11 @@ extension PostsCollectionViewController {
     }
     
     @objc func deleteMessage(){
-        let alert = UIAlertController(title: "Ta bort Inlägg", message: "Säker på att du vill ta bort inlägget?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Tillbaka", comment: "Cancel action"), style: .cancel, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Remove post", comment: ""), message: NSLocalizedString("Are you sure you want to remove this post?", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: ""), style: .cancel, handler: { _ in
             
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Ta Bort", comment: "Delete action"), style: .destructive, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Remove", comment: ""), style: .destructive, handler: { _ in
             self.deletePost()
         }))
         self.present(alert, animated: true, completion: nil)

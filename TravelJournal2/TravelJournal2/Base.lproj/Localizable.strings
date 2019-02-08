@@ -1,0 +1,71 @@
+/* 
+  Localizable.strings
+  TravelJournal2
+
+  Created by Samuel Lavasani on 2019-02-08.
+  Copyright © 2019 Niclas Nordling. All rights reserved.
+*/
+
+"Add Trip" = "Add Trip";
+
+"Are you sure you want to remove this post?" = "Are you sure you want to remove this post?";
+
+"Are you sure you want to remove this trip?" = "Are you sure you want to remove this trip?";
+
+"Back" = "Back";
+
+"Change your trip title" = "Change your trip title";
+
+"Edit" = "Edit";
+
+"Email" = "Email";
+
+"Fill in title field" = "Fill in title field";
+
+"Login" = "Login";
+
+"Login failed" = "Login failed";
+
+"Log out" = "Log out";
+
+"Missing title" = "Missing title";
+
+"My Trips" = "My Trips";
+
+"OK" = "OK";
+
+"Password" = "Password";
+
+"Pick a picture from gallery or take a new picture" = "Pick a picture from gallery or take a new picture";
+
+"Picture missing" = "Picture missing";
+
+"Register" = "Register";
+
+"Register failed" = "Register failed";
+
+"Remove" = "Remove";
+
+"Remove post" = "Remove post";
+
+"Remove trip" = "Remove trip";
+
+"Satellite" = "Satellite";
+
+"Save" = "Save";
+
+"Sign Up" = "Sign Up";
+
+"Standard" = "Standard";
+
+"Trip added" = "Trip added";
+
+"Trip already exists" = "Trip already exists";
+
+"Triping" = "Triping";
+
+"Trip title" = "Trip title";
+
+"User not found" = "User not found";
+
+"You are now logged out" = "You are now logged out";

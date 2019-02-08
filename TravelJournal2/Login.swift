@@ -71,7 +71,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
             width *= 4
         }
         
-        loginButton.setTitle("Login", for: .normal)
+        loginButton.setTitle(NSLocalizedString("Login", comment: ""), for: .normal)
         loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
         loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 125, width: UIScreen.main.bounds.width - width, height: 50)
         loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
@@ -86,11 +86,11 @@ class LoginViewController: UIViewController, UITextViewDelegate {
             width *= 4
         }
         emailTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
-        emailTextField.placeholder = "Email"
+        emailTextField.placeholder = NSLocalizedString("Email", comment: "")
         view.addSubview(emailTextField)
         
         passwordTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 50, width: UIScreen.main.bounds.width - width, height: 40)
-        passwordTextField.placeholder = "Password"
+        passwordTextField.placeholder = NSLocalizedString("Password", comment: "")
         passwordTextField.isSecureTextEntry = true
         view.addSubview(passwordTextField)
     }
@@ -99,9 +99,9 @@ class LoginViewController: UIViewController, UITextViewDelegate {
         Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
             
             if let error = error {
-                let alert = UIAlertController(title: "Log in failed", message: "\(error.localizedDescription)", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
-                    NSLog("The \"OK\" alert occured.")
+                let alert = UIAlertController(title: NSLocalizedString("Login failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    //NSLog("The \"OK\" alert occured.")
                 }))
                 self.present(alert, animated: true, completion: nil)
                 print(error)
@@ -115,7 +115,7 @@ class LoginViewController: UIViewController, UITextViewDelegate {
     
     @objc private func setupUI() {
         guard !orientation.isFlat else { return }
-        self.title = "Login"
+        self.title = NSLocalizedString("Login", comment: "")
         setupBackground()
         setupTextFields()
         setupButtons()
