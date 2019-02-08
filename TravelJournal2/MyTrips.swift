@@ -47,7 +47,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
         let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
         layout.scrollDirection = .horizontal
-        layout.itemSize = direction == .horizontal ? CGSize(width: 350, height: 500) : CGSize(width: 320, height: 320)
+        layout.itemSize = direction == .horizontal ? CGSize(width: 320, height: 480) : CGSize(width: 320, height: 320)
         collectionView.frame = UIScreen.main.bounds
         backgroundImage()
         if currentPage > 0 {
@@ -70,7 +70,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func backgroundImage() {
-        let backgroundImage = UIImage(named: "planeCloud2")
+        let backgroundImage = UIImage(named: "background2")
         let imageView = UIImageView(image: backgroundImage)
         
         let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)

@@ -11,15 +11,16 @@ import FirebaseAuth
 
 class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    let screenHeight = UIScreen.main.bounds.size.height
-    let screenWidth = UIScreen.main.bounds.size.width
-    
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
-    var tripContentView = UIView()
+    //var tripContentView = UIView()
     var showcaseImage = UIImageView()
+    var backgroundImageView = UIImageView()
+    var backgroundImage = UIImage(named: "background2")
+    var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    var blurEffectView = UIVisualEffectView()
     var cameraBtn = UIButton()
     var libraryBtn = UIButton()
     var tripTitle = UITextField()
@@ -37,74 +38,105 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         currentUser = Auth.auth().currentUser?.email ?? "User not found"
+        self.title = "Add Trip"
+        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
+        setupSaveTripButton()
         setupUI()
         tripTitle.delegate = self
-        //tripsArray = tripData.trips.map { $0.tripTitle.lowercased() }
     }
     
     func setupBackground() {
-        let backgroundImage = UIImage(named: "background2")
-        let imageView = UIImageView(image: backgroundImage)
-        
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        backgroundImageView.frame = UIScreen.main.bounds
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        backgroundImageView.image = backgroundImage
         blurEffectView.frame = view.bounds
-        view.addSubview(imageView)
-        imageView.addSubview(blurEffectView)
-        
-        
+        backgroundImageView.addSubview(blurEffectView)
+        view.addSubview(backgroundImageView)
     }
     
-    func addNewTripUI() {
-        
-        tripContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
-        tripContentView.backgroundColor = UIColor.white
-        tripContentView.clipsToBounds = true
-        tripContentView.layer.cornerRadius = 10.0
-        view.addSubview(tripContentView)
-        
+    fileprivate func setupSaveTripButton() {
         saveTripBtn.style = .plain
         saveTripBtn.title = "Save"
         saveTripBtn.target = self
         saveTripBtn.action = #selector(saveNewTrip)
-        
         self.navigationItem.rightBarButtonItem = saveTripBtn
+    }
+    
+    func addNewTripUI() {
+//        let screenHeight = UIScreen.main.bounds.size.height
+//        let screenWidth = UIScreen.main.bounds.size.width
         
-        showcaseImage.frame = (CGRect(x: 0, y: 0, width: tripContentView.frame.width, height: tripContentView.frame.height*0.75))
+//        tripContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
+//        tripContentView.backgroundColor = UIColor.white
+//        tripContentView.clipsToBounds = true
+//        tripContentView.layer.cornerRadius = 10.0
+//        view.addSubview(tripContentView)
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let y = navbarHeight + statusbarHeight + 10
+        
+        showcaseImage.frame = (CGRect(x: 10, y: y, width: view.frame.width - 20, height: view.frame.height*0.65))
         showcaseImage.contentMode = .scaleAspectFill
         showcaseImage.clipsToBounds = true
+        showcaseImage.backgroundColor = .white
+        showcaseImage.layer.cornerRadius = 20
+        view.addSubview(showcaseImage)
         
-        tripContentView.addSubview(showcaseImage)
+        tripTitle.frame = (CGRect(x: 10, y: showcaseImage.frame.height + 10 + y, width: view.frame.width - 20, height: 50))
+        tripTitle.placeholder = "Trip Title"
+        tripTitle.layer.cornerRadius = 10
+        tripTitle.backgroundColor = .white
+        tripTitle.minimumFontSize = 20.0
+        tripTitle.textAlignment = .center
+        view.addSubview(tripTitle)
+        
+        datePicker.frame = (CGRect(x: 10, y: showcaseImage.frame.height + tripTitle.frame.height + 20 + y, width: view.frame.width - 20, height: 50))
+        datePicker.backgroundColor = .white
+        datePicker.datePickerMode = .date
+        datePicker.layer.cornerRadius = 10
+        datePicker.layer.masksToBounds = true
+        view.addSubview(datePicker)
 
         if orientation != .portrait {
-            tripContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
-            showcaseImage.frame = (CGRect(x: 0, y: 0, width: tripContentView.frame.width, height: (tripContentView.frame.height*0.75)))
+//            tripContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
+            showcaseImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
+            //showcaseImage.layer.borderWidth = 1
+            tripTitle.frame = (CGRect(x: showcaseImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 50))
+            datePicker.frame = (CGRect(x: showcaseImage.frame.width + 20, y: tripTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 50))
+        }
+        
+        setupCameraButtons()
+    }
+    
+    func setupCameraButtons() {
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let y = navbarHeight + statusbarHeight + 10
+        
+        var cameraFrame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
+        var libraryFrame = CGRect(x: view.frame.width - 52, y: y + 10, width: 32, height: 32)
+        
+        if orientation != .portrait {
+            cameraFrame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
+            libraryFrame = CGRect(x: showcaseImage.frame.width - 32, y: y + 10, width: 32, height: 32)
         }
         
         cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
         cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
-        cameraBtn.frame = CGRect(x: 10, y: 10, width: 32, height: 32)
-        tripContentView.addSubview(cameraBtn)
+        cameraBtn.frame = cameraFrame
+        view.addSubview(cameraBtn)
         
         libraryBtn.setImage(UIImage(named: "library"), for: .normal)
         libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
-        libraryBtn.frame = CGRect(x: tripContentView.frame.width - 42, y: 10, width: 32, height: 32)
-        tripContentView.addSubview(libraryBtn)
-        
-        tripTitle.frame = (CGRect(x: 10, y: tripContentView.frame.height*0.75, width: tripContentView.frame.width - 20, height: tripContentView.frame.height*0.10))
-        tripTitle.placeholder = "Trip Title"
-        tripTitle.minimumFontSize = 20.0
-        tripTitle.textAlignment = .center
-        tripContentView.addSubview(tripTitle)
-        
-        datePicker.frame = (CGRect(x: 10, y: tripContentView.frame.height*0.85, width: tripContentView.frame.width - 20, height: tripContentView.frame.height*0.15))
-        datePicker.datePickerMode = .date
-        tripContentView.addSubview(datePicker)
+        libraryBtn.frame = libraryFrame
+        view.addSubview(libraryBtn)
     }
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        self.title = "Add Trip"
         setupBackground()
         addNewTripUI()
     }
