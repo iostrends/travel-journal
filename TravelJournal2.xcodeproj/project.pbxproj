@@ -13,6 +13,7 @@
 		1308835A21F9BF720052050C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1308835921F9BF720052050C /* Assets.xcassets */; };
 		1308835D21F9BF720052050C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1308835B21F9BF720052050C /* LaunchScreen.storyboard */; };
 		1342DC3F2205105F00A57C57 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1342DC3E2205105F00A57C57 /* EditPost.swift */; };
+		13563691220A1FCA0049E161 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13563690220A1FCA0049E161 /* Extensions.swift */; };
 		13727BB821F9C43D0053CA88 /* TripData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BB721F9C43D0053CA88 /* TripData.swift */; };
 		13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13727BB921F9C5880053CA88 /* GoogleService-Info.plist */; };
 		13727BBC21F9C5CF0053CA88 /* NewTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BBB21F9C5CF0053CA88 /* NewTrip.swift */; };
@@ -46,6 +47,7 @@
 		1308835C21F9BF720052050C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1308835E21F9BF720052050C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1342DC3E2205105F00A57C57 /* EditPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
+		13563690220A1FCA0049E161 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		13727BB721F9C43D0053CA88 /* TripData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripData.swift; sourceTree = "<group>"; };
 		13727BB921F9C5880053CA88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13727BBB21F9C5CF0053CA88 /* NewTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTrip.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				1308835121F9BF710052050C /* Welcome.swift */,
 				13727BBB21F9C5CF0053CA88 /* NewTrip.swift */,
 				13727BBD21F9C60D0053CA88 /* Login.swift */,
+				13563690220A1FCA0049E161 /* Extensions.swift */,
 				13727BC121F9C6560053CA88 /* MyTrips.swift */,
 				7EC316C521FF3DC300C5A406 /* UIImage + Decompression.swift */,
 				7EC316C721FF3DFF00C5A406 /* UltraVisualLayout.swift */,
@@ -331,6 +334,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1342DC3F2205105F00A57C57 /* EditPost.swift in Sources */,
+				13563691220A1FCA0049E161 /* Extensions.swift in Sources */,
 				13727BC221F9C6560053CA88 /* MyTrips.swift in Sources */,
 				1308835821F9BF710052050C /* TravelJournal2.xcdatamodeld in Sources */,
 				1308835221F9BF710052050C /* Welcome.swift in Sources */,
