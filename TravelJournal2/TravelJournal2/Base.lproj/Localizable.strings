@@ -6,6 +6,10 @@
   Copyright © 2019 Niclas Nordling. All rights reserved.
 */
 
+"A Trip with that title already exists" = "A Trip with that title already exists";
+
+"Added" = "Added";
+
 "Add Trip" = "Add Trip";
 
 "Are you sure you want to remove this post?" = "Are you sure you want to remove this post?";
@@ -21,6 +25,8 @@
 "Email" = "Email";
 
 "Fill in title field" = "Fill in title field";
+
+"Journal entry here" = "Journal entry here";
 
 "Login" = "Login";
 
@@ -40,6 +46,8 @@
 
 "Picture missing" = "Picture missing";
 
+"Post is added" = "Post is added";
+
 "Register" = "Register";
 
 "Register failed" = "Register failed";
@@ -57,6 +65,10 @@
 "Sign Up" = "Sign Up";
 
 "Standard" = "Standard";
+
+"Title" = "Title";
+
+"Title missing" = "Title missing";
 
 "Trip added" = "Trip added";
 

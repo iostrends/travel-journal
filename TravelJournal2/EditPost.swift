@@ -69,7 +69,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         var y = navbarHeight + statusbarHeight + 10
         
         savePostBtn.style = .plain
-        savePostBtn.title = "Save"
+        savePostBtn.title = NSLocalizedString("Save", comment: "")
         savePostBtn.target = self
         savePostBtn.action = #selector(updatePost)
         

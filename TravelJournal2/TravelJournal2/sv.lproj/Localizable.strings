@@ -6,6 +6,10 @@
   Copyright © 2019 Niclas Nordling. All rights reserved.
 */
 
+"A Trip with that title already exists" = "En resa med den titeln finns redan";
+
+"Added" = "Tillagd";
+
 "Add Trip" = "Lägg till resa";
 
 "Are you sure you want to remove this post?" = "Är du säker på att du vill ta bort det här inlägget?";
@@ -21,6 +25,8 @@
 "Email" = "Email";
 
 "Fill in title field" = "Fyll i titel fältet";
+
+"Journal entry here" = "Dagboks anteckningar här";
 
 "Login" = "Logga in";
 
@@ -40,6 +46,8 @@
 
 "Picture missing" = "Bild saknas";
 
+"Post is added" = "Inlägget är tillagd";
+
 "Register" = "Registrera";
 
 "Register failed" = "Registrering misslyckades";
@@ -57,6 +65,10 @@
 "Sign Up" = "Bli medlem";
 
 "Standard" = "Standard";
+
+"Title" = "Titel";
+
+"Title missing" = "Titel saknas";
 
 "Trip added" = "Resan tillagd";
 

@@ -71,7 +71,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         
         createPostBtn.style = .plain
         createPostBtn.target = self
-        createPostBtn.title = "Save"
+        createPostBtn.title = NSLocalizedString("Save", comment: "")
         createPostBtn.action = #selector(uploadPost)
         
         self.navigationItem.rightBarButtonItem = createPostBtn
@@ -100,14 +100,14 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         postTitle.textColor = UIColor.black
         postTitle.layer.borderColor = UIColor.white.cgColor
         postTitle.layer.borderWidth = 1
-        postTitle.placeholder = " Title" // Intentional space
+        postTitle.placeholder = NSLocalizedString("Title", comment: "") // Intentional space
         postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
         postTitle.layer.cornerRadius = 10.0
         view.addSubview(postTitle)
         y += postTitle.bounds.size.height
         
         postText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
-        postText.text = "Journal entry here"
+        postText.text = NSLocalizedString("Journal entry here", comment: "")
         postText.textColor = UIColor.lightGray
         postText.backgroundColor = UIColor.white
         postText.layer.borderColor = UIColor.black.cgColor
@@ -234,24 +234,24 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func invalidFormMessage(errMessage: Int){
         var alert = UIAlertController()
-        
+    
         if(errMessage == 1){
-            alert = UIAlertController(title: "Titel saknas", message: "Fyll i titelfältet", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Title missing", comment: ""), message: NSLocalizedString("Fill in title field", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 2){
-            alert = UIAlertController(title: "Resan finns redan", message: "Titeln finns redan", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Trip already exists", comment: ""), message: NSLocalizedString("A Trip with that title already exists", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 3){
-            alert = UIAlertController(title: "Bild saknas", message: "Välj en bild från galleri eller ta en ny", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Picture missing", comment: ""), message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .alert)
         }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Tillagd", message: "Inlägget är tillagt", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Added", comment: ""), message: NSLocalizedString("Post is added", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
             self.emptyFields()
             
@@ -301,7 +301,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            postText.text = "Journal entry here"
+            postText.text = NSLocalizedString("Journal entry here", comment: "")
             postText.textColor = UIColor.lightGray
         }
     }

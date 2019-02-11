@@ -61,7 +61,7 @@ class TripData {
     var oldPostTitle = ""
     
     func uploadData() {
-        var imgName = "\(oneTrip.tripTitle)_\(oneTrip.tripDate)_\(oneTrip.userEmail)"
+        var imgName = "\(oneTrip.tripTitle)_\(oneTrip.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
         imgName = imgName.replacingOccurrences(of: ",", with: "")
@@ -90,11 +90,22 @@ class TripData {
     
     func uploadImage(imgName:String) {
         if let image = oneTrip.tripImg {
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: 375, height: 180), false, 0.0)
-            let ratio = image.size.width/image.size.height
-            let scaleWidth = ratio*375
-            let offsetX = (scaleWidth-375)/2
-            image.draw(in: CGRect(x: -offsetX, y: 0, width: scaleWidth, height: 180))
+            if image.size.height < image.size.width {
+                
+                UIGraphicsBeginImageContextWithOptions(CGSize(width: 320, height: 480), false, 0.0)
+                let ratio = image.size.width/image.size.height
+                let scaleWidth = ratio*320
+                let offsetX = (scaleWidth-320)/2
+                image.draw(in: CGRect(x: -offsetX, y: 0, width: scaleWidth, height: 480))
+            } else {
+                
+                UIGraphicsBeginImageContextWithOptions(CGSize(width: 320, height: 260), false, 0.0)
+                let ratio = image.size.width/image.size.height
+                let scaleWidth = ratio*320
+                let offsetX = (scaleWidth-320)/2
+                image.draw(in: CGRect(x: -offsetX, y: 0, width: scaleWidth, height: 260))
+            }
+            
             let tripImg = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
@@ -268,7 +279,7 @@ class TripData {
     }
     
     func uploadPost() {
-        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        var imgName = "\(onePost.postTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
         imgName = imgName.replacingOccurrences(of: ",", with: "")
@@ -328,7 +339,7 @@ class TripData {
     }
 
     func updatePost(postId: String, newImage: Bool){
-        var imgName = "\(onePost.postTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        var imgName = "\(onePost.postTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
         imgName = imgName.replacingOccurrences(of: ",", with: "")
@@ -378,7 +389,7 @@ class TripData {
     }
     
     func deleteOldImage(oldPostTitle: String) {
-        var imgName = "\(self.oldPostTitle)_\(onePost.postDate)_\(onePost.userEmail)"
+        var imgName = "\(self.oldPostTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
         imgName = imgName.replacingOccurrences(of: ",", with: "")
