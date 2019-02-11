@@ -60,8 +60,6 @@ class TripData {
     var onePost = Post()
     var oldPostTitle = ""
     
-    var filteredPosts : [Post] = []
-    
     func uploadData() {
         var imgName = "\(oneTrip.tripTitle)_\(oneTrip.tripDate)_\(oneTrip.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
@@ -142,25 +140,6 @@ class TripData {
                     self.loadImage()
                 }
         }
-        
-//        db.collection("Trips").getDocuments() { (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting document: \(err)")
-//            } else {
-//                guard let qSnapshot = querySnapshot else {return}
-//                for document in qSnapshot.documents {
-//                    trip.userEmail = document.data()["userEmail"] as? String ?? ""
-//                    trip.tripId = document.documentID
-//                    trip.tripTitle = document.data()["tripTitle"] as? String ?? ""
-//                    trip.tripDate = document.data()["tripDate"] as? String ?? ""
-//                    trip.tripImgURL = document.data()["tripImg"] as? String ?? ""
-//
-//                    self.trips.append(trip)
-//                    print("TripDB \(trip)")
-//                }
-//                self.loadImage()
-//            }
-//        }
     }
     
     func loadImage() {

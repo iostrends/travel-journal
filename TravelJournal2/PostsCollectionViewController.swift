@@ -20,6 +20,8 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     }
     
     let myTripsData = TripData()
+    var currentPosts = [Post]()
+    var searchBar = UISearchBar()
     var tripTitle = ""
     var currentUser = ""
     var postId = ""
@@ -41,12 +43,13 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         setupBackground()
         setupCollectionView()
+        setupSearchBar()
         NotificationCenter.default.addObserver(self, selector: #selector(rotationHappened), name: UIDevice.orientationDidChangeNotification, object: nil)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         laddaDB()
-        laddaTabell()
     }
 
     @objc private func goToAddNewPostPressed() {
@@ -85,6 +88,7 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     }
     
     func laddaTabell() {
+        currentPosts = myTripsData.posts
         collectionView.reloadData()
     }
     
@@ -96,7 +100,7 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
 
 extension PostsCollectionViewController {
      func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return myTripsData.posts.count
+        return currentPosts.count
     }
     
      func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -105,10 +109,11 @@ extension PostsCollectionViewController {
             as? PostCollectionViewCell else {
                 return UICollectionViewCell()
         }
-        cell.imageView.image = myTripsData.posts[indexPath.row].postImg
-        cell.titleLabel.text = myTripsData.posts[indexPath.row].postTitle
-        cell.dateLabel.text = myTripsData.posts[indexPath.row].postDate
-        postId = myTripsData.posts[indexPath.row].postId
+        let post = currentPosts[indexPath.row]
+        cell.imageView.image = post.postImg
+        cell.titleLabel.text = post.postTitle
+        cell.dateLabel.text = post.postDate
+        postId = post.postId
         
         touch.addTarget(self, action: #selector(deleteMessage))
         touch.minimumPressDuration = 2
@@ -131,7 +136,7 @@ extension PostsCollectionViewController {
             )
         } else {
             let viewPost = ViewPost()
-            viewPost.postId = myTripsData.posts[indexPath.row].postId
+            viewPost.postId = currentPosts[indexPath.row].postId
             self.navigationController?.pushViewController(viewPost, animated: true)
         }
     }
@@ -141,6 +146,7 @@ extension PostsCollectionViewController {
         let itemIndex = self.collectionView.indexPath(for: cell)!.item
         myTripsData.removeFromDB(collection: "Posts", id: postId)
         myTripsData.posts.remove(at: itemIndex)
+        currentPosts.remove(at: itemIndex)
         self.collectionView.reloadData()
     }
     
@@ -154,4 +160,32 @@ extension PostsCollectionViewController {
         }))
         self.present(alert, animated: true, completion: nil)
     }
+}
+
+extension PostsCollectionViewController : UISearchBarDelegate {
+    private func setupSearchBar(){
+        
+        searchBar.delegate = self
+        searchBar.frame = CGRect(x: 0, y: 60, width: UIScreen.main.bounds.width, height: 30)
+        searchBar.searchBarStyle = .minimal
+        view.addSubview(searchBar)
+        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = UIColor.white
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard !searchText.isEmpty else {
+            currentPosts = myTripsData.posts
+            collectionView.reloadData()
+            return
+            
+        }
+        currentPosts = myTripsData.posts.filter({ post -> Bool in
+            
+            return post.postTitle.lowercased().contains(searchText.lowercased())
+        })
+        collectionView.reloadData()
+    }
+    
 }
