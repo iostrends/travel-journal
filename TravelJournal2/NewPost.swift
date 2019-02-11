@@ -114,7 +114,15 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         postText.layer.borderWidth = 1
         postText.layer.cornerRadius = 10.0
         view.addSubview(postText)
-        y += postText.bounds.size.height
+        
+        //y += postText.bounds.size.height
+        if orientation != .portrait {
+            y = navbarHeight + statusbarHeight + 10
+            postImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
+            postTitle.frame = (CGRect(x: postImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 40))
+            postText.frame = (CGRect(x: postImage.frame.width + 20, y: postTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 200))
+            libraryBtn.frame = CGRect(x: postImage.frame.width - 32, y: y + 10, width: 32, height: 32)
+        }
     }
     
     @objc func setupUI() {
