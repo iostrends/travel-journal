@@ -163,7 +163,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     func detectCML(image: CIImage) {
         // Load the ML model through its generated class
-        guard let model = try? VNCoreMLModel(for: GoogLeNetPlaces().model) else {
+        guard let model = try? VNCoreMLModel(for: ImageClassifier().model) else {
             fatalError("can't load ML model")
         }
         
