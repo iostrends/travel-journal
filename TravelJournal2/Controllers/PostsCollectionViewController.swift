@@ -36,8 +36,6 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     lazy private var backgroundImageView = UIImageView(image: backgroundImage)
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
-    var touch = UILongPressGestureRecognizer()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -126,10 +124,6 @@ extension PostsCollectionViewController {
         cell.dateLabel.text = post.postDate
         postId = post.postId
         
-        touch.addTarget(self, action: #selector(deleteMessage))
-        touch.minimumPressDuration = 2
-        cell.addGestureRecognizer(touch)
-        
         return cell
     }
     
@@ -150,26 +144,6 @@ extension PostsCollectionViewController {
             viewPost.postId = currentPosts[indexPath.row].postId
             self.navigationController?.pushViewController(viewPost, animated: true)
         }
-    }
-    
-    @objc func deletePost() {
-        let cell = touch.view as! UICollectionViewCell
-        let itemIndex = self.collectionView.indexPath(for: cell)!.item
-        myTripsData.removeFromDB(collection: "Posts", id: postId)
-        myTripsData.posts.remove(at: itemIndex)
-        currentPosts.remove(at: itemIndex)
-        self.collectionView.reloadData()
-    }
-    
-    @objc func deleteMessage(){
-        let alert = UIAlertController(title: NSLocalizedString("Remove post", comment: ""), message: NSLocalizedString("Are you sure you want to remove this post?", comment: ""), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: ""), style: .cancel, handler: { _ in
-            
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("Remove", comment: ""), style: .destructive, handler: { _ in
-            self.deletePost()
-        }))
-        self.present(alert, animated: true, completion: nil)
     }
 }
 
