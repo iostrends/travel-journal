@@ -312,15 +312,14 @@ class TripData {
     
     func uploadPostImage(imgName:String) {
         if let image = onePost.postImg {
-            UIGraphicsBeginImageContextWithOptions(CGSize(width: 375, height: 180), false, 0.0)
-            let ratio = image.size.width/image.size.height
-            let scaleWidth = ratio*375
-            let offsetX = (scaleWidth-375)/2
-            image.draw(in: CGRect(x: -offsetX, y: 0, width: scaleWidth, height: 180))
+            let width = image.size.width/8
+            let height = image.size.height/8
+            UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, 0.0)
+            image.draw(in: CGRect(x: 0, y: 0, width: width, height: height))
             let postImg = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
-            if let jpegData = postImg?.jpegData(compressionQuality: 0.7) {
+            if let jpegData = postImg?.jpegData(compressionQuality: 0.9) {
                 let storageRef = Storage.storage().reference()
                 let imgRef = storageRef.child(imgName+".jpg")
                 let metaData = StorageMetadata()
@@ -332,7 +331,6 @@ class TripData {
                         return
                     }
                     print("image uploaded")
-//                    self.uploadImage(imgName: imgName)
                 }
             }
         }
@@ -382,7 +380,6 @@ class TripData {
                         return
                     }
                     print("image updated")
-//                    self.uploadImage(imgName: imgName)
                 }
             }
         }

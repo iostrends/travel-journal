@@ -278,6 +278,37 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     }
     
     func setPostImg(img:UIImage) {
-        editImage.image = img
+        let editImg = img
+        
+        let inW = editImg.size.width
+        let inH = editImg.size.height
+        let inRatio = inH/inW
+        
+        let viewW = editImage.frame.size.width
+        let viewH = editImage.frame.size.height
+        let viewRatio = viewH/viewW
+        
+        var offsetX:CGFloat = 0.0
+        var offsetY:CGFloat  = 0.0
+        var outW:CGFloat  = 0.0
+        var outH:CGFloat  = 0.0
+        
+        if  inRatio > viewRatio {
+            outW = viewW
+            outH = inRatio*outW
+            offsetX = 0.0
+            offsetY = (viewH-outH)/2.0
+        } else {
+            outH = viewH
+            outW = outH/inRatio
+            offsetY = 0.0
+            offsetX = (viewW-outW)/2.0
+        }
+        
+        UIGraphicsBeginImageContext(CGSize(width: viewW, height: viewH))
+        
+        editImg.draw(in: CGRect(x: offsetX, y: offsetY, width: outW, height: outH))
+        editImage.image = editImg
+        UIGraphicsEndImageContext()
     }
 }
