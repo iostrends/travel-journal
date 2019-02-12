@@ -15,9 +15,11 @@ class ViewPost: UIViewController, PostDelegate {
         return UIDevice.current.orientation
     }
     
-    var backgroundImage = UIImageView()
-    var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-    var blurEffectView = UIVisualEffectView()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     var postImage = UIImageView()
     var postTitle = UILabel()
     var postDate = UILabel()
@@ -39,21 +41,8 @@ class ViewPost: UIViewController, PostDelegate {
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         data.loadOnePost(postId: postId)
-        blurEffectView.effect = blurEffect
         setupUI()
         data.postDel = self
-    }
-
-    func setupBackground() {
-        backgroundImage.frame = UIScreen.main.bounds
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.clipsToBounds = true
-        backgroundImage.image = UIImage(named: "background2")
-        
-        blurEffectView.frame = view.bounds
-        
-        view.addSubview(backgroundImage)
-        backgroundImage.addSubview(blurEffectView)
     }
 
     @objc func addViewPostUI() {
@@ -127,7 +116,7 @@ class ViewPost: UIViewController, PostDelegate {
 
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         addViewPostUI()
     }
 

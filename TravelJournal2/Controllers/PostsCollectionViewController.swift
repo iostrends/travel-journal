@@ -26,10 +26,11 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     var currentUser = ""
     var postId = ""
     var collectionView : UICollectionView!
-    var backgroundImageView = UIImageView()
-    var backgroundImage = UIImage()
-    var blurEffectStyle = UIBlurEffect()
-    var blurEffectView = UIVisualEffectView()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
     var touch = UILongPressGestureRecognizer()
     
@@ -38,10 +39,7 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         view.backgroundColor = .clear
         navigationItem.rightBarButtonItem = addNewTripButton
         myTripsData.dataDel = self
-        backgroundImage = UIImage(named: "background2")!
-        blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         setupCollectionView()
         setupSearchBar()
         NotificationCenter.default.addObserver(self, selector: #selector(rotationHappened), name: UIDevice.orientationDidChangeNotification, object: nil)
@@ -69,20 +67,10 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         view.addSubview(collectionView)
     }
     
-    func setupBackground() {
-        //backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
-        backgroundImageView.frame = UIScreen.main.bounds
-        backgroundImageView.contentMode = .scaleAspectFill
-        backgroundImageView.clipsToBounds = true
-        backgroundImageView.image = backgroundImage
-        blurEffectView.frame = view.bounds
-        backgroundImageView.addSubview(blurEffectView)
-        view.addSubview(backgroundImageView)
-    }
-    
     @objc func rotationHappened() {
         collectionView.frame = UIScreen.main.bounds
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
+        setupSearchBar()
         view.addSubview(collectionView)
         
     }

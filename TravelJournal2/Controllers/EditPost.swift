@@ -21,9 +21,11 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     var postDate = ""
     var newImage = false
     
-    var backgroundImage = UIImageView()
-    var blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
-    var blurEffectView = UIVisualEffectView()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
     var tripTitle = ""
     var editImage = UIImageView()
@@ -41,22 +43,9 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         data.loadOnePost(postId: postId)
-        blurEffectView.effect = blurEffect
         setupUI()
         data.postDel = self
         editText.delegate = self
-    }
-    
-    func setupBackground() {
-        backgroundImage.frame = UIScreen.main.bounds
-        backgroundImage.contentMode = .scaleAspectFill
-        backgroundImage.clipsToBounds = true
-        backgroundImage.image = UIImage(named: "background2")
-        
-        blurEffectView.frame = view.bounds
-        
-        view.addSubview(backgroundImage)
-        backgroundImage.addSubview(blurEffectView)
     }
     
     func addEditPostUI() {
@@ -113,7 +102,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         addEditPostUI()
     }
     

@@ -88,7 +88,7 @@ class Welcome: UIViewController {
     }
     
     @objc private func goToLoginPressed() {
-        let loginViewController = LoginViewController()
+        let loginViewController = MyTrips()
         self.navigationController?.pushViewController(loginViewController, animated: true)
     }
     

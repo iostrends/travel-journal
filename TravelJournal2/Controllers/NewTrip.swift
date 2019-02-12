@@ -17,10 +17,11 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     //var tripContentView = UIView()
     var showcaseImage = UIImageView()
-    var backgroundImageView = UIImageView()
-    var backgroundImage = UIImage(named: "background2")
-    var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
-    var blurEffectView = UIVisualEffectView()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     var cameraBtn = UIButton()
     var libraryBtn = UIButton()
     var tripTitle = UITextField()
@@ -64,14 +65,6 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func addNewTripUI() {
-//        let screenHeight = UIScreen.main.bounds.size.height
-//        let screenWidth = UIScreen.main.bounds.size.width
-        
-//        tripContentView.frame = (CGRect(x: 10, y: 80, width: screenWidth - 20, height: screenHeight - 100))
-//        tripContentView.backgroundColor = UIColor.white
-//        tripContentView.clipsToBounds = true
-//        tripContentView.layer.cornerRadius = 10.0
-//        view.addSubview(tripContentView)
         guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
         let statusbarHeight = UIApplication.shared.statusBarFrame.height
         
@@ -100,7 +93,6 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         view.addSubview(datePicker)
 
         if orientation != .portrait {
-//            tripContentView.frame = (CGRect(x: 10, y: 44, width: screenWidth - 20, height: screenHeight - 60))
             showcaseImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
             //showcaseImage.layer.borderWidth = 1
             tripTitle.frame = (CGRect(x: showcaseImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 50))
@@ -137,7 +129,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         addNewTripUI()
     }
     
