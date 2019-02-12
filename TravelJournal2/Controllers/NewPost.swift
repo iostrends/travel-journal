@@ -218,6 +218,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             dismiss(animated: true, completion: nil)
             postImage.isHidden = false
             postImage.alpha = 1
+            postImage.clipsToBounds = true
             
             guard let ciImage = CIImage(image: image) else {
                 fatalError("couldn't convert uiimage to CIImage")
