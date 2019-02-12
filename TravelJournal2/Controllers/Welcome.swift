@@ -7,105 +7,199 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class Welcome: UIViewController {
     
     private var logButton : UIButton {
         let button = UIButton()
-        button.setTitleColor(UIColor(red: 144/255, green: 12/255, blue: 63/255, alpha: 1.0), for: .normal)
+        button.setTitleColor(UIColor.mainRed(), for: .normal)
         button.backgroundColor = UIColor.white
-        button.titleLabel?.font = UIFont(name: "Hamilyn", size: 30)
-        button.layer.borderColor = UIColor.white.cgColor
-        button.layer.borderWidth = 1
-//        button.layer.cornerRadius = 80
+        button.titleLabel?.font = UIFont.buttonFont()
         return button
     }
     
-    private var loginButton = UIButton()
-    private var registerButton = UIButton()
-    private var mainLabel = UILabel()
+    private var textField : UITextField {
+        let text = UITextField()
+        text.backgroundColor = UIColor.loginBackground()
+        text.textAlignment = .center
+        text.font = UIFont.textFont()
+        text.textColor = UIColor.white
+        text.layer.cornerRadius = 10
+        return text
+    }
+    
+    fileprivate var orientation: UIDeviceOrientation {
+        return UIDevice.current.orientation
+    }
+    
+    var emailTextField = UITextField()
+    var passwordTextField = UITextField()
+    var loginButton = UIButton()
+    var registerButton = UIButton()
+    var mainLabel = UILabel()
     private var backgroundImage = UIImage(named: "background2")
     private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
     
     lazy private var backgroundImageView = UIImageView(image: backgroundImage)
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
-    fileprivate var orientation: UIDeviceOrientation {
-        return UIDevice.current.orientation
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
+        // Do any additional setup after loading the view.
         loginButton = logButton
         registerButton = logButton
+        emailTextField = textField
+        passwordTextField = textField
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil);
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil);
+        setupUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        setupUI()
+    private func setupMainLabel() {
+        if orientation != .portrait {
+            mainLabel.isHidden = true
+        } else {
+            mainLabel.isHidden = false
+        }
+        
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        let topHeight = navbarHeight + statusbarHeight
+        
+        mainLabel.frame = CGRect(x: 20, y: topHeight + 20, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.height / 4)
+        mainLabel.text = NSLocalizedString("Triping", comment: "")
+        mainLabel.font = UIFont.logoFontNormal()
+        mainLabel.textAlignment = .center
+        mainLabel.textColor = UIColor.mainRed()
+        mainLabel.shadowColor = UIColor.white
+        mainLabel.shadowOffset = CGSize(width: 1, height: 1)
+        
+        view.addSubview(mainLabel)
+    }
+    
+    func setupButtons() {
+        var x : CGFloat = 40
+        var width : CGFloat = 80
+        if orientation != .portrait {
+            x *= 4
+            width *= 4
+        }
+        
+        loginButton.setTitle(NSLocalizedString("Login", comment: ""), for: .normal)
+        loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
+        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height - 160), width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
+        view.addSubview(loginButton)
+        
+        registerButton.setTitle(NSLocalizedString("Register", comment: ""), for: .normal)
+        registerButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
+        registerButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height - 100), width: UIScreen.main.bounds.width - width, height: 50)
+        registerButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
+        view.addSubview(registerButton)
+    }
+    
+    private func setupTextFields() {
+        var x : CGFloat = 40
+        var width : CGFloat = 80
+        if orientation != .portrait {
+            x *= 4
+            width *= 4
+        }
+        emailTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 300, width: UIScreen.main.bounds.width - width, height: 40)
+        emailTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Email", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderColor()])
+        view.addSubview(emailTextField)
+        
+        passwordTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 250, width: UIScreen.main.bounds.width - width, height: 40)
+        passwordTextField.attributedPlaceholder = NSAttributedString(string: NSLocalizedString("Password", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.placeholderColor()])
+        passwordTextField.isSecureTextEntry = true
+        view.addSubview(passwordTextField)
+    }
+    
+    @objc private func loginPressed() {
+        Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
+            
+            if let error = error {
+                let alert = UIAlertController(title: NSLocalizedString("Login failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    //NSLog("The \"OK\" alert occured.")
+                }))
+                self.present(alert, animated: true, completion: nil)
+                print(error)
+                
+            } else {
+                let newTripViewController = MyTrips()
+                self.navigationController?.pushViewController(newTripViewController, animated: true)
+            }
+        }
+    }
+    
+    @objc private func registerPressed() {
+        Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
+            if let error = error {
+                let alert = UIAlertController(title: NSLocalizedString("Register failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
+                    //NSLog("The \"OK\" alert occured.")
+                }))
+                self.present(alert, animated: true, completion: nil)
+                print(error)
+                
+            } else {
+                
+                let myTripViewController = MyTrips()
+                self.navigationController?.pushViewController(myTripViewController, animated: true)
+                
+            }
+        }
     }
     
     @objc private func setupUI() {
         guard !orientation.isFlat else { return }
         setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
-        setupButtons()
         setupMainLabel()
-        UIView.animate(withDuration: 2.0) {
-            self.mainLabel.alpha = 1
+        setupTextFields()
+        setupButtons()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // Hide keyboard on hitting return key
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    @objc func keyboardWillShow(sender: NSNotification) {
+        if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if orientation == .portrait {
+                emailTextField.frame.origin.y -= keyboardHeight
+                passwordTextField.frame.origin.y -= keyboardHeight
+                loginButton.frame.origin.y -= keyboardHeight
+                registerButton.frame.origin.y -= keyboardHeight
+                mainLabel.frame.origin.y = 20
+                mainLabel.font = UIFont.logoFontSmall()
+            }
         }
     }
     
-    func setupButtons() {
-        var x : CGFloat = 50
-        var width : CGFloat = 100
-        if orientation != .portrait {
-            x *= 4
-            width *= 4
+    @objc func keyboardWillHide(sender: NSNotification) {
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        let topHeight = navbarHeight + statusbarHeight
+        
+        if orientation == .portrait {
+            emailTextField.frame.origin.y = UIScreen.main.bounds.height - 300
+            passwordTextField.frame.origin.y = UIScreen.main.bounds.height - 250
+            loginButton.frame.origin.y = UIScreen.main.bounds.height - 160
+            registerButton.frame.origin.y = UIScreen.main.bounds.height - 100
+            mainLabel.frame.origin.y = topHeight + 20
+            mainLabel.font = UIFont.logoFontNormal()
         }
-        loginButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 140, width: UIScreen.main.bounds.width - width, height: 50)
-        loginButton.setTitle(NSLocalizedString("Login", comment: ""), for: .normal)
-        loginButton.addTarget(self, action: #selector(goToLoginPressed), for: .touchUpInside)
-        loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
-        
-        registerButton.frame = CGRect(x: x, y: UIScreen.main.bounds.height - 80, width: UIScreen.main.bounds.width - width, height: 50)
-        registerButton.setTitle(NSLocalizedString("Register", comment: ""), for: .normal)
-        registerButton.addTarget(self, action: #selector(goToRegisterPressed), for: .touchUpInside)
-        registerButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
-        view.addSubview(loginButton)
-        view.addSubview(registerButton)
-    }
-    
-    private func setupMainLabel() {
-        mainLabel.frame = CGRect(x: 20, y: UIScreen.main.bounds.size.height/4, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.size.height*0.33)
-        mainLabel.text = NSLocalizedString("Triping", comment: "")
-        mainLabel.textAlignment = .center
-        mainLabel.font = UIFont(name: "Medinah", size: 85.0)
-        mainLabel.textColor = UIColor.white
-        mainLabel.alpha = 0
-        view.addSubview(mainLabel)
-        
-    }
-    
-    @objc private func goToLoginPressed() {
-        let loginViewController = MyTrips()
-        self.navigationController?.pushViewController(loginViewController, animated: true)
-    }
-    
-    @objc private func goToRegisterPressed() {
-        let regViewController = Register()
-        self.navigationController?.pushViewController(regViewController, animated: true)
-    }
-    
-}
-
-extension UIButton {
-    
-    func roundCorners(_ corners: UIRectCorner, radius: CGFloat) {
-        let path = UIBezierPath(roundedRect: self.bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        self.layer.mask = mask
     }
     
 }
