@@ -124,13 +124,10 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     @objc func uploadPost() {
         if(postTitle.text != ""){
             
-            let formatter = DateFormatter()
-            formatter.dateFormat = "MMM dd, YYYY"
-            let date = formatter.string(from: Date())
             data.onePost.userEmail = currentUser
             data.onePost.postTitle = postTitle.text ?? ""
             data.onePost.postText = postText.text ?? ""
-            data.onePost.postDate = date
+            data.onePost.postDate = Date()
             data.onePost.lat = latitude
             data.onePost.long = longitude
             data.onePost.tripTitle = tripTitle

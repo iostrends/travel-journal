@@ -18,7 +18,6 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     var userEmail = ""
     var postId = ""
-    var postDate = ""
     var newImage = false
     
     private var backgroundImage = UIImage(named: "background2")
@@ -121,13 +120,11 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     @objc func updatePost() {
         if(editTitle.text != ""){
-
+            
             data.onePost.postTitle = editTitle.text ?? ""
             data.onePost.postText = editText.text ?? ""
-            data.onePost.postDate = postDate
+            data.onePost.postDate = Date()
             data.onePost.userEmail = userEmail
-                    print("user email", userEmail)
-            print("post date", postDate)
 
             if editImage.image != nil {
                 data.onePost.postImg = editImage.image
@@ -246,8 +243,13 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             
             self.emptyFields()
             
-            // Returns to previous view controller
-            _ = self.navigationController?.popViewController(animated: true)
+            // Returns to posts view controller
+            for controller in self.navigationController!.viewControllers as Array {
+                if controller.isKind(of: PostsCollectionViewController.self) {
+                    _ =  self.navigationController!.popToViewController(controller, animated: true)
+                    break
+                }
+            }
         }))
         self.present(alert, animated: true, completion: nil)
     }
@@ -274,7 +276,6 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     
     func SetPostData(description:[String:Any]) {
         editTitle.text = description["postTitle"] as? String
-        postDate = description["postDate"] as? String ?? ""
         editText.text = description["postText"] as? String
         userEmail = description["userEmail"] as? String ?? ""
     }

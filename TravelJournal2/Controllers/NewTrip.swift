@@ -161,7 +161,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             
             tripData.oneTrip.userEmail = currentUser
             tripData.oneTrip.tripTitle = tripTitle.text ?? ""
-            tripData.oneTrip.tripDate = getChoosenDate()
+            tripData.oneTrip.tripDate = datePicker.date
             
             tripData.oneTrip.tripImg = showcaseImage.image
             
@@ -243,15 +243,5 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     func emptyFields(){
         tripTitle.text = ""
-    }
-    
-    func getChoosenDate() -> String {
-        let formatter = DateFormatter()
-        
-        formatter.dateFormat = "MMM dd, YYYY"
-        let date = formatter.string(from: datePicker.date)
-        //print("date datePickerDate", formatter.string(from: datePicker.date))
-        
-        return date
     }
 }

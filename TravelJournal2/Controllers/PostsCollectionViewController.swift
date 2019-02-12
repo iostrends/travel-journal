@@ -119,9 +119,14 @@ extension PostsCollectionViewController {
                 return UICollectionViewCell()
         }
         let post = currentPosts[indexPath.row]
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let date = formatter.string(from: post.postDate)
+        
         cell.imageView.image = post.postImg
         cell.titleLabel.text = post.postTitle
-        cell.dateLabel.text = post.postDate
+        cell.dateLabel.text = date
         postId = post.postId
         
         return cell

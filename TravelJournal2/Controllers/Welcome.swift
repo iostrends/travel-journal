@@ -73,9 +73,9 @@ class Welcome: UIViewController {
         mainLabel.text = NSLocalizedString("Triping", comment: "")
         mainLabel.font = UIFont.logoFontNormal()
         mainLabel.textAlignment = .center
-        mainLabel.textColor = UIColor.mainRed()
-        mainLabel.shadowColor = UIColor.white
-        mainLabel.shadowOffset = CGSize(width: 1, height: 1)
+        mainLabel.textColor = UIColor.white
+        mainLabel.shadowColor = UIColor.mainRed()
+        mainLabel.shadowOffset = CGSize(width: 3, height: 3)
         
         view.addSubview(mainLabel)
     }

@@ -185,9 +185,13 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MyTripCell", for: indexPath) as! TripCollectionViewCell
         
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let date = formatter.string(from: self.myTripsData.trips[indexPath.row].tripDate)
+        
         cell.tripImage.image = self.myTripsData.trips[indexPath.row].tripImg
         cell.tripTitle.text = self.myTripsData.trips[indexPath.row].tripTitle
-        cell.tripDate.text = self.myTripsData.trips[indexPath.row].tripDate
+        cell.tripDate.text = date
         tripId = self.myTripsData.trips[indexPath.row].tripId
         
         return cell

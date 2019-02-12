@@ -30,7 +30,7 @@ struct Trip {
     var userEmail = ""
     var tripId = ""
     var tripTitle = ""
-    var tripDate = ""
+    var tripDate = Date()
     var tripImgURL = ""
     var tripImg: UIImage?
 }
@@ -43,7 +43,7 @@ struct Post {
     var postImg : UIImage?
     var postImgURL = ""
     var postText = ""
-    var postDate = ""
+    var postDate = Date()
     var lat = ""
     var long = ""
 }
@@ -72,7 +72,7 @@ class TripData {
             "userEmail": oneTrip.userEmail,
             "tripTitle": oneTrip.tripTitle,
             "tripDate": oneTrip.tripDate,
-            ]
+            ] as [String : Any]
         
         if oneTrip.tripImg != nil {
             dataDict["tripImg"] = imgName + ".jpg"
@@ -132,7 +132,7 @@ class TripData {
         let db = Firestore.firestore()
         var trip = Trip()
         
-        db.collection("Trips").whereField("userEmail", isEqualTo: user)
+        db.collection("Trips").whereField("userEmail", isEqualTo: user).order(by: "tripDate", descending: true)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
@@ -142,7 +142,7 @@ class TripData {
                         trip.userEmail = document.data()["userEmail"] as? String ?? ""
                         trip.tripId = document.documentID
                         trip.tripTitle = document.data()["tripTitle"] as? String ?? ""
-                        trip.tripDate = document.data()["tripDate"] as? String ?? ""
+                        trip.tripDate = document.data()["tripDate"] as! Date
                         trip.tripImgURL = document.data()["tripImg"] as? String ?? ""
                         
                         self.trips.append(trip)
@@ -250,7 +250,7 @@ class TripData {
         let db = Firestore.firestore()
         var post = Post()
         
-        db.collection("Posts").whereField("tripTitle", isEqualTo: tripTitle).whereField("userEmail", isEqualTo: user)
+        db.collection("Posts").whereField("tripTitle", isEqualTo: tripTitle).whereField("userEmail", isEqualTo: user).order(by: "postDate", descending: true)
             .getDocuments() { (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
@@ -262,7 +262,7 @@ class TripData {
                         post.postId = document.documentID
                         post.tripTitle = document.data()["tripTitle"]as? String ?? ""
                         post.postTitle = document.data()["postTitle"]as? String ?? ""
-                        post.postDate = document.data()["postDate"]as? String ?? ""
+                        post.postDate = document.data()["postDate"]as! Date
                         post.postText = document.data()["postText"]as? String ?? ""
                         post.postImgURL = document.data()["postImg"]as? String ?? ""
                         post.lat = document.data()["postLat"]as? String ?? ""
@@ -292,7 +292,7 @@ class TripData {
             "postDate": onePost.postDate,
             "postLat": onePost.lat,
             "postLong": onePost.long
-            ]
+            ] as [String : Any]
         
         if onePost.postImg != nil {
             dataDict["postImg"] = imgName + ".jpg"
@@ -346,7 +346,8 @@ class TripData {
         var dataDict = [
             "postTitle": onePost.postTitle,
             "postText": onePost.postText,
-        ]
+            "postDate": onePost.postDate
+            ] as [String : Any]
 
         if onePost.postImg != nil {
             dataDict["postImg"] = imgName + ".jpg"

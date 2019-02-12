@@ -179,8 +179,12 @@ class ViewPost: UIViewController, PostDelegate {
     }
     
     func SetPostData(description:[String:Any]) {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        let date = formatter.string(from: description["postDate"] as! Date)
+        
         postTitle.text = description["postTitle"] as? String
-        postDate.text = description["postDate"] as? String
+        postDate.text = date
         postText.text = description["postText"] as? String
         longitude = description["postLong"] as? String ?? ""
         latitude = description["postLat"] as? String ?? ""
