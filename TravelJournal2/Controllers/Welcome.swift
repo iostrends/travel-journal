@@ -33,10 +33,10 @@ class Welcome: UIViewController {
         return UIDevice.current.orientation
     }
     
-    var emailTextField = UITextField()
-    var passwordTextField = UITextField()
-    var loginButton = UIButton()
-    var registerButton = UIButton()
+    lazy var emailTextField = textField
+    lazy var passwordTextField = textField
+    lazy var loginButton = logButton
+    lazy var registerButton = logButton
     var mainLabel = UILabel()
     private var backgroundImage = UIImage(named: "background2")
     private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -48,14 +48,15 @@ class Welcome: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
         // Do any additional setup after loading the view.
-        loginButton = logButton
-        registerButton = logButton
-        emailTextField = textField
-        passwordTextField = textField
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil);
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil);
         setupUI()
+        if let _ = Auth.auth().currentUser {
+            //go to my trips directly if user is logged in
+            let myTripsViewController = MyTrips()
+            self.navigationController?.pushViewController(myTripsViewController, animated: true)
+        }
     }
     
     private func setupMainLabel() {
@@ -130,8 +131,8 @@ class Welcome: UIViewController {
                 print(error)
                 
             } else {
-                let newTripViewController = MyTrips()
-                self.navigationController?.pushViewController(newTripViewController, animated: true)
+                let myTripsViewController = MyTrips()
+                self.navigationController?.pushViewController(myTripsViewController, animated: true)
             }
         }
     }
@@ -147,9 +148,8 @@ class Welcome: UIViewController {
                 print(error)
                 
             } else {
-                
-                let myTripViewController = MyTrips()
-                self.navigationController?.pushViewController(myTripViewController, animated: true)
+                let myTripsViewController = MyTrips()
+                self.navigationController?.pushViewController(myTripsViewController, animated: true)
                 
             }
         }
