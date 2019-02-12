@@ -89,6 +89,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         postTitle.textColor = UIColor.black
         postTitle.layer.borderColor = UIColor.white.cgColor
         postTitle.layer.borderWidth = 1
+        postTitle.textAlignment = .center
         postTitle.placeholder = NSLocalizedString("Title", comment: "") // Intentional space
         postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
         postTitle.layer.cornerRadius = 10.0

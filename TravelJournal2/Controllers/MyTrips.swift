@@ -17,11 +17,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
     let myTripsData = TripData()
     var collectionView : UICollectionView!
-    fileprivate var currentPage: Int = 0 {
-        didSet {
-            print("Currentpage:\(currentPage)")
-        }
-    }
+    fileprivate var currentPage: Int = 0
     
     fileprivate var pageSize: CGSize {
         let layout = self.collectionView.collectionViewLayout as! UPCarouselFlowLayout
@@ -55,6 +51,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
             let scrollPosition: UICollectionView.ScrollPosition = orientation.isPortrait ? .centeredHorizontally : .centeredVertically
             self.collectionView.scrollToItem(at: indexPath, at: scrollPosition, animated: false)
         }
+        
         collectionView.flashScrollIndicators()
     }
     
@@ -127,7 +124,7 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     func setupCarousel() {
         let layout = UPCarouselFlowLayout()
         let direction: UICollectionView.ScrollDirection = orientation.isPortrait ? .horizontal : .vertical
-        layout.scrollDirection = direction
+        layout.scrollDirection = .horizontal
         layout.itemSize = direction == .horizontal ? CGSize(width: 320, height: 480) : CGSize(width: 320, height: 320)
         layout.sideItemScale = 0.8
         layout.sideItemAlpha = 1

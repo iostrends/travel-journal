@@ -19,6 +19,10 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         return button
     }
     
+    fileprivate var orientation: UIDeviceOrientation {
+        return UIDevice.current.orientation
+    }
+    
     let myTripsData = TripData()
     var currentPosts = [Post]()
     var searchBar = UISearchBar()
@@ -26,9 +30,9 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     var currentUser = ""
     var postId = ""
     var collectionView : UICollectionView!
+    
     private var backgroundImage = UIImage(named: "background2")
     private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
-    
     lazy private var backgroundImageView = UIImageView(image: backgroundImage)
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
@@ -39,15 +43,16 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         view.backgroundColor = .clear
         navigationItem.rightBarButtonItem = addNewTripButton
         myTripsData.dataDel = self
-        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
-        setupCollectionView()
-        setupSearchBar()
         NotificationCenter.default.addObserver(self, selector: #selector(rotationHappened), name: UIDevice.orientationDidChangeNotification, object: nil)
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         laddaDB()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
+        setupCollectionView()
+        laddaTabell()
+        setupSearchBar()
     }
 
     @objc private func goToAddNewPostPressed() {
@@ -58,20 +63,38 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     }
     
     func setupCollectionView() {
-        collectionView = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: UltravisualLayout())
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let y = navbarHeight + statusbarHeight + 35
+        
+        collectionView = UICollectionView(frame: CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - y), collectionViewLayout: UltravisualLayout())
         collectionView.backgroundColor = .clear
         collectionView.register(UINib(nibName: "PostCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "PostCell")
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         view.addSubview(collectionView)
+        
+        if orientation != .portrait {
+            collectionView.frame = CGRect(x: 10, y: y, width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - y)
+        }
     }
     
     @objc func rotationHappened() {
-        collectionView.frame = UIScreen.main.bounds
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let y = navbarHeight + statusbarHeight + 35
+        
+        collectionView.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - y)
         setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
-        setupSearchBar()
         view.addSubview(collectionView)
+        setupSearchBar()
+        if orientation != .portrait {
+            collectionView.frame = CGRect(x: 10, y: y, width: UIScreen.main.bounds.width - 20, height: UIScreen.main.bounds.height - y)
+        }
         
     }
     
@@ -152,9 +175,12 @@ extension PostsCollectionViewController {
 
 extension PostsCollectionViewController : UISearchBarDelegate {
     private func setupSearchBar(){
-        
         searchBar.delegate = self
-        searchBar.frame = CGRect(x: 0, y: 60, width: UIScreen.main.bounds.width, height: 30)
+        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
+        let statusbarHeight = UIApplication.shared.statusBarFrame.height
+        
+        let y = navbarHeight + statusbarHeight
+        searchBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 30)
         searchBar.searchBarStyle = .minimal
         view.addSubview(searchBar)
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
