@@ -211,8 +211,6 @@ class TripData {
 
                     if let imgUrl = dataDescription["postImg"] as? String {
                         self.loadPostImage(imgUrl: imgUrl)
-                    } else {
-                        SVProgressHUD.dismiss()
                     }
                 }
             } else {
@@ -236,9 +234,9 @@ class TripData {
                         i+=1
                     }
                 }
-                SVProgressHUD.dismiss()
                 if (i == self.posts.count) {
                     self.dataDel?.laddaTabell()
+                    SVProgressHUD.dismiss()
                 }
             }
         }

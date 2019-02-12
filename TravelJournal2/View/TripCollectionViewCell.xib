@@ -23,7 +23,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="350" height="420"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trip Date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CnD-zl-AFK">
-                        <rect key="frame" x="10" y="460" width="330" height="30"/>
+                        <rect key="frame" x="10" y="450" width="330" height="40"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
@@ -38,7 +38,7 @@
             </view>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="CnD-zl-AFK" secondAttribute="bottom" constant="10" id="L1B-XK-eDN"/>
-                <constraint firstItem="CnD-zl-AFK" firstAttribute="top" secondItem="5hb-Vb-4k7" secondAttribute="bottom" constant="10" id="S6X-z1-9Pi"/>
+                <constraint firstItem="CnD-zl-AFK" firstAttribute="top" secondItem="5hb-Vb-4k7" secondAttribute="bottom" id="S6X-z1-9Pi"/>
                 <constraint firstAttribute="trailing" secondItem="Mxd-kh-IJc" secondAttribute="trailing" id="SBN-P9-vxI"/>
                 <constraint firstAttribute="trailing" secondItem="CnD-zl-AFK" secondAttribute="trailing" constant="10" id="UBw-QB-Yfc"/>
                 <constraint firstItem="5hb-Vb-4k7" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="Xib-aU-eYg"/>
