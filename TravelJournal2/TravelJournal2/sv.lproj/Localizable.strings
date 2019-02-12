@@ -18,6 +18,10 @@
 
 "Back" = "Tillbaka";
 
+"Camera" = "Kamera";
+
+"Cancel" = "Ångra";
+
 "Change your trip title" = "Ändra resans titel";
 
 "Edit" = "Ändra";
@@ -25,6 +29,8 @@
 "Email" = "Email";
 
 "Fill in title field" = "Fyll i titel fältet";
+
+"Gallery" = "Galleri";
 
 "Journal entry here" = "Dagboks anteckningar här";
 

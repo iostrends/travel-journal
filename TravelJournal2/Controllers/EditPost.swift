@@ -31,8 +31,6 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
     var editTitle = UITextField()
     var editText = UITextView()
     var savePostBtn = UIBarButtonItem()
-    var cameraBtn = UIButton()
-    var libraryBtn = UIButton()
     
     let data = TripData()
     
@@ -45,6 +43,9 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         setupUI()
         data.postDel = self
         editText.delegate = self
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        editImage.isUserInteractionEnabled = true
+        editImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func addEditPostUI() {
@@ -67,28 +68,20 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editImage.contentMode = .scaleAspectFill
         editImage.layer.cornerRadius = 10.0
         editImage.clipsToBounds = true
-        editImage.backgroundColor = UIColor.white
+        editImage.backgroundColor = .clear
         
         view.addSubview(editImage)
         
-        cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
-        cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
-        cameraBtn.frame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
-        view.addSubview(cameraBtn)
-        
-        libraryBtn.setImage(UIImage(named: "library"), for: .normal)
-        libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
-        libraryBtn.frame = CGRect(x: width - 32, y: y + 10, width: 32, height: 32)
-        view.addSubview(libraryBtn)
         y += editImage.bounds.size.height
         
-        editTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
-        editTitle.backgroundColor = UIColor.white
-        editTitle.textColor = UIColor.black
+        editTitle.frame = (CGRect(x: 70, y: y + 10, width: view.frame.width - 140, height: height*0.05))
+        editTitle.backgroundColor = .clear
+        editTitle.textColor = UIColor.white
         editTitle.textAlignment = .center
         editTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
         editTitle.layer.cornerRadius = 10.0
         editTitle.setInsetLeft(10.0)
+        addLineToView(view: editTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
         view.addSubview(editTitle)
         y += editTitle.bounds.size.height
         
@@ -107,9 +100,15 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             
             editText.frame = (CGRect(x: editImage.frame.width + 20, y: editTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 200))
             
-            libraryBtn.frame = CGRect(x: editImage.frame.width - 32, y: y + 10, width: 32, height: 32)
         }
         
+    }
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        //let tappedImage = tapGestureRecognizer.view as! UIImageView
+        picturePressed()
+        // Your action
     }
     
     @objc func setupUI() {
@@ -158,6 +157,25 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         imagePicker.sourceType = .photoLibrary
         print("Library pressed")
         self.present(imagePicker, animated: true, completion: nil)
+    }
+    
+    private func picturePressed() {
+        let optionMenu = UIAlertController(title: nil, message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { (action) in
+            self.cameraPressed()
+        }
+        
+        let galleryAction = UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { (action) in
+            self.libraryPressed()
+        }
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel)
+        
+        optionMenu.addAction(cameraAction)
+        optionMenu.addAction(galleryAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     func detectCML(image: CIImage) {

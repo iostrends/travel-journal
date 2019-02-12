@@ -15,15 +15,12 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         return UIDevice.current.orientation
     }
     
-    //var tripContentView = UIView()
-    var showcaseImage = UIImageView()
+    var showcaseImage = UIImageView(image: UIImage(named: "addnewphoto"))
     private var backgroundImage = UIImage(named: "background2")
     private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
     
     lazy private var backgroundImageView = UIImageView(image: backgroundImage)
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
-    var cameraBtn = UIButton()
-    var libraryBtn = UIButton()
     var tripTitle = UITextField()
     var datePicker = UIDatePicker()
     var saveTripBtn = UIBarButtonItem()
@@ -40,20 +37,13 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         currentUser = Auth.auth().currentUser?.email ?? NSLocalizedString("User not found", comment: "")
         self.title = NSLocalizedString("Add Trip", comment: "")
-        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         setupSaveTripButton()
         setupUI()
         tripTitle.delegate = self
-    }
-    
-    func setupBackground() {
-        backgroundImageView.frame = UIScreen.main.bounds
-        backgroundImageView.contentMode = .scaleAspectFill
-        backgroundImageView.clipsToBounds = true
-        backgroundImageView.image = backgroundImage
-        blurEffectView.frame = view.bounds
-        backgroundImageView.addSubview(blurEffectView)
-        view.addSubview(backgroundImageView)
+        showcaseImage.alpha = 0.4
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        showcaseImage.isUserInteractionEnabled = true
+        showcaseImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
     fileprivate func setupSaveTripButton() {
@@ -73,20 +63,21 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         showcaseImage.frame = (CGRect(x: 10, y: y, width: view.frame.width - 20, height: view.frame.height*0.65))
         showcaseImage.contentMode = .scaleAspectFill
         showcaseImage.clipsToBounds = true
-        showcaseImage.backgroundColor = .white
         showcaseImage.layer.cornerRadius = 20
         view.addSubview(showcaseImage)
         
-        tripTitle.frame = (CGRect(x: 10, y: showcaseImage.frame.height + 10 + y, width: view.frame.width - 20, height: 50))
-        tripTitle.placeholder = NSLocalizedString("Trip title", comment: "")
+        tripTitle.frame = (CGRect(x: 80, y: showcaseImage.frame.height + 10 + y, width: view.frame.width - 160, height: 40))
         tripTitle.layer.cornerRadius = 10
-        tripTitle.backgroundColor = .white
+        tripTitle.backgroundColor = .clear
+        tripTitle.attributedPlaceholder =  NSAttributedString(string: NSLocalizedString("Trip title", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        tripTitle.textColor = .white
         tripTitle.minimumFontSize = 20.0
         tripTitle.textAlignment = .center
         view.addSubview(tripTitle)
         
-        datePicker.frame = (CGRect(x: 10, y: showcaseImage.frame.height + tripTitle.frame.height + 20 + y, width: view.frame.width - 20, height: 50))
-        datePicker.backgroundColor = .white
+        datePicker.frame = (CGRect(x: 20, y: showcaseImage.frame.height + tripTitle.frame.height + 20 + y, width: view.frame.width - 40, height: 50))
+        datePicker.backgroundColor = .clear
+        datePicker.setValue(UIColor.white, forKey: "textColor")
         datePicker.datePickerMode = .date
         datePicker.layer.cornerRadius = 10
         datePicker.layer.masksToBounds = true
@@ -99,32 +90,27 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             datePicker.frame = (CGRect(x: showcaseImage.frame.width + 20, y: tripTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 50))
         }
         
-        setupCameraButtons()
+        addLineToView(view: tripTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
+        addLineToView(view: datePicker, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
     }
     
-    func setupCameraButtons() {
-        guard let navbarHeight = self.navigationController?.navigationBar.bounds.size.height else {return}
-        let statusbarHeight = UIApplication.shared.statusBarFrame.height
-        
-        let y = navbarHeight + statusbarHeight + 10
-        
-        var cameraFrame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
-        var libraryFrame = CGRect(x: view.frame.width - 52, y: y + 10, width: 32, height: 32)
-        
-        if orientation != .portrait {
-            cameraFrame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
-            libraryFrame = CGRect(x: showcaseImage.frame.width - 32, y: y + 10, width: 32, height: 32)
+    private func picturePressed() {
+        let optionMenu = UIAlertController(title: nil, message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { (action) in
+            self.cameraPressed()
         }
         
-        cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
-        cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
-        cameraBtn.frame = cameraFrame
-        view.addSubview(cameraBtn)
+        let galleryAction = UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { (action) in
+            self.libraryPressed()
+        }
         
-        libraryBtn.setImage(UIImage(named: "library"), for: .normal)
-        libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
-        libraryBtn.frame = libraryFrame
-        view.addSubview(libraryBtn)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel)
+        
+        optionMenu.addAction(cameraAction)
+        optionMenu.addAction(galleryAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     @objc func setupUI() {
@@ -139,6 +125,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imagePicker.sourceType = .camera
         
         self.present(imagePicker, animated: true, completion: nil)
+        showcaseImage.alpha = 1.0
     }
     
     @objc func libraryPressed() {
@@ -148,6 +135,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imagePicker.sourceType = .photoLibrary
         
         self.present(imagePicker, animated: true, completion: nil)
+        showcaseImage.alpha = 1.0
     }
     
     // SAVE NEW TRIP TO DATABASE
@@ -196,6 +184,12 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         showcaseImage.isHidden = false
         showcaseImage.alpha = 1
         
+    }
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        //let tappedImage = tapGestureRecognizer.view as! UIImageView
+        picturePressed()
+        // Your action
     }
     
     // Helper function inserted by Swift 4.2 migrator.
