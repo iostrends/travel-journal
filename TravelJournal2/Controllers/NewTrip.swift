@@ -21,8 +21,6 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     
     lazy private var backgroundImageView = UIImageView(image: backgroundImage)
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
-    var cameraBtn = UIButton()
-    var libraryBtn = UIButton()
     var tripTitle = UITextField()
     var datePicker = UIDatePicker()
     var saveTripBtn = UIBarButtonItem()
@@ -91,6 +89,7 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             tripTitle.frame = (CGRect(x: showcaseImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 50))
             datePicker.frame = (CGRect(x: showcaseImage.frame.width + 20, y: tripTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 50))
         }
+        
         addLineToView(view: tripTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
         addLineToView(view: datePicker, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
     }
@@ -201,32 +200,6 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     // Helper function inserted by Swift 4.2 migrator.
     fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
         return input.rawValue
-    }
-    
-    enum LINE_POSITION {
-        case LINE_POSITION_TOP
-        case LINE_POSITION_BOTTOM
-    }
-    
-    // Helper function to add a single border to UIViews
-    func addLineToView(view : UIView, position : LINE_POSITION, color: UIColor, width: Double) {
-        let lineView = UIView()
-        lineView.backgroundColor = color
-        lineView.translatesAutoresizingMaskIntoConstraints = false // This is important!
-        view.addSubview(lineView)
-        
-        let metrics = ["width" : NSNumber(value: width)]
-        let views = ["lineView" : lineView]
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[lineView]|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:metrics, views:views))
-        
-        switch position {
-        case .LINE_POSITION_TOP:
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[lineView(width)]", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:metrics, views:views))
-            break
-        case .LINE_POSITION_BOTTOM:
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[lineView(width)]|", options:NSLayoutConstraint.FormatOptions(rawValue: 0), metrics:metrics, views:views))
-            break
-        }
     }
     
     // ALERTS

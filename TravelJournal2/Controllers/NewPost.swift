@@ -26,12 +26,10 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
     var tripTitle = ""
-    var postImage = UIImageView()
+    var postImage = UIImageView(image: UIImage(named: "addnewphoto"))
     var postTitle = UITextField()
     var postText = UITextView()
     var createPostBtn = UIBarButtonItem()
-    var cameraBtn = UIButton()
-    var libraryBtn = UIButton()
     
     let data = TripData()
     let locationManager = CLLocationManager()
@@ -47,6 +45,10 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         findMyLocation()
         setupUI()
         postText.delegate = self
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        postImage.isUserInteractionEnabled = true
+        postImage.addGestureRecognizer(tapGestureRecognizer)
+        postImage.alpha = 0.4
     }
     
     func addNewPostUI() {
@@ -69,34 +71,22 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         postImage.contentMode = .scaleAspectFill
         postImage.layer.cornerRadius = 10.0
         postImage.clipsToBounds = true
-        postImage.backgroundColor = UIColor.white
-        
+        postImage.backgroundColor = .clear
         view.addSubview(postImage)
         
-        cameraBtn.setImage(UIImage(named: "camera"), for: .normal)
-        cameraBtn.addTarget(self, action: #selector(cameraPressed), for: .touchUpInside)
-        cameraBtn.frame = CGRect(x: 20, y: y + 10, width: 32, height: 32)
-        view.addSubview(cameraBtn)
-        
-        libraryBtn.setImage(UIImage(named: "library"), for: .normal)
-        libraryBtn.addTarget(self, action: #selector(libraryPressed), for: .touchUpInside)
-        libraryBtn.frame = CGRect(x: width - 32, y: y + 10, width: 32, height: 32)
-        view.addSubview(libraryBtn)
         y += postImage.bounds.size.height
         
-        postTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
-        postTitle.backgroundColor = UIColor.white
-        postTitle.textColor = UIColor.black
-        postTitle.layer.borderColor = UIColor.white.cgColor
-        postTitle.layer.borderWidth = 1
+        postTitle.frame = (CGRect(x: 70, y: y + 10, width: view.frame.width - 140, height: height*0.05))
+        postTitle.backgroundColor = .clear
+        postTitle.textColor = UIColor.white
         postTitle.textAlignment = .center
-        postTitle.placeholder = NSLocalizedString("Title", comment: "") // Intentional space
+        postTitle.attributedPlaceholder =  NSAttributedString(string: NSLocalizedString("Title", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
-        postTitle.layer.cornerRadius = 10.0
+        addLineToView(view: postTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
         view.addSubview(postTitle)
         y += postTitle.bounds.size.height
         
-        postText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
+        postText.frame = (CGRect(x: 10, y: y + 30, width: width, height: height*0.35))
         postText.text = NSLocalizedString("Journal entry here", comment: "")
         postText.textColor = UIColor.lightGray
         postText.backgroundColor = UIColor.white
@@ -111,14 +101,39 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             postImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
             postTitle.frame = (CGRect(x: postImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 40))
             postText.frame = (CGRect(x: postImage.frame.width + 20, y: postTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 200))
-            libraryBtn.frame = CGRect(x: postImage.frame.width - 32, y: y + 10, width: 32, height: 32)
         }
+    }
+    
+    private func picturePressed() {
+        let optionMenu = UIAlertController(title: nil, message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { (action) in
+            self.cameraPressed()
+        }
+        
+        let galleryAction = UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { (action) in
+            self.libraryPressed()
+        }
+        
+        let cancelAction = UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel)
+        
+        optionMenu.addAction(cameraAction)
+        optionMenu.addAction(galleryAction)
+        optionMenu.addAction(cancelAction)
+        
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     @objc func setupUI() {
         guard !orientation.isFlat else { return }
         setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         addNewPostUI()
+    }
+    
+    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        //let tappedImage = tapGestureRecognizer.view as! UIImageView
+        picturePressed()
+        // Your action
     }
     
     @objc func uploadPost() {
@@ -157,7 +172,10 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
         
-        self.present(imagePicker, animated: true, completion: nil)
+        self.present(imagePicker, animated: true) {
+            self.postImage.alpha = 1.0
+        }
+        
     }
     
     @objc func libraryPressed() {
@@ -165,7 +183,9 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         imagePicker.delegate = self
         imagePicker.sourceType = .photoLibrary
         print("Library pressed")
-        self.present(imagePicker, animated: true, completion: nil)
+        self.present(imagePicker, animated: true) {
+            self.postImage.alpha = 1.0
+        }
     }
     
     func detectCML(image: CIImage) {
