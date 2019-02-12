@@ -86,6 +86,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editTitle.frame = (CGRect(x: 10, y: y + 10, width: width, height: height*0.05))
         editTitle.backgroundColor = UIColor.white
         editTitle.textColor = UIColor.black
+        editTitle.textAlignment = .center
         editTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
         editTitle.layer.cornerRadius = 10.0
         editTitle.setInsetLeft(10.0)
@@ -98,6 +99,18 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editText.layer.cornerRadius = 10.0
         view.addSubview(editText)
         y += editText.bounds.size.height
+        
+        if orientation != .portrait {
+            y = navbarHeight + statusbarHeight + 10
+            editImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
+            
+            editTitle.frame = (CGRect(x: editImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 40))
+            
+            editText.frame = (CGRect(x: editImage.frame.width + 20, y: editTitle.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 200))
+            
+            libraryBtn.frame = CGRect(x: editImage.frame.width - 32, y: y + 10, width: 32, height: 32)
+        }
+        
     }
     
     @objc func setupUI() {
@@ -216,20 +229,20 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         var alert = UIAlertController()
         
         if(errMessage == 1){
-            alert = UIAlertController(title: "Titel saknas", message: "Fyll i titelfältet", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Title missing", comment: ""), message: NSLocalizedString("Fill in title field", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 3){
-            alert = UIAlertController(title: "Bild saknas", message: "Välj en bild från galleri eller ta en ny", preferredStyle: .alert)
+            alert = UIAlertController(title: NSLocalizedString("Picture missing", comment: ""), message: NSLocalizedString("Pick a picture from gallery or take a new picture", comment: ""), preferredStyle: .alert)
         }
         
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
         }))
         self.present(alert, animated: true, completion: nil)
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: "Uppdaterat", message: "Inlägget har blivit uppdaterat", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+        let alert = UIAlertController(title: NSLocalizedString("Updated", comment: ""), message: NSLocalizedString("Your post is now updated", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
             self.emptyFields()
             
@@ -254,7 +267,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.isEmpty {
-            editText.text = "Journal entry here"
+            editText.text = NSLocalizedString("Journal entry here", comment: "")
             editText.textColor = UIColor.lightGray
         }
     }

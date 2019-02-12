@@ -41,8 +41,11 @@ class ViewPost: UIViewController, PostDelegate {
         // Do any additional setup after loading the view.
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         data.loadOnePost(postId: postId)
-        setupUI()
         data.postDel = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupUI()
     }
 
     @objc func addViewPostUI() {
@@ -112,6 +115,17 @@ class ViewPost: UIViewController, PostDelegate {
         locationBtn.addTarget(self, action: #selector(postLocation), for: .touchUpInside)
         locationBtn.frame = CGRect(x: screenWidth - 52, y: screenHeight - 52, width: 32, height: 32)
         view.addSubview(locationBtn)
+        
+        if orientation != .portrait {
+            y = navbarHeight + statusbarHeight + 10
+            postImage.frame = (CGRect(x: 10, y: y, width: (view.frame.width / 2) - 20, height: (view.frame.height - y - 10)))
+            //showcaseImage.layer.borderWidth = 1
+            postTitle.frame = (CGRect(x: postImage.frame.width + 20, y: y, width: (view.frame.width / 2) - 20, height: 40))
+            postDate.frame = (CGRect(x: postImage.frame.width + 20, y: postTitle.frame.height + y, width: (view.frame.width / 2) - 20, height: 40))
+            postText.frame = (CGRect(x: postImage.frame.width + 20, y: postTitle.frame.height + postDate.frame.height + 10 + y, width: (view.frame.width / 2) - 20, height: 200))
+            
+            shareBtn.frame = CGRect(x: screenWidth - locationBtn.frame.width - 82, y: screenHeight - 52, width: 32, height: 32)
+        }
     }
 
     @objc func setupUI() {

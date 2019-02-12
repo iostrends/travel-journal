@@ -70,8 +70,8 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
     @objc func rotationHappened() {
         collectionView.frame = UIScreen.main.bounds
         setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
-        setupSearchBar()
         view.addSubview(collectionView)
+        setupSearchBar()
         
     }
     
