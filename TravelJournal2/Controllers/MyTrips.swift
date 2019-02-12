@@ -36,7 +36,6 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
     
     var currentUser = ""
     var tripId = ""
-    var touch = UILongPressGestureRecognizer()
     
     @objc fileprivate func rotationDidChange() {
         guard !orientation.isFlat else { return }
@@ -84,12 +83,17 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         return button
     }
     
+    var deleteTripButton : UIBarButtonItem {
+        let button = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteMessage))
+        return button
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         view.backgroundColor = UIColor.clear
-        self.title = NSLocalizedString("My Trips", comment: "")
-        navigationItem.rightBarButtonItem = addNewTripButton
+//        self.title = NSLocalizedString("My Trips", comment: "")
+        navigationItem.rightBarButtonItems = [addNewTripButton, deleteTripButton]
         let backItem = UIBarButtonItem(title: NSLocalizedString("Log out", comment: ""), style: .plain, target: self, action: #selector(logOutUser))
         navigationItem.leftBarButtonItem = backItem
         
@@ -186,18 +190,13 @@ class MyTrips: UIViewController, UICollectionViewDelegate, UICollectionViewDataS
         cell.tripDate.text = self.myTripsData.trips[indexPath.row].tripDate
         tripId = self.myTripsData.trips[indexPath.row].tripId
         
-        touch.addTarget(self, action: #selector(deleteMessage))
-        touch.minimumPressDuration = 2
-        cell.addGestureRecognizer(touch)
-        
         return cell
     }
     
     @objc func deleteTrip() {
-        let cell = touch.view as! UICollectionViewCell
-        let itemIndex = self.collectionView.indexPath(for: cell)!.item
-        myTripsData.removeFromDB(collection: "Trips", id: tripId)
-        myTripsData.trips.remove(at: itemIndex)
+        let removeTrip = self.myTripsData.trips[currentPage].tripId
+        myTripsData.removeFromDB(collection: "Trips", id: removeTrip)
+        myTripsData.trips.remove(at: currentPage)
         self.collectionView.reloadData()
     }
     

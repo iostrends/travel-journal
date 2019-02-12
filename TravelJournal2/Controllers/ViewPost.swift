@@ -27,6 +27,7 @@ class ViewPost: UIViewController, PostDelegate {
     var shareBtn = UIButton()
     var locationBtn = UIButton()
     var editPostBtn = UIBarButtonItem()
+    var deletePostBtn = UIBarButtonItem()
     
     let data = TripData()
     
@@ -64,12 +65,10 @@ class ViewPost: UIViewController, PostDelegate {
         }
         
         // Edit Post button
-        editPostBtn.style = .plain
-        editPostBtn.title = NSLocalizedString("Edit", comment: "")
-        editPostBtn.target = self
-        editPostBtn.action = #selector(editPost)
+        editPostBtn = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editPost))
+        deletePostBtn = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteMessage))
         
-        self.navigationItem.rightBarButtonItem = editPostBtn
+        self.navigationItem.rightBarButtonItems = [editPostBtn, deletePostBtn]
         
         // Post Image
         postImage.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.40))
@@ -161,6 +160,22 @@ class ViewPost: UIViewController, PostDelegate {
         editPost.postId = postId
 
         self.navigationController?.pushViewController(editPost, animated: true)
+    }
+    
+    @objc func deletePost() {
+        data.removeFromDB(collection: "Posts", id: postId)
+    }
+    
+    @objc func deleteMessage(){
+        let alert = UIAlertController(title: NSLocalizedString("Remove trip", comment: ""), message: NSLocalizedString("Are you sure you want to remove this trip?", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Back", comment: ""), style: .cancel, handler: { _ in
+            
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("Remove", comment: ""), style: .destructive, handler: { _ in
+            self.deletePost()
+            _ = self.navigationController?.popViewController(animated: true)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func SetPostData(description:[String:Any]) {
