@@ -24,10 +24,11 @@ class Welcome: UIViewController {
     private var loginButton = UIButton()
     private var registerButton = UIButton()
     private var mainLabel = UILabel()
-    private var backgroundImageView = UIImageView()
-    private var backgroundImage = UIImage()
-    private var blurEffectStyle = UIBlurEffect()
-    private var blurEffectView = UIVisualEffectView()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
     
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
@@ -38,9 +39,6 @@ class Welcome: UIViewController {
         view.backgroundColor = UIColor.clear
         loginButton = logButton
         registerButton = logButton
-        backgroundImage = UIImage(named: "background2")!
-        blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
-        blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
     
@@ -50,23 +48,12 @@ class Welcome: UIViewController {
     
     @objc private func setupUI() {
         guard !orientation.isFlat else { return }
-        setupBackground()
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         setupButtons()
         setupMainLabel()
         UIView.animate(withDuration: 2.0) {
             self.mainLabel.alpha = 1
         }
-    }
-    
-    private func setupBackground() {
-        //backgroundImageView = UIImageView(frame: UIScreen.main.bounds)
-        backgroundImageView.frame = UIScreen.main.bounds
-        backgroundImageView.contentMode = .scaleAspectFill
-        backgroundImageView.clipsToBounds = true
-        backgroundImageView.image = backgroundImage
-        blurEffectView.frame = view.bounds
-        backgroundImageView.addSubview(blurEffectView)
-        view.addSubview(backgroundImageView)
     }
     
     func setupButtons() {

@@ -1,5 +1,5 @@
 //
-//  RegisterViewController.swift
+//  LoginViewController.swift
 //  TravelJournal2
 //
 //  Created by Samuel Lavasani on 2019-01-22.
@@ -9,18 +9,17 @@
 import UIKit
 import FirebaseAuth
 
-class Register: UIViewController, UITextViewDelegate {
+class LoginViewController: UIViewController, UITextViewDelegate {
     
-    var logButton : UIButton {
+    private var logButton : UIButton {
         let button = UIButton()
-        button.titleLabel?.textColor = UIColor.white
-        button.backgroundColor = UIColor.brown
-        button.titleLabel?.font = UIFont(name: "AvenirNext-Medium", size: 20)
-        button.layer.cornerRadius = 10
+        button.setTitleColor(UIColor(red: 144/255, green: 12/255, blue: 63/255, alpha: 1.0), for: .normal)
+        button.backgroundColor = UIColor.white
+        button.titleLabel?.font = UIFont(name: "Hamilyn", size: 30)
         return button
     }
     
-    var textField : UITextField {
+    private var textField : UITextField {
         let text = UITextField()
         text.backgroundColor = UIColor.white
         text.textAlignment = .center
@@ -28,47 +27,53 @@ class Register: UIViewController, UITextViewDelegate {
         return text
     }
     
-    //var usernameTextField = UITextField()
-    var emailTextField = UITextField()
-    var passwordTextField = UITextField()
-    var loginButton = UIButton()
-    var backgroundImageView = UIImageView()
-    var backgroundImage = UIImage()
-    
     fileprivate var orientation: UIDeviceOrientation {
         return UIDevice.current.orientation
     }
     
+    var emailTextField = UITextField()
+    var passwordTextField = UITextField()
+    var loginButton = UIButton()
+    private var backgroundImage = UIImage(named: "background2")
+    private var blurEffectStyle = UIBlurEffect(style: UIBlurEffect.Style.dark)
+    
+    lazy private var backgroundImageView = UIImageView(image: backgroundImage)
+    lazy private var blurEffectView = UIVisualEffectView(effect: blurEffectStyle)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.clear
-        self.title = NSLocalizedString("Register", comment: "")
+        // Do any additional setup after loading the view.
         loginButton = logButton
         emailTextField = textField
         passwordTextField = textField
-        backgroundImage =  UIImage(named: "registerbackground")!
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
         setupUI()
     }
     
-    func setupBackground() {
-        backgroundImageView.frame = UIScreen.main.bounds
-        backgroundImageView.contentMode = .scaleAspectFill
-        backgroundImageView.clipsToBounds = true
-        backgroundImageView.image = backgroundImage
-        view.addSubview(backgroundImageView)
+    func setupButtons() {
+        var x : CGFloat = 20
+        var width : CGFloat = 40
+        if orientation != .portrait {
+            x *= 4
+            width *= 4
+        }
         
+        loginButton.setTitle(NSLocalizedString("Login", comment: ""), for: .normal)
+        loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
+        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 125, width: UIScreen.main.bounds.width - width, height: 50)
+        loginButton.roundCorners([.topLeft, .bottomRight], radius: 30.0)
+        view.addSubview(loginButton)
     }
     
-    func setupTextFields() {
+    private func setupTextFields() {
         var x : CGFloat = 10
         var width : CGFloat = 20
         if orientation != .portrait {
             x *= 4
             width *= 4
         }
-        
-        emailTextField.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4), width: UIScreen.main.bounds.width - width, height: 40)
+        emailTextField.frame = CGRect(x: x, y: UIScreen.main.bounds.height / 4, width: UIScreen.main.bounds.width - width, height: 40)
         emailTextField.placeholder = NSLocalizedString("Email", comment: "")
         view.addSubview(emailTextField)
         
@@ -78,24 +83,11 @@ class Register: UIViewController, UITextViewDelegate {
         view.addSubview(passwordTextField)
     }
     
-    func setupButtons() {
-        var x : CGFloat = 10
-        var width : CGFloat = 20
-        if orientation != .portrait {
-            x *= 4
-            width *= 4
-        }
-        
-        loginButton.frame = CGRect(x: x, y: (UIScreen.main.bounds.height / 4) + 100, width: UIScreen.main.bounds.width - width, height: 50)
-        loginButton.setTitle(NSLocalizedString("Register", comment: ""), for: .normal)
-        loginButton.addTarget(self, action: #selector(registerPressed), for: .touchUpInside)
-        view.addSubview(loginButton)
-    }
-    
-    @objc private func registerPressed() {
-        Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
+    @objc private func loginPressed() {
+        Auth.auth().signIn(withEmail: emailTextField.text!, password: passwordTextField.text!) { (user, error) in
+            
             if let error = error {
-                let alert = UIAlertController(title: NSLocalizedString("Register failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
+                let alert = UIAlertController(title: NSLocalizedString("Login failed", comment: ""), message: "\(error.localizedDescription)", preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
                     //NSLog("The \"OK\" alert occured.")
                 }))
@@ -103,17 +95,16 @@ class Register: UIViewController, UITextViewDelegate {
                 print(error)
                 
             } else {
-                
-                let myTripViewController = MyTrips()
-                self.navigationController?.pushViewController(myTripViewController, animated: true)
-                
+                let newTripViewController = MyTrips()
+                self.navigationController?.pushViewController(newTripViewController, animated: true)
             }
         }
     }
     
-    @objc func setupUI() {
+    @objc private func setupUI() {
         guard !orientation.isFlat else { return }
-        setupBackground()
+        self.title = NSLocalizedString("Login", comment: "")
+        setupCustomBackground(backgroundImageView: backgroundImageView, blurEffectView: blurEffectView)
         setupTextFields()
         setupButtons()
     }
