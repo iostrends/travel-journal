@@ -83,7 +83,7 @@ class ViewPost: UIViewController, PostDelegate {
         // Post title
         postTitle.frame = (CGRect(x: 10, y: y, width: width, height: view.frame.height*0.06))
         postTitle.textColor = UIColor.white
-        postTitle.font = UIFont(name: "AvenirNext-Medium", size: 25.0)
+        postTitle.font = UIFont.titleFont()
         view.addSubview(postTitle)
         y += postTitle.bounds.size.height
         

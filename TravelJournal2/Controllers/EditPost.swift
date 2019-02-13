@@ -78,7 +78,9 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         editTitle.backgroundColor = .clear
         editTitle.textColor = UIColor.white
         editTitle.textAlignment = .center
-        editTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
+        editTitle.font = UIFont.titleFont()
+        editTitle.clearButtonMode = .whileEditing
+        editTitle.autocapitalizationType = .sentences
         editTitle.layer.cornerRadius = 10.0
         editTitle.setInsetLeft(10.0)
         addLineToView(view: editTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
@@ -87,6 +89,7 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
         
         editText.frame = (CGRect(x: 10, y: y + 20, width: width, height: height*0.35))
         editText.textColor = UIColor.black
+        editText.autocapitalizationType = .sentences
         editText.backgroundColor = UIColor.white
         editText.layer.cornerRadius = 10.0
         view.addSubview(editText)

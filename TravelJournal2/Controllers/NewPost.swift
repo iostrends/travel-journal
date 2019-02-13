@@ -86,13 +86,17 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         postTitle.textColor = UIColor.white
         postTitle.textAlignment = .center
         postTitle.attributedPlaceholder =  NSAttributedString(string: NSLocalizedString("Title", comment: ""), attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        postTitle.font = UIFont(name: "AvenirNext-Medium", size: 22.0)
+        postTitle.clearButtonMode = .whileEditing
+        postTitle.autocapitalizationType = .sentences
+        postTitle.font = UIFont.titleFont()
         addLineToView(view: postTitle, position: .LINE_POSITION_BOTTOM, color: UIColor.white, width: 1.0)
+        postTitle.setInsetLeft(10.0)
         view.addSubview(postTitle)
         y += postTitle.bounds.size.height
         
         postText.frame = (CGRect(x: 10, y: y + 30, width: width, height: height*0.35))
         postText.text = NSLocalizedString("Journal entry here", comment: "")
+        postText.autocapitalizationType = .sentences
         postText.textColor = UIColor.lightGray
         postText.backgroundColor = UIColor.white
         postText.layer.borderColor = UIColor.black.cgColor

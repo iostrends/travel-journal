@@ -74,6 +74,8 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         tripTitle.textColor = .white
         tripTitle.minimumFontSize = 20.0
         tripTitle.textAlignment = .center
+        tripTitle.clearButtonMode = .whileEditing
+        tripTitle.autocapitalizationType = .sentences
         view.addSubview(tripTitle)
         
         datePicker.frame = (CGRect(x: 20, y: showcaseImage.frame.height + tripTitle.frame.height + 20 + y, width: view.frame.width - 40, height: 50))

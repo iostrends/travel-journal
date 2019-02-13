@@ -26,6 +26,8 @@ class Welcome: UIViewController {
         text.font = UIFont.textFont()
         text.textColor = UIColor.white
         text.layer.cornerRadius = 10
+        text.clearButtonMode = .whileEditing
+        text.keyboardType = .emailAddress
         return text
     }
     
@@ -166,7 +168,7 @@ class Welcome: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    
+
     // Hide keyboard on hitting return key
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)

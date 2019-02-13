@@ -345,6 +345,7 @@ class TripData {
     }
 
     func updatePost(postId: String, newImage: Bool, completion: @escaping (Bool) -> ()){
+        SVProgressHUD.show()
         var imgName = "\(onePost.postTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
@@ -396,6 +397,7 @@ class TripData {
                     }
                     print("image updated")
                     completion(true)
+                    SVProgressHUD.dismiss()
                 }
             }
         }
