@@ -181,7 +181,7 @@ class Welcome: UIViewController {
                 passwordTextField.frame.origin.y -= keyboardHeight
                 loginButton.frame.origin.y -= keyboardHeight
                 registerButton.frame.origin.y -= keyboardHeight
-                mainLabel.frame.origin.y = 20
+                mainLabel.frame.origin.y = -20
                 mainLabel.font = UIFont.logoFontSmall()
             }
         }

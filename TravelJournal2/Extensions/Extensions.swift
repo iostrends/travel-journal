@@ -53,7 +53,7 @@ extension UIFont {
     }
     
     class func logoFontSmall() -> UIFont {
-        guard let font = UIFont(name: "Medinah", size: 55.0) else {
+        guard let font = UIFont(name: "Medinah", size: 40.0) else {
             return UIFont.systemFont(ofSize: 20)
         }
         return font

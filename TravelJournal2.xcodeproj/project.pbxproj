@@ -12,8 +12,8 @@
 		1308835821F9BF710052050C /* TravelJournal2.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1308835621F9BF710052050C /* TravelJournal2.xcdatamodeld */; };
 		1308835A21F9BF720052050C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1308835921F9BF720052050C /* Assets.xcassets */; };
 		1308835D21F9BF720052050C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1308835B21F9BF720052050C /* LaunchScreen.storyboard */; };
+		13210FAD2213EEE6005A65A6 /* ImageClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 13210FAC2213EEE6005A65A6 /* ImageClassifier.mlmodel */; };
 		1342DC3F2205105F00A57C57 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1342DC3E2205105F00A57C57 /* EditPost.swift */; };
-		1344C4072211A80100DDF88F /* ImageClassifier.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1344C4062211A80100DDF88F /* ImageClassifier.mlmodel */; };
 		13563691220A1FCA0049E161 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13563690220A1FCA0049E161 /* Extensions.swift */; };
 		13727BB821F9C43D0053CA88 /* TripData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13727BB721F9C43D0053CA88 /* TripData.swift */; };
 		13727BBA21F9C5880053CA88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 13727BB921F9C5880053CA88 /* GoogleService-Info.plist */; };
@@ -45,8 +45,8 @@
 		1308835921F9BF720052050C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1308835C21F9BF720052050C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1308835E21F9BF720052050C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		13210FAC2213EEE6005A65A6 /* ImageClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageClassifier.mlmodel; sourceTree = "<group>"; };
 		1342DC3E2205105F00A57C57 /* EditPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
-		1344C4062211A80100DDF88F /* ImageClassifier.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = ImageClassifier.mlmodel; sourceTree = "<group>"; };
 		13563690220A1FCA0049E161 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		13727BB721F9C43D0053CA88 /* TripData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripData.swift; sourceTree = "<group>"; };
 		13727BB921F9C5880053CA88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		7EAE243B2212CCBF003049B8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				1344C4062211A80100DDF88F /* ImageClassifier.mlmodel */,
+				13210FAC2213EEE6005A65A6 /* ImageClassifier.mlmodel */,
 				1308835621F9BF710052050C /* TravelJournal2.xcdatamodeld */,
 				13727BB721F9C43D0053CA88 /* TripData.swift */,
 			);
@@ -371,10 +371,10 @@
 				13563691220A1FCA0049E161 /* Extensions.swift in Sources */,
 				13727BC221F9C6560053CA88 /* MyTrips.swift in Sources */,
 				1308835821F9BF710052050C /* TravelJournal2.xcdatamodeld in Sources */,
-				1344C4072211A80100DDF88F /* ImageClassifier.mlmodel in Sources */,
 				1308835221F9BF710052050C /* Welcome.swift in Sources */,
 				13727BBC21F9C5CF0053CA88 /* NewTrip.swift in Sources */,
 				13C4BB1021FF2C83008D6BC5 /* NewPost.swift in Sources */,
+				13210FAD2213EEE6005A65A6 /* ImageClassifier.mlmodel in Sources */,
 				13B6DE512200804A00238695 /* ShowMap.swift in Sources */,
 				13CE55F121FB082A00F85906 /* ViewPost.swift in Sources */,
 				7EC316C621FF3DC300C5A406 /* UIImage + Decompression.swift in Sources */,

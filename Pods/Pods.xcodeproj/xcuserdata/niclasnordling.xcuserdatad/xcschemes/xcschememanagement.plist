@@ -14,7 +14,7 @@
 		<key>Bolts.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>16</integer>
+			<integer>17</integer>
 		</dict>
 		<key>BoringSSL.xcscheme</key>
 		<dict>
@@ -33,7 +33,7 @@
 		<key>FBSDKCoreKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>20</integer>
+			<integer>21</integer>
 		</dict>
 		<key>FBSDKLoginKit.xcscheme</key>
 		<dict>
@@ -45,7 +45,7 @@
 		<key>FBSDKLoginKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>21</integer>
+			<integer>22</integer>
 		</dict>
 		<key>FBSDKShareKit.xcscheme</key>
 		<dict>
@@ -57,7 +57,7 @@
 		<key>FBSDKShareKit.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>22</integer>
+			<integer>23</integer>
 		</dict>
 		<key>FacebookCore.xcscheme</key>
 		<dict>
@@ -69,7 +69,7 @@
 		<key>FacebookCore.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>17</integer>
+			<integer>18</integer>
 		</dict>
 		<key>FacebookLogin.xcscheme</key>
 		<dict>
@@ -81,7 +81,7 @@
 		<key>FacebookLogin.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>18</integer>
+			<integer>19</integer>
 		</dict>
 		<key>FacebookShare.xcscheme</key>
 		<dict>
@@ -93,7 +93,7 @@
 		<key>FacebookShare.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>19</integer>
+			<integer>20</integer>
 		</dict>
 		<key>FirebaseAuth.xcscheme</key>
 		<dict>
