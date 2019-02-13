@@ -71,7 +71,7 @@ class Welcome: UIViewController {
         let topHeight = navbarHeight + statusbarHeight
         
         mainLabel.frame = CGRect(x: 20, y: topHeight + 20, width: UIScreen.main.bounds.size.width - 40, height: UIScreen.main.bounds.height / 4)
-        mainLabel.text = NSLocalizedString("Triping", comment: "")
+        mainLabel.text = NSLocalizedString("Tripping", comment: "")
         mainLabel.font = UIFont.logoFontNormal()
         mainLabel.textAlignment = .center
         mainLabel.textColor = UIColor.white

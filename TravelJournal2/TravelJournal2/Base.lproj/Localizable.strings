@@ -12,9 +12,9 @@
 
 "Add Trip" = "Add Trip";
 
-"Are you sure you want to remove this post?" = "Are you sure you want to remove this post?";
+"Are you sure you want to remove this post?" = "Are you sure you want to remove this Post?";
 
-"Are you sure you want to remove this trip?" = "Are you sure you want to remove this trip?";
+"Are you sure you want to remove this trip?" = "Are you sure you want to remove this Trip?";
 
 "Back" = "Back";
 
@@ -22,7 +22,7 @@
 
 "Cancel" = "Cancel";
 
-"Change your trip title" = "Change your trip title";
+"Change your trip title" = "Change your Trip title";
 
 "Edit" = "Edit";
 
@@ -52,7 +52,7 @@
 
 "Picture missing" = "Picture missing";
 
-"Post is added" = "Post is added";
+"Post is added" = "Post added";
 
 "Register" = "Register";
 
@@ -60,9 +60,9 @@
 
 "Remove" = "Remove";
 
-"Remove post" = "Remove post";
+"Remove post" = "Remove Post";
 
-"Remove trip" = "Remove trip";
+"Remove trip" = "Remove Trip";
 
 "Satellite" = "Satellite";
 
@@ -80,7 +80,7 @@
 
 "Trip already exists" = "Trip already exists";
 
-"Triping" = "Triping";
+"Tripping" = "Tripping";
 
 "Trip title" = "Trip title";
 
@@ -90,4 +90,4 @@
 
 "You are now logged out" = "You are now logged out";
 
-"Your post has been updated" = "Your post has been updated";
+"Your post has been updated" = "Post updated";
