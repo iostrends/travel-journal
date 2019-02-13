@@ -10,6 +10,10 @@ import UIKit
 import CoreLocation
 import CoreML
 import Vision
+import Firebase
+import FirebaseFirestore
+import FirebaseStorage
+import SVProgressHUD
 
 class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
     
@@ -30,6 +34,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     var postTitle = UITextField()
     var postText = UITextView()
     var createPostBtn = UIBarButtonItem()
+    var alert = UIAlertController()
     
     let data = TripData()
     let locationManager = CLLocationManager()
@@ -153,10 +158,9 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
                 invalidFormMessage(errMessage: 3)
             }
             
-            data.uploadPost()
-            
-            print("Post saved")
-            uploadSuccessMessage()
+            data.uploadPost { (result) in
+                self.uploadSuccessMessage()
+            }
             
         } else if(postTitle.text == "") {
             print("No title")
@@ -249,8 +253,6 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     // ALERTS
     
     func invalidFormMessage(errMessage: Int){
-        var alert = UIAlertController()
-    
         if(errMessage == 1){
             alert = UIAlertController(title: NSLocalizedString("Title missing", comment: ""), message: NSLocalizedString("Fill in title field", comment: ""), preferredStyle: .alert)
         } else if(errMessage == 2){
@@ -266,7 +268,7 @@ class NewPost: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     }
     
     func uploadSuccessMessage(){
-        let alert = UIAlertController(title: NSLocalizedString("Added", comment: ""), message: NSLocalizedString("Post is added", comment: ""), preferredStyle: .alert)
+        alert = UIAlertController(title: NSLocalizedString("Added", comment: ""), message: NSLocalizedString("Post is added", comment: ""), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { _ in
             
             self.emptyFields()

@@ -60,7 +60,8 @@ class TripData {
     var onePost = Post()
     var oldPostTitle = ""
     
-    func uploadData() {
+    func uploadData(completion: @escaping (Bool) -> ()) {
+        SVProgressHUD.show()
         var imgName = "\(oneTrip.tripTitle)_\(oneTrip.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
@@ -83,12 +84,14 @@ class TripData {
                 print("Error: \(err)")
             } else {
                 print("Dokument sparat")
-                if self.oneTrip.tripImg != nil { self.uploadImage(imgName: imgName) }
+                if self.oneTrip.tripImg != nil { self.uploadImage(imgName: imgName) {(result) in
+                     completion(true)
+                    }}
             }
         }
     }
     
-    func uploadImage(imgName:String) {
+    func uploadImage(imgName:String, completion: @escaping (Bool) -> ()) {
         if let image = oneTrip.tripImg {
             if image.size.height < image.size.width {
                 
@@ -120,8 +123,8 @@ class TripData {
                         print(error!)
                         return
                     }
-                    print("image uploaded")
-//                    self.uploadImage(imgName: imgName)
+                    completion(true)
+                    SVProgressHUD.dismiss()
                 }
             }
         }
@@ -276,7 +279,8 @@ class TripData {
 
     }
     
-    func uploadPost() {
+    func uploadPost(completion: @escaping (Bool) -> ()) {
+        SVProgressHUD.show()
         var imgName = "\(onePost.postTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
@@ -303,12 +307,16 @@ class TripData {
                 print("Error: \(err)")
             } else {
                 print("Dokument sparat")
-                if self.onePost.postImg != nil { self.uploadPostImage(imgName: imgName) }
+                if self.onePost.postImg != nil {
+                    self.uploadPostImage(imgName: imgName, completion: { (result) in
+                        completion(true)
+                    })
+                }
             }
         }
     }
     
-    func uploadPostImage(imgName:String) {
+    func uploadPostImage(imgName:String, completion: @escaping (Bool) -> ()) {
         if let image = onePost.postImg {
             let width = image.size.width/8
             let height = image.size.height/8
@@ -329,12 +337,14 @@ class TripData {
                         return
                     }
                     print("image uploaded")
+                    completion(true)
+                    SVProgressHUD.dismiss()
                 }
             }
         }
     }
 
-    func updatePost(postId: String, newImage: Bool){
+    func updatePost(postId: String, newImage: Bool, completion: @escaping (Bool) -> ()){
         var imgName = "\(onePost.postTitle)_\(onePost.userEmail)"
         imgName = imgName.replacingOccurrences(of: " ", with: "")
         imgName = imgName.replacingOccurrences(of: "&", with: "")
@@ -359,13 +369,19 @@ class TripData {
             } else {
                 print("Dokument sparat")
                 if self.onePost.postImg != nil {
-                    newImage ? self.uploadPostImage(imgName: imgName) : self.updateImage(imgName: imgName) }
+                    newImage ? self.uploadPostImage(imgName: imgName, completion: { (result) in
+                        completion(true)
+                    })
+                    : self.updateImage(imgName: imgName, completion: { (result) in
+                        completion(true)
+                    })
+                }
                 if self.onePost.postTitle != self.oldPostTitle { self.deleteOldImage(oldPostTitle: self.oldPostTitle) }
             }
         }
     }
     
-    func updateImage(imgName: String) {
+    func updateImage(imgName: String, completion: @escaping (Bool) -> ()) {
         if let image = onePost.postImg {
             if let jpegData = image.jpegData(compressionQuality: 0.7) {
                 let storageRef = Storage.storage().reference()
@@ -379,6 +395,7 @@ class TripData {
                         return
                     }
                     print("image updated")
+                    completion(true)
                 }
             }
         }

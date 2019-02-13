@@ -131,11 +131,10 @@ class EditPost: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                 invalidFormMessage(errMessage: 3)
             }
 
-            data.updatePost(postId: postId, newImage: newImage)
+            data.updatePost(postId: postId, newImage: newImage) { (result) in
+                self.uploadSuccessMessage()
+            }
             newImage = false
-
-            print("Post updated")
-            uploadSuccessMessage()
 
         } else if(editTitle.text == "") {
             print("No title")

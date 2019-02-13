@@ -154,10 +154,10 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
             
             tripData.oneTrip.tripImg = showcaseImage.image
             
-            tripData.uploadData()
+            tripData.uploadData { (result) in
+                self.uploadSuccessMessage()
+            }
             
-            //print("Trip saved")
-            uploadSuccessMessage()
             
         } else if(tripName == "") {
             //print("No title")
