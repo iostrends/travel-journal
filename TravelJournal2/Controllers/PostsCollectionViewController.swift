@@ -105,6 +105,16 @@ class PostsCollectionViewController: UIViewController, UICollectionViewDelegate,
         myTripsData.posts.removeAll()
         myTripsData.loadPostsByTrip(user: currentUser,tripTitle: tripTitle)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    // Hide keyboard on hitting return key
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
 }
 
 extension PostsCollectionViewController {

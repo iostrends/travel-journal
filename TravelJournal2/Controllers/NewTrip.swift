@@ -35,8 +35,9 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
         // Do any additional setup after loading the view.
         view.backgroundColor = UIColor.clear
         NotificationCenter.default.addObserver(self, selector: #selector(setupUI), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil);
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil);
         currentUser = Auth.auth().currentUser?.email ?? NSLocalizedString("User not found", comment: "")
-        self.title = NSLocalizedString("Add Trip", comment: "")
         setupSaveTripButton()
         setupUI()
         tripTitle.delegate = self
@@ -247,5 +248,20 @@ class NewTrip: UIViewController, UIImagePickerControllerDelegate, UINavigationCo
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
+    }
+    
+    @objc func keyboardWillShow(sender: NSNotification) {
+        if let keyboardSize = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            let keyboardHeight = keyboardSize.height
+            if orientation == .portrait {
+                view.frame.origin.y = -keyboardHeight
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(sender: NSNotification) {
+        if orientation == .portrait {
+            view.frame.origin.y = 0
+        }
     }
 }
