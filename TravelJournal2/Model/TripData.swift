@@ -12,17 +12,17 @@ import FirebaseFirestore
 import FirebaseStorage
 import SVProgressHUD
 
-protocol TripDelegate {
+protocol TripDelegate: class {
     func SetTripData(description:[String: Any])
     func setTripImg(img:UIImage)
 }
 
-protocol PostDelegate {
+protocol PostDelegate: class {
     func SetPostData(description:[String: Any])
     func setPostImg(img:UIImage)
 }
 
-protocol DataDelegate {
+protocol DataDelegate: class {
     func laddaTabell()
 }
 
@@ -49,9 +49,9 @@ struct Post {
 }
 
 class TripData {
-    var tripDel: TripDelegate?
-    var postDel: PostDelegate?
-    var dataDel: DataDelegate?
+    weak var tripDel: TripDelegate?
+    weak var postDel: PostDelegate?
+    weak var dataDel: DataDelegate?
     
     var trips:[Trip] = []
     var posts:[Post] = []
